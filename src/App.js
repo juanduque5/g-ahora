@@ -16,6 +16,7 @@ import Register from "./components/Register/Register";
 import image5 from "./images/image5.png";
 import image6 from "./images/image6.png";
 import image7 from "./images/image7.png";
+// siiii
 
 // import MainB from "./components/MainB/MainB";
 // import MainF from "./components/MainF/MainF";
