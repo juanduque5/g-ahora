@@ -1,0 +1,5 @@
+#image {
+  background: url("../../images/frutas.jpg") lightgray 50% / cover no-repeat;
+
+  /* Otros estilos específicos para #imageFilter si es necesario */
+}

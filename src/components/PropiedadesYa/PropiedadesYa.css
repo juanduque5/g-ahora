@@ -1,0 +1,5 @@
+#imageFilter {
+  background: url("../../images/layer.png") lightgray 50% / cover no-repeat;
+
+  /* Otros estilos específicos para #imageFilter si es necesario */
+}

@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body {
-  margin: 0;
+  margin: 0 auto;
+
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
@@ -11,7 +12,181 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.footie {
+  width: 90%;
+}
+
+.ajusta {
+  width: 90%;
+  margin: auto;
+}
+
+.publica {
+  width: 90%;
+  margin: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .ajusta {
+    width: 90%;
+    margin: auto;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  /* Tu CSS para esta resolución */
+  /* Por ejemplo, puedes aplicar estilos específicos para tabletas */
+  .elback {
+    width: 100%;
+    margin: auto;
+  }
+  .ajusta {
+    width: 90%;
+    margin: auto;
+  }
+
+  .publica {
+    width: 80%;
+    margin: auto;
+  }
+  .try {
+    display: grid;
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ); /* Divide en 2 columnas de igual tamaño */
+    /* Espacio entre elementos */
+  }
+}
+
+/* Para pantallas de 1280x800 o más grandes */
+@media screen and (min-width: 1280px) and (min-height: 800px) {
+  /* Tus estilos aquí */
+  .elback {
+    width: 100%;
+    margin: auto;
+  }
+  .ajusta {
+    width: 90%;
+    margin: auto;
+  }
+
+  .publica {
+    width: 80%;
+    margin: auto;
+  }
+
+  .foot {
+    width: 75.5%;
+  }
+}
+
+/* 
+//1728 x 1085 */
+/* Para pantallas de 1440x809 o más grandes */
+@media screen and (min-width: 1445px) and (min-height: 809px) {
+  /* Tus estilos aquí */
+  /* body {
+    width: 90%;
+  } */
+  .elback {
+    width: 100%;
+    margin: auto;
+  }
+
+  .ajusta {
+    width: 80%;
+    margin: auto;
+  }
+
+  .publica {
+    width: 80%;
+    margin: auto;
+  }
+
+  .footie {
+    width: 80%;
+  }
+}
+
+/* Para pantallas de 1728x1085 o más grandes */
+@media screen and (min-width: 1728px) and (min-height: 1085px) {
+  /* Tus estilos aquí */
+  .elback {
+    width: 100%;
+    margin: auto;
+  }
+
+  .ajusta {
+    width: 80%;
+    margin: auto;
+  }
+
+  .publica {
+    width: 80%;
+    margin: auto;
+  }
+  .foot {
+    width: 80%;
+  }
+}
+
+/* Para pantallas de 2048x1152 o más grandes */
+@media screen and (min-width: 2048px) and (min-height: 1152px) {
+  /* Tus estilos aquí */
+  .elback {
+    width: 100%;
+    margin: auto;
+  }
+
+  .ajusta {
+    width: 80%;
+    margin: auto;
+  }
+
+  .publica {
+    width: 80%;
+    margin: auto;
+  }
+  .foot {
+    width: 75.5%;
+  }
+}
+
+/* Para pantallas de 1920x1080 o más grandes */
+@media screen and (min-width: 1920px) and (min-height: 1080px) {
+  /* Tus estilos aquí */
+  .elback {
+    width: 100%;
+    margin: auto;
+  }
+
+  .ajusta {
+    width: 80%;
+    margin: auto;
+  }
+
+  .publica {
+    width: 80%;
+    margin: auto;
+  }
+
+  .footie {
+    width: 70.5%;
+  }
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* En tu archivo CSS */
+@font-face {
+  font-family: "Fira Sans";
+  src: url("./Fira_Sans/FiraSans-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("./Open_Sans/static/OpenSans-Regular.ttf") format("truetype");
 }
