@@ -21,13 +21,7 @@ const Login = () => {
   //Handle Sign up API
 
   const handleSignupClick = () => {
-    // if (password !== password2) {
-    //   setIsModalOPen(true);
-
-    //   return;
-    // } else {
-    //   setError(false);
-    // }
+ 
 
     const postData = {
       email: email,

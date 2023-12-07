@@ -18,3 +18,10 @@
   align-items: center;
   width: 100%;
 }
+
+.ReactModal__Content {
+  /* display: none; Oculta el contenido del modal */
+  width: 600px;
+  height: 35%;
+  margin: auto;
+}
