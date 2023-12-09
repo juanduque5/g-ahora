@@ -12,6 +12,7 @@ import Info from "./components/Info/Info";
 import Vacations from "./components/Vacations/Vacations";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
+import Reset from "./components/Reset/Reset";
 
 import image5 from "./images/image5.png";
 import image6 from "./images/image6.png";
@@ -237,6 +238,14 @@ class App extends Component {
             element={
               <>
                 <Register />
+              </>
+            }
+          />
+          <Route
+            path="/Reset"
+            element={
+              <>
+                <Reset />
               </>
             }
           />

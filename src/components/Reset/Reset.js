@@ -1,24 +1,14 @@
 import { React, useState } from "react";
-import "./Login.css";
+import "./Reset.css";
 import { Link, useNavigate } from "react-router-dom";
-import visible from "../../images/visible.png";
+// import visible from "../../images/visible.png";
 import Modal from "react-modal";
 
-const Login = ({ name }) => {
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+const Reset = ({ name }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [isModalOpen, setIsModalOPen] = useState(false);
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
   const handleEmail = (event) => {
     setEmail(event.target.value);
@@ -34,7 +24,6 @@ const Login = ({ name }) => {
   const handleLoginClick = () => {
     const postData = {
       email: email,
-      password: password,
     };
 
     const requestOptions = {
@@ -45,7 +34,7 @@ const Login = ({ name }) => {
       body: JSON.stringify(postData),
     };
 
-    fetch("http://localhost:2001/auth/login", requestOptions)
+    fetch("http://localhost:2001/auth/reset", requestOptions)
       .then((response) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
@@ -58,7 +47,7 @@ const Login = ({ name }) => {
       })
       .then((data) => {
         console.log("DATA", data);
-        name(data.name);
+
         navigate("/"); // Reemplaza 'NombreDeLaPantalla' con el nombre de tu pantalla
       })
       .catch((error) => {
@@ -108,43 +97,12 @@ const Login = ({ name }) => {
           </div>
           <div className="h-1/2 ">
             <div className="flex h-1/2 justify-center ">
-              <div className=" h-3/5 w-11/12 ">
-                <div className="flex h-2/5  items-center">
-                  <p className="font-open-sans text-sm font-bold">Contrasena</p>
-                </div>
-                <div className="flex h-3/5  ">
-                  <input
-                    className="h-full w-full rounded-lg border"
-                    placeholder="Password"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={handlePasswordChange}
-                  ></input>
-                  <img
-                    className="absolute right-8  flex h-6 w-6 translate-y-1/2 cursor-pointer"
-                    onClick={togglePasswordVisibility}
-                    src={visible}
-                    alt="Hi"
-                  ></img>
-                </div>
-                <div className="flex h-3/5">
-                  <Link
-                    className="mt-3 font-open-sans text-blue-500 underline"
-                    to="/Reset"
-                  >
-                    {" "}
-                    Reset password{" "}
-                  </Link>
-                </div>
-              </div>
-            </div>
-            <div className="flex h-1/2 justify-center ">
               <div
                 onClick={handleLoginClick}
-                className="mt-5 flex h-2/5  w-3/5 cursor-pointer rounded-lg border bg-blue-new"
+                className="mt-8 flex h-2/5  w-3/5 cursor-pointer rounded-lg border bg-blue-new"
               >
                 <p className="m-auto font-fira-sans text-white">
-                  Iniciar sesion
+                  Reset password
                 </p>
               </div>
             </div>
@@ -175,4 +133,4 @@ const Login = ({ name }) => {
   );
 };
 
-export default Login;
+export default Reset;
