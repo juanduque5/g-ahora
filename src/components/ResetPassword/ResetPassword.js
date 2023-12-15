@@ -1,18 +1,63 @@
-import { React, useState } from "react";
-import "./Reset.css";
+import { React, useState, useEffect } from "react";
+import "./ResetPassword.css";
 import { Link, useNavigate } from "react-router-dom";
 // import visible from "../../images/visible.png";
+import visible from "../../images/visible.png";
 import Modal from "react-modal";
+import { useParams } from "react-router-dom";
 
-const Reset = ({ name }) => {
+const ResetPassword = () => {
+  const { token } = useParams();
   const [message, setMessage] = useState(null);
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isModalOpen, setIsModalOPen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [id, setId] = useState(null);
   const [passed, setPassed] = useState(false);
 
-  const handleEmail = (event) => {
-    setEmail(event.target.value);
+  useEffect(() => {
+    // Realiza una solicitud al backend para verificar el token
+    const verifyToken = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:2001/auth/reset-password/${token}`,
+        );
+        if (!response.ok) {
+          return response.json().then((errorData) => {
+            setMessage(errorData.message);
+            openModal();
+            navigate("/Reset");
+            throw new Error(`Error: ${errorData.message}`);
+          });
+        } else {
+          return response.json().then((message) => {
+            console.log(message.message);
+            console.log(message.id);
+            setId(message.id);
+          });
+        }
+      } catch (error) {
+        console.error("Error al verificar el token:", error);
+        setMessage(error.message);
+        openModal();
+        navigate("/Reset");
+        // Manejar el error, por ejemplo, redirigir a una página de error
+        // window.location.href = "/reset-error";
+      }
+    };
+
+    verifyToken();
+  }, [token, navigate]);
+
+  console.log("token:", token);
+
+  const handlePasswordReset = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const openModal = () => {
@@ -22,20 +67,20 @@ const Reset = ({ name }) => {
     setIsModalOPen(false);
   };
 
-  const handleLoginClick = () => {
+  const handleNewPassword = () => {
     const postData = {
-      email: email,
+      password: password,
     };
 
     const requestOptions = {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(postData),
     };
 
-    fetch("http://localhost:2001/auth/reset", requestOptions)
+    fetch(`http://localhost:2001/auth/password-update/${id}`, requestOptions)
       .then((response) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
@@ -47,9 +92,8 @@ const Reset = ({ name }) => {
         return response.json();
       })
       .then((data) => {
-        console.log("DATA", data);
+        console.log("DATA:", data);
         setPassed(true);
-        setMessage(data.message);
         openModal();
       })
       .catch((error) => {
@@ -59,7 +103,7 @@ const Reset = ({ name }) => {
       });
   };
 
-  const statusMessage = passed ? "Email sent" : "Error occurred";
+  const statusMessage = passed ? "Password has been updated" : "Error occurred";
 
   return (
     <div className="wx">
@@ -68,7 +112,7 @@ const Reset = ({ name }) => {
           <div className="h-1/2 ">
             <div className="flex h-30 items-end justify-center ">
               <p className="font-open-sans text-2xl font-semibold">
-                Inicia sesion
+                Reset Password
               </p>
             </div>
             <div className="h-70 ">
@@ -84,16 +128,22 @@ const Reset = ({ name }) => {
                 <div className="mt-10  h-3/5 w-full">
                   <div className="flex h-2/5 items-center  ">
                     <p className="font-open-sans text-sm font-bold">
-                      Correo electronico
+                      New password
                     </p>
                   </div>
                   <div className="flex h-3/5 items-center ">
                     <input
                       className="h-full w-full rounded-lg border"
-                      type="text"
-                      placeholder="Email"
-                      onChange={handleEmail}
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      onChange={handlePasswordReset}
                     ></input>
+                    <img
+                      className="absolute right-8  flex h-6 w-6 translate-y-1/4 cursor-pointer"
+                      onClick={togglePasswordVisibility}
+                      src={visible}
+                      alt="Hi"
+                    ></img>
                   </div>
                 </div>
               </div>
@@ -102,11 +152,11 @@ const Reset = ({ name }) => {
           <div className="h-1/2 ">
             <div className="flex h-1/2 justify-center ">
               <div
-                onClick={handleLoginClick}
+                onClick={handleNewPassword}
                 className="mt-8 flex h-2/5  w-3/5 cursor-pointer rounded-lg border bg-blue-new"
               >
                 <p className="m-auto font-fira-sans text-white">
-                  Reset password
+                  Update password
                 </p>
               </div>
             </div>
@@ -116,7 +166,7 @@ const Reset = ({ name }) => {
       <Modal isOpen={isModalOpen} onAfterClose={closeModal}>
         <div className="flex flex-col gap-1">
           <div className="  border-b-slate-400">
-            <p className="font-semibold">{statusMessage} </p>
+            <p className="font-semibold">{statusMessage}</p>
           </div>
           {message && (
             <div className="mt-2 h-28">
@@ -137,4 +187,4 @@ const Reset = ({ name }) => {
   );
 };
 
-export default Reset;
+export default ResetPassword;

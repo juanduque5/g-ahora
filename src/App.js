@@ -13,6 +13,7 @@ import Vacations from "./components/Vacations/Vacations";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Reset from "./components/Reset/Reset";
+import ResetPassword from "./components/ResetPassword/ResetPassword";
 
 import image5 from "./images/image5.png";
 import image6 from "./images/image6.png";
@@ -246,6 +247,15 @@ class App extends Component {
             element={
               <>
                 <Reset />
+              </>
+            }
+          />
+
+          <Route
+            path="/Reset-Password/:token"
+            element={
+              <>
+                <ResetPassword />
               </>
             }
           />
