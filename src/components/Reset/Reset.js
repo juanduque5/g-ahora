@@ -60,6 +60,9 @@ const Reset = ({ name }) => {
   };
 
   const statusMessage = passed ? "Email sent" : "Error occurred";
+  const handleExit = () => {
+    navigate("/Login");
+  };
 
   return (
     <div className="wx">
@@ -126,7 +129,10 @@ const Reset = ({ name }) => {
             </div>
           )}
 
-          <div className="relative top-5 flex justify-end ">
+          <div
+            onClick={handleExit}
+            className="relative top-5 flex justify-end "
+          >
             <button className="flex h-9 w-1/4 justify-center rounded-md bg-red-500">
               <p className="m-auto font-open-sans text-white ">Exit</p>
             </button>

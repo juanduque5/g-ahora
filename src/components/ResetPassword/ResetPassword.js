@@ -8,7 +8,8 @@ import { useParams } from "react-router-dom";
 
 const ResetPassword = () => {
   const { token } = useParams();
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState([]);
+
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [isModalOpen, setIsModalOPen] = useState(false);
@@ -19,6 +20,9 @@ const ResetPassword = () => {
   useEffect(() => {
     // Realiza una solicitud al backend para verificar el token
     const verifyToken = async () => {
+      if (!token) {
+        navigate("/Reset");
+      }
       try {
         const response = await fetch(
           `http://localhost:2001/auth/reset-password/${token}`,
@@ -27,8 +31,8 @@ const ResetPassword = () => {
           return response.json().then((errorData) => {
             setMessage(errorData.message);
             openModal();
-            navigate("/Reset");
-            throw new Error(`Error: ${errorData.message}`);
+            // navigate("/Reset");
+            // throw new Error(`Error: ${errorData.message}`);
           });
         } else {
           return response.json().then((message) => {
@@ -84,7 +88,8 @@ const ResetPassword = () => {
       .then((response) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
-            setMessage(errorData.message);
+            console.log("Error data from server:", errorData.data[0].msg);
+            setMessage(errorData.data[0].msg);
             openModal();
             throw new Error(`Error: ${errorData.message}`);
           });
@@ -94,16 +99,21 @@ const ResetPassword = () => {
       .then((data) => {
         console.log("DATA:", data);
         setPassed(true);
+        setMessage("You can logged in now ");
         openModal();
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);
-        setMessage(error.message);
+
         openModal();
       });
   };
 
   const statusMessage = passed ? "Password has been updated" : "Error occurred";
+
+  const handleExit = () => {
+    navigate("/Reset");
+  };
 
   return (
     <div className="wx">
@@ -176,7 +186,10 @@ const ResetPassword = () => {
             </div>
           )}
 
-          <div className="relative top-5 flex justify-end ">
+          <div
+            onClick={handleExit}
+            className="relative top-5 flex justify-end "
+          >
             <button className="flex h-9 w-1/4 justify-center rounded-md bg-red-500">
               <p className="m-auto font-open-sans text-white ">Exit</p>
             </button>
