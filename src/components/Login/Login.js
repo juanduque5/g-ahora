@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import visible from "../../images/visible.png";
 import Modal from "react-modal";
 
-const Login = ({ name }) => {
+const Login = ({ name, setAutoLogout }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
@@ -59,6 +59,14 @@ const Login = ({ name }) => {
       .then((data) => {
         console.log("DATA", data);
         name(data.name);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.id);
+        const remainingMilliseconds = 60 * 60 * 1000;
+        const expiryDate = new Date(
+          new Date().getTime() + remainingMilliseconds,
+        );
+        localStorage.setItem("expiryDate", expiryDate.toISOString());
+        setAutoLogout(remainingMilliseconds);
         navigate("/"); // Reemplaza 'NombreDeLaPantalla' con el nombre de tu pantalla
       })
       .catch((error) => {

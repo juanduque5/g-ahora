@@ -7,6 +7,11 @@ import down from "../../images/chevron-down.png";
 
 const Header = ({ logged }) => {
   const [menu, setMenu] = useState(false);
+  const [mostrarOpciones, setMostrarOpciones] = useState(false);
+
+  const toggleOpciones = () => {
+    setMostrarOpciones(!mostrarOpciones);
+  };
 
   const openMobileMenu = () => {
     setMenu(!menu);
@@ -14,7 +19,7 @@ const Header = ({ logged }) => {
   };
   console.log(menu);
 
-  console.log("Logged", logged);
+  console.log("Logged in:", logged);
 
   return (
     // absolute top left
@@ -108,18 +113,18 @@ const Header = ({ logged }) => {
                 </svg>
               </Link>
             </div>
-            <div className="w-30 m-auto hidden  cursor-pointer lg:block">
+            <div className="m-auto hidden w-30  cursor-pointer lg:block">
               <h1 className="text-center text-base font-semibold ">
                 <Link to="/Propiedades"> Propiedades </Link>
               </h1>
             </div>
-            <div className="w-30 m-auto hidden  cursor-pointer lg:block">
+            <div className="m-auto hidden w-30  cursor-pointer lg:block">
               <h1 className="text-center text-base font-semibold">
                 <Link to="/Publica"> Publica tu propiedad</Link>
               </h1>
             </div>
           </div>
-          <div className="m-auto flex h-3/4 w-1/2 ">
+          <div className="m-auto flex h-3/4 w-1/2 border border-green-400">
             <div className="m-auto hidden w-1/2 cursor-pointer  lg:block">
               <p className="ml-16 text-base font-semibold">
                 <Link to="/Vacations">
@@ -127,9 +132,9 @@ const Header = ({ logged }) => {
                 </Link>
               </p>
             </div>
-            <div className="m-auto hidden w-2/5  cursor-pointer lg:block">
+            <div className="m-auto hidden w-2/5  cursor-pointer border border-blue-500 lg:block">
               {logged ? (
-                <p className="blue-new text-blue-new mr-3 flex justify-end text-base font-bold">
+                <p className="blue-new mr-3 flex justify-end text-base font-bold text-blue-new">
                   {logged}
                 </p>
               ) : (
@@ -138,27 +143,31 @@ const Header = ({ logged }) => {
                 </p>
               )}
             </div>
-            <div className="m-auto mr-0 flex h-auto w-16 cursor-pointer justify-end  lg:w-10   xl:w-10">
+            <div
+              onClick={toggleOpciones}
+              className="relative m-auto mr-0 flex h-auto w-16 cursor-pointer justify-end  border border-red-500 lg:w-10   xl:w-10"
+            >
               <div
                 onClick={openMobileMenu}
                 className="flex h-5 w-9 cursor-pointer flex-col  justify-between  lg:hidden"
               >
                 <div
-                  className={` bg-new h-1 rounded-lg ${
+                  className={` h-1 rounded-lg bg-new ${
                     menu ? "burger-bar" : "unclick"
                   }`}
                 ></div>
                 <div
-                  className={` bg-new h-1 rounded-lg ${
+                  className={` h-1 rounded-lg bg-new ${
                     menu ? "burger-bar" : "unclick"
                   }`}
                 ></div>
                 <div
-                  className={` bg-new h-1 rounded-lg ${
+                  className={` h-1 rounded-lg bg-new ${
                     menu ? "burger-bar" : "unclick"
                   }`}
                 ></div>
               </div>
+
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="48%"
@@ -200,6 +209,31 @@ const Header = ({ logged }) => {
               </svg>
               <img className="m-auto hidden lg:flex" src={down} alt="Hi"></img>
             </div>
+
+            {mostrarOpciones && (
+              <div
+                className=" bg-whte relative hidden rounded-md bg-gray-50 shadow-2xl lg:block"
+                style={{
+                  position: "absolute",
+                  left: "89%",
+                  width: "110px",
+                  top: "8.2%",
+                }}
+              >
+                <div className="flex border-b  ">
+                  <p className="m-auto">Opción 1</p>
+                </div>
+                <div className="flex border-b ">
+                  <p className="m-auto">Opción 1</p>
+                </div>
+                <div className="flex border-b ">
+                  <p className="m-auto">Opción 1</p>
+                </div>
+                <div className="flex ">
+                  <p className="m-auto">Opción 1</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -213,29 +247,29 @@ const Header = ({ logged }) => {
           className={`m-auto flex w-11/12  select-none flex-col gap-1 rounded-md border bg-gray-50   pb-3 shadow-lg transition`}
         >
           <div className="w-full cursor-pointer ">
-            <p className="font-fira-sans text-new3 flex h-9 items-center justify-center border   font-bold">
+            <p className="flex h-9 items-center justify-center border font-fira-sans font-bold   text-new3">
               <Link to="/Propiedades"> Propiedades </Link>
             </p>
           </div>
           <div className="w-full cursor-pointer ">
-            <p className="font-fira-sans text-new3 flex h-9 w-full items-center justify-center border font-bold">
+            <p className="flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
               <Link to="/Publica"> Publica tu propiedad</Link>
             </p>
           </div>
           <div className="w-full cursor-pointer ">
-            <p className="font-fira-sans text-new3 m-auto flex h-9 w-full items-center justify-center border font-bold">
+            <p className="m-auto flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
               <Link to="/Vacations">
                 🏖️️ Encuentra un lugar para vacacionar
               </Link>
             </p>
           </div>
-          <div className="bg-blue-new w-full cursor-pointer border">
-            <p className="font-fira-sans  m-auto flex h-9 w-full items-center justify-center font-bold  text-white">
+          <div className="w-full cursor-pointer border bg-blue-new">
+            <p className="m-auto  flex h-9 w-full items-center justify-center font-fira-sans font-bold  text-white">
               Login
             </p>
           </div>
-          <div className=" bg-blue-dark  w-full cursor-pointer border">
-            <p className="font-fira-sans m-auto flex h-9 w-full items-center justify-center font-bold text-white">
+          <div className=" w-full  cursor-pointer border bg-blue-dark">
+            <p className="m-auto flex h-9 w-full items-center justify-center font-fira-sans font-bold text-white">
               Register
             </p>
           </div>

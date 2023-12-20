@@ -18,7 +18,7 @@ import ResetPassword from "./components/ResetPassword/ResetPassword";
 import image5 from "./images/image5.png";
 import image6 from "./images/image6.png";
 import image7 from "./images/image7.png";
-// siiii
+//
 
 // import MainB from "./components/MainB/MainB";
 // import MainF from "./components/MainF/MainF";
@@ -135,18 +135,38 @@ class App extends Component {
       ],
       new: {},
       name: "",
+      token: null,
+      expiryDate: null,
+      isAuth: false,
     };
-
-    // Enlazar métodos si es necesario
-    // this.miMetodo = this.miMetodo.bind(this);
   }
 
-  // toggleApplyStyle = () => {
-  //   this.setState((prevState) => ({
-  //     applyStyle: !prevState.applyStyle,
-  //   }));
-  // };
-  // // Métodos de clase
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    const expiryDate = localStorage.getItem("expiryDate");
+
+    if (!token || !expiryDate) {
+      return;
+    }
+
+    if (new Date(expiryDate) <= new Date()) {
+      this.logoutHandler();
+      return;
+    }
+
+    const userId = localStorage.getItem("userId");
+    const remainingMilliseconds =
+      new Date(expiryDate).getTime() - new Date().getTime();
+    this.setState({ isAuth: true, token: token, userId: userId });
+    this.setAutoLogout(remainingMilliseconds);
+  }
+
+  logoutHandler = () => {
+    this.setState({ isAuth: false, token: null });
+    localStorage.removeItem("token");
+    localStorage.removeItem("expiryDate");
+    localStorage.removeItem("userId");
+  };
 
   fill = (info) => {
     // console.log("app", info);
@@ -161,9 +181,22 @@ class App extends Component {
     }));
   };
 
+  setAutoLogout = (milliseconds) => {
+    setTimeout(() => {
+      this.logoutHandler();
+    }, milliseconds);
+  };
+
+  // token = (token) => {
+  //   this.setState((prevState) => ({
+  //     token: token,
+  //   }));
+  // };
+
   render() {
     const { info } = this.state;
     console.log("name: ", this.state.name);
+    console.log("TOKEN: ", this.state.token);
 
     const OPTIONS = {};
 
@@ -230,7 +263,7 @@ class App extends Component {
             path="/Login"
             element={
               <>
-                <Login name={this.name} />
+                <Login name={this.name} setAutoLogout={this.setAutoLogout} />
               </>
             }
           />
