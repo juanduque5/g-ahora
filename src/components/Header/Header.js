@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import "./Header.css";
 import down from "../../images/chevron-down.png";
 
-const Header = ({ logged }) => {
+const Header = ({ logged, isAuth, logoutHandler }) => {
   const [menu, setMenu] = useState(false);
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
 
@@ -124,32 +124,30 @@ const Header = ({ logged }) => {
               </h1>
             </div>
           </div>
-          <div className="m-auto flex h-3/4 w-1/2 border border-green-400">
+          <div className="m-auto flex h-3/4 w-1/2 ">
             <div className="m-auto hidden w-1/2 cursor-pointer  lg:block">
               <p className="ml-16 text-base font-semibold">
-                <Link to="/Vacations">
-                  🏖️️ Encuentra un lugar para vacacionar
-                </Link>
+                <Link to="/Vacations">🏖️️ Un lugar para vacacionar</Link>
               </p>
             </div>
-            <div className="m-auto hidden w-2/5  cursor-pointer border border-blue-500 lg:block">
-              {logged ? (
+            <div className="m-auto hidden w-2/5  cursor-pointer lg:block">
+              {isAuth ? (
                 <p className="blue-new mr-3 flex justify-end text-base font-bold text-blue-new">
                   {logged}
                 </p>
               ) : (
-                <p className="blue-new  mr-1 flex justify-end text-base font-bold">
-                  <Link to="/Login">Acceder como agente</Link>
+                <p className="blue-new  mr-1 flex justify-end  text-base font-bold">
+                  <Link to="/Login">Acceder </Link>
                 </p>
               )}
             </div>
             <div
               onClick={toggleOpciones}
-              className="relative m-auto mr-0 flex h-auto w-16 cursor-pointer justify-end  border border-red-500 lg:w-10   xl:w-10"
+              className="relative m-auto mr-0 flex h-auto w-16 cursor-pointer justify-end   lg:w-10   xl:w-10"
             >
               <div
                 onClick={openMobileMenu}
-                className="flex h-5 w-9 cursor-pointer flex-col  justify-between  lg:hidden"
+                className="flex h-5 w-9 cursor-pointer flex-col  justify-between   lg:hidden"
               >
                 <div
                   className={` h-1 rounded-lg bg-new ${
@@ -207,12 +205,18 @@ const Header = ({ logged }) => {
                   />
                 </svg>
               </svg>
-              <img className="m-auto hidden lg:flex" src={down} alt="Hi"></img>
+              <img
+                className={`m-auto hidden select-none lg:flex ${
+                  isAuth && mostrarOpciones ? "rotate-180" : "-rotate-0"
+                }`}
+                src={down}
+                alt="Hi"
+              ></img>
             </div>
 
-            {mostrarOpciones && (
+            {isAuth && mostrarOpciones && (
               <div
-                className=" bg-whte relative hidden rounded-md bg-gray-50 shadow-2xl lg:block"
+                className="relative hidden select-none rounded-md border bg-gray-50 shadow-2xl lg:block"
                 style={{
                   position: "absolute",
                   left: "89%",
@@ -220,17 +224,20 @@ const Header = ({ logged }) => {
                   top: "8.2%",
                 }}
               >
-                <div className="flex border-b  ">
-                  <p className="m-auto">Opción 1</p>
+                <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
+                  <p className="m-auto">Account</p>
                 </div>
-                <div className="flex border-b ">
-                  <p className="m-auto">Opción 1</p>
+                <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
+                  <p className="m-auto">Propiedades</p>
                 </div>
-                <div className="flex border-b ">
-                  <p className="m-auto">Opción 1</p>
+                <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
+                  <p className="m-auto">Catalogo</p>
                 </div>
-                <div className="flex ">
-                  <p className="m-auto">Opción 1</p>
+                <div
+                  onClick={logoutHandler}
+                  className="flex cursor-pointer rounded-sm rounded-b-md border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                >
+                  <p className="m-auto">Log out</p>
                 </div>
               </div>
             )}

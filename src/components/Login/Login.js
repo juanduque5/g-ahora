@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import visible from "../../images/visible.png";
 import Modal from "react-modal";
 
-const Login = ({ name, setAutoLogout }) => {
+const Login = ({ setAutoLogout }) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
@@ -58,16 +58,23 @@ const Login = ({ name, setAutoLogout }) => {
       })
       .then((data) => {
         console.log("DATA", data);
-        name(data.name);
+        // name(data.name);
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.id);
+        localStorage.setItem("name", data.name);
         const remainingMilliseconds = 60 * 60 * 1000;
+        // const remainingMilliseconds = 2 * 60 * 1000;
         const expiryDate = new Date(
           new Date().getTime() + remainingMilliseconds,
         );
+        console.log("EXPI", expiryDate);
+        console.log("remainingMilliseconds", remainingMilliseconds);
+
         localStorage.setItem("expiryDate", expiryDate.toISOString());
+
         setAutoLogout(remainingMilliseconds);
         navigate("/"); // Reemplaza 'NombreDeLaPantalla' con el nombre de tu pantalla
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error fetching data:", error.message);

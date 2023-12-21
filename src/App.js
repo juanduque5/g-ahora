@@ -134,7 +134,6 @@ class App extends Component {
         },
       ],
       new: {},
-      name: "",
       token: null,
       expiryDate: null,
       isAuth: false,
@@ -142,6 +141,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    console.log("App componentDidMount");
     const token = localStorage.getItem("token");
     const expiryDate = localStorage.getItem("expiryDate");
 
@@ -157,7 +157,13 @@ class App extends Component {
     const userId = localStorage.getItem("userId");
     const remainingMilliseconds =
       new Date(expiryDate).getTime() - new Date().getTime();
+
     this.setState({ isAuth: true, token: token, userId: userId });
+    console.log("token componentDidMount", token);
+    console.log("expiryDate componentDidMount", expiryDate);
+
+    console.log("remainingMilliseconds", remainingMilliseconds);
+
     this.setAutoLogout(remainingMilliseconds);
   }
 
@@ -166,6 +172,15 @@ class App extends Component {
     localStorage.removeItem("token");
     localStorage.removeItem("expiryDate");
     localStorage.removeItem("userId");
+    localStorage.removeItem("name");
+
+    window.location.reload();
+  };
+
+  setAutoLogout = (milliseconds) => {
+    setTimeout(() => {
+      this.logoutHandler();
+    }, milliseconds);
   };
 
   fill = (info) => {
@@ -175,28 +190,10 @@ class App extends Component {
     }));
   };
 
-  name = (name) => {
-    this.setState((prevState) => ({
-      name: name,
-    }));
-  };
-
-  setAutoLogout = (milliseconds) => {
-    setTimeout(() => {
-      this.logoutHandler();
-    }, milliseconds);
-  };
-
-  // token = (token) => {
-  //   this.setState((prevState) => ({
-  //     token: token,
-  //   }));
-  // };
-
   render() {
     const { info } = this.state;
-    console.log("name: ", this.state.name);
-    console.log("TOKEN: ", this.state.token);
+
+    const name = localStorage.getItem("name");
 
     const OPTIONS = {};
 
@@ -209,7 +206,11 @@ class App extends Component {
             path="/"
             element={
               <>
-                <Header logged={this.state.name} />
+                <Header
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
                 <PropiedadesYa />
                 <Cards title={true} infoH={newArr} />
                 <PropiedadesYaS />
@@ -221,7 +222,7 @@ class App extends Component {
             path="/Propiedades"
             element={
               <>
-                <Header logged={this.state.name} />
+                <Header logged={name} isAuth={this.state.isAuth} />
                 <ListaPropiedades />
                 <Cards title={false} infoH={info} fill={this.fill} />
                 <Footer />
@@ -232,7 +233,7 @@ class App extends Component {
             path="/Publica"
             element={
               <>
-                <Header logged={this.state.name} />
+                <Header logged={name} isAuth={this.state.isAuth} />
                 <Publica />
                 <Footer />
               </>
@@ -242,7 +243,7 @@ class App extends Component {
             path="/Info"
             element={
               <>
-                <Header logged={this.state.name} />
+                <Header logged={name} isAuth={this.state.isAuth} />
                 <Info options={OPTIONS} info={this.state.new} infoH={info} />
                 <Footer />
               </>
@@ -252,7 +253,7 @@ class App extends Component {
             path="/Vacations"
             element={
               <>
-                <Header logged={this.state.name} />
+                <Header logged={name} isAuth={this.state.isAuth} />
                 <Vacations />
                 <Cards title={true} infoH={newArr} vacation={true} />
                 <Footer />
@@ -263,7 +264,7 @@ class App extends Component {
             path="/Login"
             element={
               <>
-                <Login name={this.name} setAutoLogout={this.setAutoLogout} />
+                <Login setAutoLogout={this.setAutoLogout} />
               </>
             }
           />
