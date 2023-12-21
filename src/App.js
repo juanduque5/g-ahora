@@ -14,6 +14,7 @@ import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Reset from "./components/Reset/Reset";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
+import Account from "./components/Account/Account";
 
 import image5 from "./images/image5.png";
 import image6 from "./images/image6.png";
@@ -137,6 +138,8 @@ class App extends Component {
       token: null,
       expiryDate: null,
       isAuth: false,
+      userId: null,
+      reload: true,
     };
   }
 
@@ -159,16 +162,15 @@ class App extends Component {
       new Date(expiryDate).getTime() - new Date().getTime();
 
     this.setState({ isAuth: true, token: token, userId: userId });
-    console.log("token componentDidMount", token);
     console.log("expiryDate componentDidMount", expiryDate);
-
+    console.log("TOKEN", token);
     console.log("remainingMilliseconds", remainingMilliseconds);
 
     this.setAutoLogout(remainingMilliseconds);
   }
 
   logoutHandler = () => {
-    this.setState({ isAuth: false, token: null });
+    this.setState({ isAuth: false, token: null, userId: null });
     localStorage.removeItem("token");
     localStorage.removeItem("expiryDate");
     localStorage.removeItem("userId");
@@ -222,7 +224,11 @@ class App extends Component {
             path="/Propiedades"
             element={
               <>
-                <Header logged={name} isAuth={this.state.isAuth} />
+                <Header
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
                 <ListaPropiedades />
                 <Cards title={false} infoH={info} fill={this.fill} />
                 <Footer />
@@ -233,7 +239,11 @@ class App extends Component {
             path="/Publica"
             element={
               <>
-                <Header logged={name} isAuth={this.state.isAuth} />
+                <Header
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
                 <Publica />
                 <Footer />
               </>
@@ -243,7 +253,11 @@ class App extends Component {
             path="/Info"
             element={
               <>
-                <Header logged={name} isAuth={this.state.isAuth} />
+                <Header
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
                 <Info options={OPTIONS} info={this.state.new} infoH={info} />
                 <Footer />
               </>
@@ -253,7 +267,11 @@ class App extends Component {
             path="/Vacations"
             element={
               <>
-                <Header logged={name} isAuth={this.state.isAuth} />
+                <Header
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
                 <Vacations />
                 <Cards title={true} infoH={newArr} vacation={true} />
                 <Footer />
@@ -290,6 +308,30 @@ class App extends Component {
             element={
               <>
                 <ResetPassword />
+              </>
+            }
+          />
+          <Route
+            path="/Account/:id"
+            element={
+              <>
+                <Account />
+              </>
+            }
+          />
+          <Route
+            path="/Propiedades/:id"
+            element={
+              <>
+                <Account />
+              </>
+            }
+          />
+          <Route
+            path="/Catalogo/:id"
+            element={
+              <>
+                <Account />
               </>
             }
           />

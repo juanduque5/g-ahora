@@ -1,11 +1,13 @@
 import { React, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 import "./Header.css";
 import down from "../../images/chevron-down.png";
 
 const Header = ({ logged, isAuth, logoutHandler }) => {
+  // window.location.reload();
+  const navigate = useNavigate();
   const [menu, setMenu] = useState(false);
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
 
@@ -17,6 +19,49 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
     setMenu(!menu);
     console.log(menu);
   };
+
+  const accessLogin = () => {
+    navigate("/Login");
+    window.location.reload();
+  };
+
+  const handleAuth = (value) => {
+    const token = localStorage.getItem("token");
+    console.log("token handle", token);
+    fetch("http://localhost:2001/auth/dropdown", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error en la solicitud");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (value === "account") {
+          navigate(`/Account/${data.id}`);
+        } else if (value === "propiedades") {
+          navigate(`/Propiedades/${data.id}`);
+        } else {
+          navigate(`/Catalogo/${data.id}`);
+        }
+        console.log(data);
+      })
+      .catch((err) => {
+        console.error("isAuth ERROR", err);
+        if (err.text) {
+          return err.text().then((errorMessage) => {
+            console.error("Error message from server:", errorMessage);
+          });
+        } else {
+          console.error("Error message from server:", err.message);
+        }
+      });
+  };
+
   console.log(menu);
 
   console.log("Logged in:", logged);
@@ -136,8 +181,11 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                   {logged}
                 </p>
               ) : (
-                <p className="blue-new  mr-1 flex justify-end  text-base font-bold">
-                  <Link to="/Login">Acceder </Link>
+                <p
+                  onClick={accessLogin}
+                  className="blue-new  mr-1 flex justify-end  text-base font-bold"
+                >
+                  Acceder
                 </p>
               )}
             </div>
@@ -224,13 +272,22 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                   top: "8.2%",
                 }}
               >
-                <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
+                <div
+                  onClick={() => handleAuth("account")}
+                  className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                >
                   <p className="m-auto">Account</p>
                 </div>
-                <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
+                <div
+                  onClick={() => handleAuth("propiedades")}
+                  className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                >
                   <p className="m-auto">Propiedades</p>
                 </div>
-                <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
+                <div
+                  onClick={() => handleAuth("catalogo")}
+                  className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                >
                   <p className="m-auto">Catalogo</p>
                 </div>
                 <div
