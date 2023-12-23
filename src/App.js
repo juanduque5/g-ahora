@@ -15,6 +15,7 @@ import Register from "./components/Register/Register";
 import Reset from "./components/Reset/Reset";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import Account from "./components/Account/Account";
+import Agregar from "./components/Agregar/Agregar";
 
 import image5 from "./images/image5.png";
 import image6 from "./images/image6.png";
@@ -315,7 +316,11 @@ class App extends Component {
             path="/Account/:id"
             element={
               <>
-                <Account />
+                <Account
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
               </>
             }
           />
@@ -323,7 +328,11 @@ class App extends Component {
             path="/Propiedades/:id"
             element={
               <>
-                <Account />
+                <Account
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
               </>
             }
           />
@@ -331,7 +340,23 @@ class App extends Component {
             path="/Catalogo/:id"
             element={
               <>
-                <Account />
+                <Account
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
+              </>
+            }
+          />
+          <Route
+            path="/Agregar"
+            element={
+              <>
+                <Agregar
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
               </>
             }
           />

@@ -2,10 +2,10 @@ import { React, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
-import "./Account.css";
+// import "./Account.css";
 import down from "../../images/chevron-down.png";
 
-const Header = ({ logged, isAuth }) => {
+const Agregar = ({ logged, isAuth }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
 
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const Header = ({ logged, isAuth }) => {
   };
 
   return (
-    <div className="">
+    <div className="flex flex-col">
       <div className="header-shadow   mb-10 flex h-20 w-full">
         <div className="ajusta m-auto flex h-full w-full flex-row  ">
           <div className="m-auto flex h-3/4 w-9/12  sm:w-1/2 md:w-1/2 md:border-r  lg:w-1/2 lg:border-r xl:w-1/2 xl:border-r">
@@ -110,8 +110,8 @@ const Header = ({ logged, isAuth }) => {
               </Link>
             </div>
           </div>
-          <div className="m-auto flex h-3/4 w-1/2 items-center justify-end border border-red-300">
-            <div className="  flex cursor-pointer justify-end border border-green-500 lg:block">
+          <div className="m-auto flex h-3/4 w-1/2 items-center justify-end ">
+            <div className="  flex cursor-pointer justify-end  lg:block">
               {isAuth ? (
                 <p className="blue-new mr-3 flex justify-end text-base font-bold text-blue-new">
                   {logged}
@@ -132,7 +132,7 @@ const Header = ({ logged, isAuth }) => {
               height="45%"
               viewBox="0 0 46 46"
               fill="none"
-              className=" flex border border-blue-600"
+              className=" flex "
             >
               <circle cx="23" cy="23" r="21" fill="#D9D9D9" fillOpacity="0.2" />
               <circle
@@ -160,7 +160,7 @@ const Header = ({ logged, isAuth }) => {
               </svg>
             </svg>
             <img
-              className={`relative right-5 flex select-none border border-red-600 ${
+              className={`relative right-3 flex select-none ${
                 isAuth && mostrarOpciones ? "rotate-180" : "-rotate-0"
               }`}
               src={down}
@@ -170,56 +170,41 @@ const Header = ({ logged, isAuth }) => {
         </div>
       </div>
 
-      <div className="ajusta ">
+      <div className="ajusta mb-40">
         <div className="flex h-auto w-full justify-between ">
           <div className="flex">
-            <p className=" m-auto font-semibold">Mis Propiedades</p>
+            <p className=" m-auto font-semibold">Nueva propiedad</p>
           </div>
           <div>
             <button
               onClick={accessAgregar}
-              className="rounded-md bg-blue-new p-3"
+              className="rounded-md border border-blue-new p-3"
             >
-              <p className="text-white">Agregar</p>
+              <p className="font-semibold text-blue-new">Cancelar</p>
             </button>
           </div>
         </div>
       </div>
 
-      <div className="ajusta relative top-6 mt-12 flex h-96 flex-col gap-1  ">
-        <div className="flex h-1/4 flex-row gap-6 border shadow-md">
-          <div className=" w-20 border">jaja</div>
-          <div className="flex w-10/12 flex-col justify-start ">
-            <div className="flex h-full font-semibold">
-              Hermosa casa con vista al mar
-            </div>
-            <div className="flex h-full text-gray-k">Ciudad guatemala</div>
-            <div className="flex h-full font-semibold">$ 38,00000</div>
+      <div className="ajusta relative top-24 flex h-auto flex-col border">
+        <div className=" flex h-20 w-full border">
+          <p className="m-auto font-semibold">Seleciona tipo de inmueble</p>
+        </div>
+        <div className="m-auto flex h-52 w-full flex-row items-center justify-center gap-4 border">
+          <div className="cursor-pointer border p-5 hover:border-blue-new ">
+            <p>Casa</p>
           </div>
-          <div className="flex w-10 flex-row gap-1">
-            <button className="m-auto rounded-lg border bg-red-500 p-2">
-              <p className="text-white">Delete</p>
-            </button>
-            <button className="m-auto rounded-lg border bg-yellow-300 p-2">
-              <p className="text-white">Editar</p>
-            </button>
+          <div className="cursor-pointer border p-5 hover:border-blue-new ">
+            <p>Apartamento</p>
+          </div>
+          <div className="cursor-pointer border p-5 hover:border-blue-new ">
+            <p>Inmueble</p>
           </div>
         </div>
-        <div className="flex h-1/4 flex-row  gap-6 border shadow-md">
-          <div className=" w-20 border">jaja</div>
-          <div className="flex w-10/12 flex-col justify-start ">
-            <div className="flex h-full font-semibold">
-              Hermosa casa con vista al mar
-            </div>
-            <div className="flex h-full text-gray-k">Ciudad guatemala</div>
-            <div className="flex h-full font-semibold">$ 38,00000</div>
-          </div>
-          <div className="flex w-10 flex-row gap-1">
-            <button className="m-auto rounded-lg border bg-red-500 p-2">
-              <p className="text-white">Delete</p>
-            </button>
-            <button className="m-auto rounded-lg border bg-yellow-300 p-2">
-              <p className="text-white">Editar</p>
+        <div className="borde m-auto flex h-20">
+          <div className="m-auto">
+            <button className="rounded-lg bg-blue-new p-4 text-white">
+              Siguiente
             </button>
           </div>
         </div>
@@ -227,4 +212,4 @@ const Header = ({ logged, isAuth }) => {
     </div>
   );
 };
-export default Header;
+export default Agregar;
