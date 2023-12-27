@@ -196,7 +196,7 @@ const Agregar = ({ logged, isAuth }) => {
           </div>
           <div className="cursor-pointer border p-5 hover:border-blue-new ">
             <p>Apartamento</p>
-          </div>
+          </div> 
           <div className="cursor-pointer border p-5 hover:border-blue-new ">
             <p>Inmueble</p>
           </div>

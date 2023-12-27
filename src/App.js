@@ -349,7 +349,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/Agregar"
+            path="/Agregar"              
             element={
               <>
                 <Agregar
