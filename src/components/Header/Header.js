@@ -7,7 +7,7 @@ import down from "../../images/chevron-down.png";
 
 const Header = ({ logged, isAuth, logoutHandler }) => {
   // window.location.reload();
-  const navigate = useNavigate();
+  const navigate = useNavigate();    
   const [menu, setMenu] = useState(false);
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
 
