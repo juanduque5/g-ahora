@@ -3,7 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 import "./Account.css";
+import deletee from "../../images/deletee.png";
 import down from "../../images/chevron-down.png";
+import plus from "../../images/plus.png";
+import edit from "../../images/edit.png";
 
 const Header = ({ logged, isAuth }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
@@ -178,8 +181,13 @@ const Header = ({ logged, isAuth }) => {
           <div>
             <button
               onClick={accessAgregar}
-              className="rounded-md bg-blue-new p-3"
+              className="flex flex-row rounded-md bg-blue-new p-3"
             >
+              <img
+                className="m-auto mr-2 flex select-none "
+                src={plus}
+                alt="Hi"
+              ></img>
               <p className="text-white">Agregar</p>
             </button>
           </div>
@@ -187,24 +195,6 @@ const Header = ({ logged, isAuth }) => {
       </div>
 
       <div className="ajusta relative top-6 mt-12 flex h-96 flex-col gap-1  ">
-        <div className="flex h-1/4 flex-row gap-6 border shadow-md">
-          <div className=" w-20 border">jaja</div>
-          <div className="flex w-10/12 flex-col justify-start ">
-            <div className="flex h-full font-semibold">
-              Hermosa casa con vista al mar
-            </div>
-            <div className="flex h-full text-gray-k">Ciudad guatemala</div>
-            <div className="flex h-full font-semibold">$ 38,00000</div>
-          </div>
-          <div className="flex w-10 flex-row gap-1">
-            <button className="m-auto rounded-lg border bg-red-500 p-2">
-              <p className="text-white">Delete</p>
-            </button>
-            <button className="m-auto rounded-lg border bg-yellow-300 p-2">
-              <p className="text-white">Editar</p>
-            </button>
-          </div>
-        </div>
         <div className="flex h-1/4 flex-row  gap-6 border shadow-md">
           <div className=" w-20 border">jaja</div>
           <div className="flex w-10/12 flex-col justify-start ">
@@ -215,11 +205,19 @@ const Header = ({ logged, isAuth }) => {
             <div className="flex h-full font-semibold">$ 38,00000</div>
           </div>
           <div className="flex w-10 flex-row gap-1">
-            <button className="m-auto rounded-lg border bg-red-500 p-2">
-              <p className="text-white">Delete</p>
+            <button className="m-auto flex rounded-lg border p-2 shadow-md">
+              <img
+                className="m-auto  flex h-6 w-6 select-none"
+                src={edit}
+                alt="Hi"
+              ></img>
             </button>
-            <button className="m-auto rounded-lg border bg-yellow-300 p-2">
-              <p className="text-white">Editar</p>
+            <button className="m-auto rounded-lg  border p-2 shadow-md">
+              <img
+                className="m-auto  flex h-6 w-6 select-none"
+                src={deletee}
+                alt="Hi"
+              ></img>
             </button>
           </div>
         </div>

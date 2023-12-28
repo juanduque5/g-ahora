@@ -50,6 +50,8 @@ const Login = ({ setAutoLogout }) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
             setError(errorData.message);
+            console.log(errorData.message);
+            console.log(error);
             openModal();
             throw new Error(`Error: ${errorData.message}`);
           });

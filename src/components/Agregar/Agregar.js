@@ -2,11 +2,21 @@ import { React, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
-// import "./Account.css";
+import "./Agregar.css";
 import down from "../../images/chevron-down.png";
+import househ from "../../images/househ.png";
+import land from "../../images/land.png";
+import apartment from "../../images/apartment.png";
+import business from "../../images/business-goal.png";
 
 const Agregar = ({ logged, isAuth }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const [filterOption, setFilterOption] = useState({
+    casa: false,
+    apartamento: false,
+    local: false,
+    lote: false,
+  });
 
   const navigate = useNavigate();
   const accessLogin = () => {
@@ -17,6 +27,18 @@ const Agregar = ({ logged, isAuth }) => {
   const accessAgregar = () => {
     navigate("/Agregar");
   };
+
+  const filterSearch = (option, type) => {
+    // const values = Object.keys(filterOption);
+    console.log(option);
+    setFilterOption({
+      ...filterOption,
+
+      [option]: !filterOption[option],
+    });
+  };
+
+  console.log(filterOption);
 
   return (
     <div className="flex flex-col">
@@ -191,14 +213,41 @@ const Agregar = ({ logged, isAuth }) => {
           <p className="m-auto font-semibold">Seleciona tipo de inmueble</p>
         </div>
         <div className="m-auto flex h-52 w-full flex-row items-center justify-center gap-4 border">
-          <div className="cursor-pointer border p-5 hover:border-blue-new ">
-            <p>Casa</p>
+          <div
+            onClick={() => filterSearch("casa")}
+            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+              filterOption.casa ? "myBorder" : ""
+            } `}
+          >
+            <img src={househ} className="m-auto" alt="Hi"></img>
+            <p className="m-auto">Casa</p>
           </div>
-          <div className="cursor-pointer border p-5 hover:border-blue-new ">
-            <p>Apartamento</p>
-          </div> 
-          <div className="cursor-pointer border p-5 hover:border-blue-new ">
-            <p>Inmueble</p>
+          <div
+            onClick={() => filterSearch("apartamento")}
+            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+              filterOption.apartamento ? "myBorder" : ""
+            } `}
+          >
+            <img src={apartment} className="m-auto h-12 w-12" alt="Hi"></img>
+            <p className="m-auto">Apartamento</p>
+          </div>
+          <div
+            onClick={() => filterSearch("local")}
+            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+              filterOption.local ? "myBorder" : ""
+            } `}
+          >
+            <img src={business} className="m-auto" alt="Hi"></img>
+            <p className="m-auto">Local</p>
+          </div>
+          <div
+            onClick={() => filterSearch("lote")}
+            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+              filterOption.lote ? "myBorder" : ""
+            } `}
+          >
+            <img src={land} className="m-auto" alt="Hi"></img>
+            <p className="m-auto">Lote</p>
           </div>
         </div>
         <div className="borde m-auto flex h-20">
