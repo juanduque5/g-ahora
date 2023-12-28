@@ -16,6 +16,7 @@ import Reset from "./components/Reset/Reset";
 import ResetPassword from "./components/ResetPassword/ResetPassword";
 import Account from "./components/Account/Account";
 import Agregar from "./components/Agregar/Agregar";
+import Detalles from "./components/Detalles/Detalles";
 
 import image5 from "./images/image5.png";
 import image6 from "./images/image6.png";
@@ -349,10 +350,22 @@ class App extends Component {
             }
           />
           <Route
-            path="/Agregar"              
+            path="/Agregar"
             element={
               <>
                 <Agregar
+                  logged={name}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
+              </>
+            }
+          />
+          <Route
+            path="/Detalles"
+            element={
+              <>
+                <Detalles
                   logged={name}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}

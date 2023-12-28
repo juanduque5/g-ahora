@@ -2,14 +2,11 @@ import { React, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
-import "./Agregar.css";
-import down from "../../images/chevron-down.png";
-import househ from "../../images/househ.png";
-import land from "../../images/land.png";
-import apartment from "../../images/apartment.png";
-import business from "../../images/business-goal.png";
+// import "./Agregar.css";
 
-const Agregar = ({ logged, isAuth }) => {
+import down from "../../images/chevron-down.png";
+
+const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
   const [filterOption, setFilterOption] = useState({
     casa: false,
@@ -46,7 +43,6 @@ const Agregar = ({ logged, isAuth }) => {
   };
 
   console.log(filterOption);
-
   return (
     <div className="flex flex-col">
       <div className="header-shadow   mb-10 flex h-20 w-full">
@@ -215,60 +211,25 @@ const Agregar = ({ logged, isAuth }) => {
         </div>
       </div>
 
-      <div className="ajusta relative top-24 flex h-auto flex-col border">
-        <div className=" flex h-20 w-full border">
-          <p className="m-auto font-semibold">Seleciona tipo de inmueble</p>
-        </div>
-        <div className="m-auto flex h-52 w-full flex-row items-center justify-center gap-4 border">
-          <div
-            onClick={() => filterSearch("casa")}
-            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-              filterOption.casa ? "myBorder" : ""
-            } `}
-          >
-            <img src={househ} className="m-auto" alt="Hi"></img>
-            <p className="m-auto">Casa</p>
+      <div className="mb-11">
+        <div className="ajusta relative top-7 flex h-auto flex-col border">
+          <div className="flex justify-start">
+            <p>Datos principales</p>
           </div>
-          <div
-            onClick={() => filterSearch("apartamento")}
-            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-              filterOption.apartamento ? "myBorder" : ""
-            } `}
-          >
-            <img src={apartment} className="m-auto h-12 w-12" alt="Hi"></img>
-            <p className="m-auto">Apartamento</p>
+          <div className="flex h-72 w-full flex-row border ">
+            <div className="w-9/12 border">
+              <p>jaja</p>
+            </div>
+            <div className="w-1/4 border">
+              <p>jaja</p>
+            </div>
           </div>
-          <div
-            onClick={() => filterSearch("local")}
-            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-              filterOption.local ? "myBorder" : ""
-            } `}
-          >
-            <img src={business} className="m-auto" alt="Hi"></img>
-            <p className="m-auto">Local</p>
-          </div>
-          <div
-            onClick={() => filterSearch("lote")}
-            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-              filterOption.lote ? "myBorder" : ""
-            } `}
-          >
-            <img src={land} className="m-auto" alt="Hi"></img>
-            <p className="m-auto">Lote</p>
-          </div>
-        </div>
-        <div className="borde m-auto flex h-20">
-          <div className="m-auto">
-            <button
-              onClick={accessAgregar}
-              className="rounded-lg bg-blue-new p-4 text-white"
-            >
-              Siguiente
-            </button>
+          <div className=" h-72 w-full border">
+            <p>jja</p>
           </div>
         </div>
       </div>
     </div>
   );
 };
-export default Agregar;
+export default Detalles;
