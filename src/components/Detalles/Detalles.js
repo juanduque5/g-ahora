@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
@@ -8,21 +8,18 @@ import down from "../../images/chevron-down.png";
 
 const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
-  const [filterOption, setFilterOption] = useState({
-    casa: false,
-    apartamento: false,
-    local: false,
-    lote: false,
-  });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!logged) {
+      navigate("/");
+    }
+    return () => {};
+  }, [logged, navigate]); // Dependencias que activarán el efecto
+
   const accessLogin = () => {
     navigate("/Login");
-    window.location.reload();
-  };
-
-  const accessAgregar = () => {
-    navigate("/Detalles");
     window.location.reload();
   };
 
@@ -31,18 +28,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     window.location.reload();
   };
 
-  const filterSearch = (option, type) => {
-    const updatedFilterOption = {};
+  console.log("isAuth", isAuth);
 
-    // Set the selected option to true and others to false
-    Object.keys(filterOption).forEach((key) => {
-      updatedFilterOption[key] = key === option ? true : false;
-    });
-
-    setFilterOption(updatedFilterOption);
-  };
-
-  console.log(filterOption);
   return (
     <div className="flex flex-col">
       <div className="header-shadow   mb-10 flex h-20 w-full">
@@ -214,19 +201,142 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
       <div className="mb-11">
         <div className="ajusta relative top-7 flex h-auto flex-col border">
           <div className="flex justify-start">
-            <p>Datos principales</p>
+            <p className="font-medium">Datos principales</p>
           </div>
-          <div className="flex h-72 w-full flex-row border ">
-            <div className="w-9/12 border">
-              <p>jaja</p>
+          <div className="flex h-96 w-full flex-col border md:h-72  md:flex-row">
+            <div className="order-2 flex w-full flex-col border md:order-1 md:w-9/12">
+              <div className="flex h-auto flex-col border md:h-1/2 md:flex-row">
+                <div className="flex w-full flex-col border md:w-1/2">
+                  <div className="flex h-1/2 items-center border">
+                    <p className="font-semibold">Nombre de la propiedad:</p>
+                  </div>
+                  <div className="flex h-1/2 items-center border">
+                    <input
+                      type="text"
+                      className="h-full w-11/12 rounded-md border border-gray-400 p-1 md:h-3/5 "
+                    ></input>
+                  </div>
+                </div>
+                <div className="flex w-full flex-col border md:w-1/2">
+                  <div className="flex h-1/2 items-center border">
+                    <p className=" font-semibold">Direccion: </p>
+                  </div>
+                  <div className="flex h-1/2 items-center border">
+                    <input
+                      type="text"
+                      className="h-full w-11/12  rounded-md border border-gray-400 p-1 md:h-3/5"
+                    ></input>
+                  </div>
+                </div>
+              </div>
+              <div className="flex h-full flex-col border md:h-3/5">
+                <div className="h-auto border">
+                  <p className="font-semibold">Description:</p>
+                </div>
+                <div
+                  style={{
+                    height: "100%",
+                    border: "1px solid #ccc",
+                    padding: "8px",
+                    overflowY: "auto",
+                  }}
+                >
+                  <textarea
+                    style={{
+                      width: "95%",
+                      height: "94%",
+                      borderRadius: "4px",
+                      border: "1px solid rgb(156 163 175)",
+                      padding: "8px",
+                      boxSizing: "border-box",
+                      resize: "none", // Evitar que se redimensione
+                    }}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="w-1/4 border">
-              <p>jaja</p>
+            <div className="order-1 flex h-2/4 w-full border md:order-2 md:h-full md:w-1/4">
+              <div className="m-auto flex h-4/6 w-11/12 cursor-pointer border border-dashed border-gray-600 bg-slate-100 md:h-5/6">
+                <p className="m-auto">Subir imagenes</p>
+              </div>
             </div>
           </div>
-          <div className=" h-72 w-full border">
-            <p>jja</p>
+          <div className=" flex h-auto w-full flex-col border md:h-72">
+            <div className="h-10 border">
+              <p className="font-semibold">Detalles</p>
+            </div>
+            <div className="flex h-1/2 flex-col border md:flex-row">
+              <div className="flex w-full flex-col border">
+                <div className="flex h-1/2 items-center border">
+                  <p className="font-semibold">Numero Habitaciones:</p>
+                </div>
+                <div className="flex h-1/2 items-center border">
+                  <input
+                    type="text"
+                    className="h-3/5 w-11/12  rounded-md border border-gray-400 p-1 "
+                  ></input>
+                </div>
+              </div>
+              <div className="flex w-full flex-col border">
+                <div className="flex h-1/2 items-center border">
+                  <p className="font-semibold">Numero Banos:</p>
+                </div>
+                <div className="flex h-1/2 items-center border">
+                  <input
+                    type="text"
+                    className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
+                  ></input>
+                </div>
+              </div>
+              <div className="flex w-full flex-col border">
+                <div className="flex h-1/2 items-center border">
+                  <p className="font-semibold">Estacionamientos:</p>
+                </div>
+                <div className="flex h-1/2 items-center border">
+                  <input
+                    type="text"
+                    className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
+                  ></input>
+                </div>
+              </div>
+            </div>
+            <div className="flex h-1/2 flex-col border md:flex-row">
+              <div className="flex w-full flex-col border md:w-4/12">
+                <div className="flex h-1/2 items-center border">
+                  <p className="font-semibold">
+                    Area construccion en metros cuadrados:
+                  </p>
+                </div>
+                <div className="flex h-1/2 items-center border">
+                  <input
+                    type="text"
+                    className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
+                  ></input>
+                </div>
+              </div>
+              <div className="flex w-full flex-col border md:w-4/12">
+                <div className="flex h-1/2 items-center border">
+                  <p className="font-semibold">
+                    Area del terreno en metros cuadrados:
+                  </p>
+                </div>
+                <div className="flex h-1/2 items-center border">
+                  <input
+                    type="text"
+                    className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
+                  ></input>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <div className="mb-6">
+        <div className="ajusta flex ">
+          <button className="m-auto rounded-lg border bg-blue-new p-4 ">
+            <p className="text-white">Agregar</p>
+          </button>
         </div>
       </div>
     </div>

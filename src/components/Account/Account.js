@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
@@ -8,7 +8,7 @@ import down from "../../images/chevron-down.png";
 import plus from "../../images/plus.png";
 import edit from "../../images/edit.png";
 
-const Header = ({ logged, isAuth }) => {
+const Header = ({ logged, isAuth, logoutHandler }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
 
   const navigate = useNavigate();
@@ -20,6 +20,15 @@ const Header = ({ logged, isAuth }) => {
   const accessAgregar = () => {
     navigate("/Agregar");
   };
+
+  useEffect(() => {
+    if (!logged) {
+      navigate("/");
+    }
+    return () => {};
+  }, [logged, navigate]); // Dependencias que activarán el efecto
+
+  console.log("isAuth", isAuth);
 
   return (
     <div className="">

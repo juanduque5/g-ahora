@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
@@ -9,7 +9,7 @@ import land from "../../images/land.png";
 import apartment from "../../images/apartment.png";
 import business from "../../images/business-goal.png";
 
-const Agregar = ({ logged, isAuth }) => {
+const Agregar = ({ logged, isAuth, logoutHandler }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
   const [filterOption, setFilterOption] = useState({
     casa: false,
@@ -19,6 +19,14 @@ const Agregar = ({ logged, isAuth }) => {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!logged) {
+      navigate("/");
+    }
+    return () => {};
+  }, [logged, navigate]); // Dependencias que activarán el efecto
+
   const accessLogin = () => {
     navigate("/Login");
     window.location.reload();
