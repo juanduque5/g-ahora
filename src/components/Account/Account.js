@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 import "./Account.css";
@@ -10,6 +11,8 @@ import edit from "../../images/edit.png";
 
 const Header = ({ logged, isAuth, logoutHandler }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const { id } = useParams();
+  console.log("id daddy", id);
 
   const navigate = useNavigate();
   const accessLogin = () => {
@@ -18,7 +21,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
   };
 
   const accessAgregar = () => {
-    navigate("/Agregar");
+    navigate(`/Agregar/${id}`);
   };
 
   useEffect(() => {

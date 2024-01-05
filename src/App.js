@@ -350,7 +350,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/Agregar"
+            path="/Agregar/:id"
             element={
               <>
                 <Agregar
@@ -362,7 +362,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/Detalles"
+            path="/Detalles/:id/:selectedOption"
             element={
               <>
                 <Detalles

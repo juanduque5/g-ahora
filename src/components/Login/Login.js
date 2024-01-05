@@ -64,9 +64,9 @@ const Login = ({ setAutoLogout }) => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.id);
         localStorage.setItem("name", data.name);
-        // const remainingMilliseconds = 60 * 60 * 1000;
+        const remainingMilliseconds = 60 * 60 * 1000;
         //two minutes
-        const remainingMilliseconds = 2 * 60 * 1000;
+        // const remainingMilliseconds = 2 * 60 * 1000;
         const expiryDate = new Date(
           new Date().getTime() + remainingMilliseconds,
         );

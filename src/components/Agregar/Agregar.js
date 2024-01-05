@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import Modal from "react-modal";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 import "./Agregar.css";
@@ -11,12 +12,17 @@ import business from "../../images/business-goal.png";
 
 const Agregar = ({ logged, isAuth, logoutHandler }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const [isModalOpen, setIsModalOPen] = useState(false);
+  const [error, setError] = useState(null);
   const [filterOption, setFilterOption] = useState({
     casa: false,
     apartamento: false,
     local: false,
     lote: false,
   });
+
+  const { id } = useParams();
+  console.log("id-id", id);
 
   const navigate = useNavigate();
 
@@ -33,8 +39,16 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
   };
 
   const accessAgregar = () => {
-    navigate("/Detalles");
-    window.location.reload();
+    const selectedOption = Object.keys(filterOption).find(
+      (key) => filterOption[key],
+    );
+    if (selectedOption) {
+      navigate(`/Detalles/${id}/${selectedOption}`);
+      window.location.reload();
+    } else {
+      openModal();
+      setError("Please select an option");
+    }
   };
 
   const accessAccount = () => {
@@ -51,6 +65,13 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
     });
 
     setFilterOption(updatedFilterOption);
+  };
+
+  const openModal = () => {
+    setIsModalOPen(true);
+  };
+  const closeModal = () => {
+    setIsModalOPen(false);
   };
 
   console.log(filterOption);
@@ -276,6 +297,29 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
           </div>
         </div>
       </div>
+      <Modal isOpen={isModalOpen} onAfterClose={closeModal}>
+        <div className="flex flex-col gap-1">
+          <div className="  border-b-slate-400">
+            <p className="font-semibold">An Error Occurred</p>
+          </div>
+          {error && (
+            <div className="mt-2 h-28">
+              <ul>
+                <li className="ml-1">- {error}</li>
+              </ul>
+            </div>
+          )}
+
+          <div className="relative top-5 flex justify-end ">
+            <button
+              onClick={closeModal}
+              className="flex h-9 w-1/4 justify-center rounded-md bg-red-500"
+            >
+              <p className="m-auto font-open-sans text-white ">Exit</p>
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

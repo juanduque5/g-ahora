@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 // import "./Agregar.css";
@@ -8,6 +8,17 @@ import down from "../../images/chevron-down.png";
 
 const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const [info, setInfo] = useState({
+    ciudad: "",
+    barrio: "",
+    description: "",
+    habitaciones: "",
+    banos: "",
+    estacionamientos: "",
+    area: "",
+    estado: "",
+  });
+  const { selectedOption } = useParams();
 
   const navigate = useNavigate();
 
@@ -26,6 +37,24 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const accessAccount = () => {
     navigate("/");
     window.location.reload();
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInfo({
+      ...info,
+      [name]: value,
+    });
+  };
+
+  const uploadInfo = (e) => {
+    e.preventDefault();
+    let datosCombinados = {
+      ...info,
+      tipo: selectedOption,
+    };
+
+    console.log("DATOS COMBINED:", datosCombinados);
   };
 
   console.log("isAuth", isAuth);
@@ -208,10 +237,13 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
               <div className="flex h-auto flex-col border md:h-1/2 md:flex-row">
                 <div className="flex w-full flex-col border md:w-1/2">
                   <div className="flex h-1/2 items-center border">
-                    <p className="font-semibold">Nombre de la propiedad:</p>
+                    <p className="font-semibold">Ciuadad:</p>
                   </div>
                   <div className="flex h-1/2 items-center border">
                     <input
+                      name="ciudad"
+                      value={info.ciudad}
+                      onChange={handleChange}
                       type="text"
                       className="h-full w-11/12 rounded-md border border-gray-400 p-1 md:h-3/5 "
                     ></input>
@@ -219,10 +251,13 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                 </div>
                 <div className="flex w-full flex-col border md:w-1/2">
                   <div className="flex h-1/2 items-center border">
-                    <p className=" font-semibold">Direccion: </p>
+                    <p className=" font-semibold">Barrio: </p>
                   </div>
                   <div className="flex h-1/2 items-center border">
                     <input
+                      name="barrio"
+                      value={info.barrio}
+                      onChange={handleChange}
                       type="text"
                       className="h-full w-11/12  rounded-md border border-gray-400 p-1 md:h-3/5"
                     ></input>
@@ -257,7 +292,13 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
             </div>
             <div className="order-1 flex h-2/4 w-full border md:order-2 md:h-full md:w-1/4">
               <div className="m-auto flex h-4/6 w-11/12 cursor-pointer border border-dashed border-gray-600 bg-slate-100 md:h-5/6">
-                <p className="m-auto">Subir imagenes</p>
+                <p className="m-auto">
+                  {" "}
+                  <span className="text-blue-new underline">
+                    Subir imagenes
+                  </span>{" "}
+                  o arrastrarlas
+                </p>
               </div>
             </div>
           </div>
@@ -272,6 +313,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                 </div>
                 <div className="flex h-1/2 items-center border">
                   <input
+                    name="habitaciones"
+                    value={info.habitaciones}
+                    onChange={handleChange}
                     type="text"
                     className="h-3/5 w-11/12  rounded-md border border-gray-400 p-1 "
                   ></input>
@@ -283,6 +327,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                 </div>
                 <div className="flex h-1/2 items-center border">
                   <input
+                    name="banos"
+                    value={info.banos}
+                    onChange={handleChange}
                     type="text"
                     className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
                   ></input>
@@ -294,6 +341,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                 </div>
                 <div className="flex h-1/2 items-center border">
                   <input
+                    name="estacionamientos"
+                    value={info.estacionamientos}
+                    onChange={handleChange}
                     type="text"
                     className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
                   ></input>
@@ -309,6 +359,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                 </div>
                 <div className="flex h-1/2 items-center border">
                   <input
+                    name="area"
+                    value={info.area}
+                    onChange={handleChange}
                     type="text"
                     className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
                   ></input>
@@ -316,9 +369,21 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
               </div>
               <div className="flex w-full flex-col border md:w-4/12">
                 <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">
-                    Area del terreno en metros cuadrados:
-                  </p>
+                  <p className="font-semibold">Nuevo o usado:</p>
+                </div>
+                <div className="flex h-1/2 items-center border">
+                  <input
+                    name="estado"
+                    value={info.estado}
+                    onChange={handleChange}
+                    type="text"
+                    className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
+                  ></input>
+                </div>
+              </div>
+              <div className="flex w-full flex-col border md:w-4/12">
+                <div className="flex h-1/2 items-center border">
+                  <p className="font-semibold">Direccion para el mapa</p>
                 </div>
                 <div className="flex h-1/2 items-center border">
                   <input
@@ -334,7 +399,10 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
 
       <div className="mb-6">
         <div className="ajusta flex ">
-          <button className="m-auto rounded-lg border bg-blue-new p-4 ">
+          <button
+            onClick={uploadInfo}
+            className="m-auto rounded-lg border bg-blue-new p-4 "
+          >
             <p className="text-white">Agregar</p>
           </button>
         </div>
