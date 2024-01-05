@@ -18,7 +18,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     area: "",
     estado: "",
   });
-  const { selectedOption } = useParams();
+  const { id, selectedOption } = useParams();
 
   const navigate = useNavigate();
 
@@ -49,12 +49,40 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
 
   const uploadInfo = (e) => {
     e.preventDefault();
-    let datosCombinados = {
+    const datosCombinados = {
       ...info,
       tipo: selectedOption,
+      id: id,
     };
 
-    console.log("DATOS COMBINED:", datosCombinados);
+    const properData = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(datosCombinados),
+    };
+
+    fetch("http://localhost:2001/properties/properties", properData)
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((errorData) => {
+            console.log(errorData);
+          });
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        console.log("DATA", data);
+        navigate("/");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log("ERROR", error);
+      });
+
+    // console.log("DATOS COMBINED:", datosCombinados);
   };
 
   console.log("isAuth", isAuth);
@@ -277,6 +305,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                   }}
                 >
                   <textarea
+                    name="description"
+                    value={info.description}
+                    onChange={handleChange}
                     style={{
                       width: "95%",
                       height: "94%",
