@@ -18,9 +18,9 @@ import Account from "./components/Account/Account";
 import Agregar from "./components/Agregar/Agregar";
 import Detalles from "./components/Detalles/Detalles";
 
-import image5 from "./images/image5.png";
-import image6 from "./images/image6.png";
-import image7 from "./images/image7.png";
+// import image5 from "./images/image5.png";
+// import image6 from "./images/image6.png";
+// import image7 from "./images/image7.png";
 //
 
 // import MainB from "./components/MainB/MainB";
@@ -34,108 +34,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      info: [
-        {
-          url: image5,
-          tipo: "Apartamento-Venta",
-          precio: "600,000",
-          lugar: "Ciudad guatemala",
-          cuartos: "5",
-          banos: "3",
-          parqueo: "2",
-          metros: "m473.2",
-        },
-        {
-          url: image6,
-          tipo: "Casa-Venta",
-          precio: "200,000",
-          lugar: "Ciudad Gotica",
-          cuartos: "2",
-          banos: "2",
-          parqueo: "1",
-          metros: "m173.2",
-        },
-        {
-          url: image7,
-          tipo: "Apartamento-Venta",
-          precio: "400,000",
-          lugar: "Ciudad Vieja",
-          cuartos: "3",
-          banos: "2",
-          parqueo: "1",
-          metros: "m73.2",
-        },
-        {
-          url: image7,
-          tipo: "Apartamento-Venta",
-          precio: "400,000",
-          lugar: "Ciudad Vieja",
-          cuartos: "3",
-          banos: "2",
-          parqueo: "1",
-          metros: "m73.2",
-        },
-        {
-          url: image6,
-          tipo: "Casa-Venta",
-          precio: "200,000",
-          lugar: "Ciudad Gotica",
-          cuartos: "2",
-          banos: "2",
-          parqueo: "1",
-          metros: "m173.2",
-        },
-        {
-          url: image5,
-          tipo: "Apartamento-Venta",
-          precio: "600,000",
-          lugar: "Ciudad guatemala",
-          cuartos: "5",
-          banos: "3",
-          parqueo: "2",
-          metros: "m473.2",
-        },
-        {
-          url: image7,
-          tipo: "Apartamento-Venta",
-          precio: "400,000",
-          lugar: "Ciudad Vieja",
-          cuartos: "3",
-          banos: "2",
-          parqueo: "1",
-          metros: "m73.2",
-        },
-        {
-          url: image6,
-          tipo: "Casa-Venta",
-          precio: "200,000",
-          lugar: "Ciudad Gotica",
-          cuartos: "2",
-          banos: "2",
-          parqueo: "1",
-          metros: "m173.2",
-        },
-        {
-          url: image5,
-          tipo: "Apartamento-Venta",
-          precio: "600,000",
-          lugar: "Ciudad guatemala",
-          cuartos: "5",
-          banos: "3",
-          parqueo: "2",
-          metros: "m473.2",
-        },
-        {
-          url: image5,
-          tipo: "Apartamento-Venta",
-          precio: "600,000",
-          lugar: "Ciudad guatemala",
-          cuartos: "5",
-          banos: "3",
-          parqueo: "2",
-          metros: "m473.2",
-        },
-      ],
+      info: [],
       new: {},
       token: null,
       expiryDate: null,
@@ -147,6 +46,9 @@ class App extends Component {
 
   componentDidMount() {
     console.log("App componentDidMount");
+
+    this.fetchData();
+
     const token = localStorage.getItem("token");
     const expiryDate = localStorage.getItem("expiryDate");
 
@@ -170,6 +72,21 @@ class App extends Component {
 
     this.setAutoLogout(remainingMilliseconds);
   }
+
+  fetchData = async () => {
+    console.log("fetchio");
+    try {
+      const response = await fetch("http://localhost:2001/properties/info");
+      if (!response.ok) {
+        console.log("Error al obtener datos iniciales");
+      }
+      const data = await response.json();
+      this.setState({ properties: data });
+      console.log("data", data);
+    } catch (error) {
+      console.error("Error al obtener datos iniciales:", error);
+    }
+  };
 
   logoutHandler = () => {
     this.setState({ isAuth: false, token: null, userId: null });
@@ -380,3 +297,104 @@ class App extends Component {
 }
 
 export default App;
+
+// {
+//           url: image5,
+//           tipo: "Apartamento-Venta",
+//           precio: "600,000",
+//           lugar: "Ciudad guatemala",
+//           cuartos: "5",
+//           banos: "3",
+//           parqueo: "2",
+//           metros: "m473.2",
+//         },
+//         {
+//           url: image6,
+//           tipo: "Casa-Venta",
+//           precio: "200,000",
+//           lugar: "Ciudad Gotica",
+//           cuartos: "2",
+//           banos: "2",
+//           parqueo: "1",
+//           metros: "m173.2",
+//         },
+//         {
+//           url: image7,
+//           tipo: "Apartamento-Venta",
+//           precio: "400,000",
+//           lugar: "Ciudad Vieja",
+//           cuartos: "3",
+//           banos: "2",
+//           parqueo: "1",
+//           metros: "m73.2",
+//         },
+//         {
+//           url: image7,
+//           tipo: "Apartamento-Venta",
+//           precio: "400,000",
+//           lugar: "Ciudad Vieja",
+//           cuartos: "3",
+//           banos: "2",
+//           parqueo: "1",
+//           metros: "m73.2",
+//         },
+//         {
+//           url: image6,
+//           tipo: "Casa-Venta",
+//           precio: "200,000",
+//           lugar: "Ciudad Gotica",
+//           cuartos: "2",
+//           banos: "2",
+//           parqueo: "1",
+//           metros: "m173.2",
+//         },
+//         {
+//           url: image5,
+//           tipo: "Apartamento-Venta",
+//           precio: "600,000",
+//           lugar: "Ciudad guatemala",
+//           cuartos: "5",
+//           banos: "3",
+//           parqueo: "2",
+//           metros: "m473.2",
+//         },
+//         {
+//           url: image7,
+//           tipo: "Apartamento-Venta",
+//           precio: "400,000",
+//           lugar: "Ciudad Vieja",
+//           cuartos: "3",
+//           banos: "2",
+//           parqueo: "1",
+//           metros: "m73.2",
+//         },
+//         {
+//           url: image6,
+//           tipo: "Casa-Venta",
+//           precio: "200,000",
+//           lugar: "Ciudad Gotica",
+//           cuartos: "2",
+//           banos: "2",
+//           parqueo: "1",
+//           metros: "m173.2",
+//         },
+//         {
+//           url: image5,
+//           tipo: "Apartamento-Venta",
+//           precio: "600,000",
+//           lugar: "Ciudad guatemala",
+//           cuartos: "5",
+//           banos: "3",
+//           parqueo: "2",
+//           metros: "m473.2",
+//         },
+//         {
+//           url: image5,
+//           tipo: "Apartamento-Venta",
+//           precio: "600,000",
+//           lugar: "Ciudad guatemala",
+//           cuartos: "5",
+//           banos: "3",
+//           parqueo: "2",
+//           metros: "m473.2",
+//         },

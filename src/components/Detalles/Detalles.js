@@ -74,9 +74,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         return response.json();
       })
       .then((data) => {
-        console.log("DATA", data);
-        navigate("/");
-        window.location.reload();
+        // navigate("/");
+        // window.location.reload();
+        console.log("Property data:", data);
       })
       .catch((error) => {
         console.log("ERROR", error);
