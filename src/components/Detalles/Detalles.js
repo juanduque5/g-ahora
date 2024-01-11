@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 // import "./Agregar.css";
@@ -7,6 +7,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import down from "../../images/chevron-down.png";
 
 const Detalles = ({ logged, isAuth, logoutHandler }) => {
+  const { state } = useLocation();
+  const { id, selectedOption } = useParams();
+  const { selectedOption2 } = state || {};
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
   const [info, setInfo] = useState({
     ciudad: "",
@@ -18,7 +21,6 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     area: "",
     estado: "",
   });
-  const { id, selectedOption } = useParams();
 
   const navigate = useNavigate();
 
@@ -53,7 +55,10 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
       ...info,
       tipo: selectedOption,
       id: id,
+      uso: selectedOption2,
     };
+
+    console.log("datos combinados:", datosCombinados);
 
     const properData = {
       method: "POST",

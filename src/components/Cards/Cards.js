@@ -14,10 +14,11 @@ import "./Cards.css";
 
 const Cards = ({ title, infoH, fill, vacation }) => {
   const navigate = useNavigate();
+  console.log("infoH:", infoH);
   const redirect = (info) => {
-    // console.log("cards", info);
-    fill(info);
-    navigate("/Info");
+    console.log("id", info.id);
+    // fill(info);
+    navigate(`/PropertyInfo/${info.id}`);
   };
   return (
     <div className="ajusta">
@@ -25,11 +26,11 @@ const Cards = ({ title, infoH, fill, vacation }) => {
         {title && (
           <div className="mb-16 flex h-10 justify-center ">
             {vacation ? (
-              <p className="font-open-sans m-auto  text-center text-3xl font-semibold">
+              <p className="m-auto text-center  font-open-sans text-3xl font-semibold">
                 Destinos populares
               </p>
             ) : (
-              <p className="font-open-sans m-auto  text-center text-3xl font-semibold">
+              <p className="m-auto text-center  font-open-sans text-3xl font-semibold">
                 Explora propiedades cerca de ti
               </p>
             )}
@@ -46,10 +47,14 @@ const Cards = ({ title, infoH, fill, vacation }) => {
           {infoH.map((info, index) => (
             <div
               onClick={() => redirect(info)}
-              className=" h-500 lg:w-30 xl:w-30 sm:w-76 flex w-auto cursor-pointer flex-col   flex-wrap rounded-lg shadow-md   md:w-full "
+              className=" flex h-500 w-auto cursor-pointer flex-col flex-wrap rounded-lg shadow-md   sm:w-76 md:w-full lg:w-30   xl:w-30 "
               key={index}
             >
-              <div className="h-3/5  ">
+              <div className="relative h-3/5 ">
+                <div className="absolute left-0 top-0 bg-slate-600 p-2 text-white opacity-75">
+                  {info.uso}
+                </div>
+
                 <img
                   className="m-auto h-full w-full rounded-t-lg"
                   src={info.url}
@@ -59,18 +64,18 @@ const Cards = ({ title, infoH, fill, vacation }) => {
               <div className="flex h-2/5 justify-center ">
                 <div className="m-auto flex h-44  w-11/12 flex-col ">
                   <div className=" flex h-full ">
-                    <p className="font-open-sans m-auto ml-0 text-lg font-bold md:text-lg lg:text-xl xl:text-xl">
+                    <p className="m-auto ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-xl xl:text-xl">
                       {info.tipo}
                     </p>
                   </div>
                   <div className=" flex h-full ">
-                    <p className="font-open-sans  lg:text-22 xl:text-22 m-auto ml-0 text-lg font-bold md:text-lg">
+                    <p className="m-auto  ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-22 xl:text-22">
                       $ {info.precio}
                     </p>
                   </div>
                   <div className=" flex h-full ">
-                    <p className="font-open-sans text-gray-new m-auto ml-0 text-base font-normal md:text-lg lg:text-xl xl:text-xl">
-                      {info.lugar}
+                    <p className="m-auto ml-0 font-open-sans text-base font-normal text-gray-new md:text-lg lg:text-xl xl:text-xl">
+                      {info.ciudad}
                     </p>
                   </div>
                   <div className=" flex h-full flex-row ">
@@ -81,7 +86,7 @@ const Cards = ({ title, infoH, fill, vacation }) => {
                         alt="Hi"
                       ></img>
                       <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                        {info.cuartos}
+                        {info.habitaciones}
                       </p>
                     </div>
                     <div className="flex w-1/5 ">
@@ -101,7 +106,7 @@ const Cards = ({ title, infoH, fill, vacation }) => {
                         alt="Hi"
                       ></img>
                       <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                        {info.parqueo}
+                        {info.estacionamientos}
                       </p>
                     </div>
                     <div className="flex w-2/5 ">
@@ -111,7 +116,7 @@ const Cards = ({ title, infoH, fill, vacation }) => {
                         alt="Hi"
                       ></img>
                       <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                        {info.metros}
+                        {info.area}
                       </p>
                     </div>
                   </div>
@@ -120,8 +125,8 @@ const Cards = ({ title, infoH, fill, vacation }) => {
             </div>
           ))}
         </div>
-        <div className="bg-blue-new m-auto flex h-11 w-24 cursor-pointer rounded-lg">
-          <p className="font-open-sans m-auto flex text-base text-white">
+        <div className="m-auto flex h-11 w-24 cursor-pointer rounded-lg bg-blue-new">
+          <p className="m-auto flex font-open-sans text-base text-white">
             Ver mas
           </p>
         </div>

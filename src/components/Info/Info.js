@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import useEmblaCarousel from "embla-carousel-react";
 import { Thumb } from "./thumb";
@@ -17,6 +18,8 @@ import bed from "../../images/bed.png";
 import location from "../../images/location.png";
 
 const Info = ({ info, infoH, options }) => {
+  const { id } = useParams();
+
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
@@ -25,6 +28,7 @@ const Info = ({ info, infoH, options }) => {
     containScroll: "keepSnaps",
     dragFree: true,
   });
+  const [data, setData] = useState([]);
 
   const scrollPrev = useCallback(() => {
     emblaApi && emblaApi.scrollPrev();
@@ -66,21 +70,52 @@ const Info = ({ info, infoH, options }) => {
     emblaApi.on("resize", onResize);
   }, [emblaApi, onSelect, onResize]);
 
+  useEffect(() => {
+    // Lógica para llamar al backend y obtener la información basada en el ID
+    // Puedes utilizar una función asíncrona y gestionar el estado local para la información
+    // Ejemplo:
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:2001/properties/infoById/${id}`,
+        );
+        if (!response.ok) {
+          console.log(
+            "NOT RESPONSE OK: Error al obtener datos de la propiedad",
+          );
+        }
+        const data = await response.json();
+        // console.log("data", data.data);
+        setData(data.data);
+        // Guardar la información en el estado local o hacer lo que sea necesario
+      } catch (error) {
+        console.error(
+          "CATCH ERROR: Error al obtener datos de la propiedad",
+          error,
+        );
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  console.log(data);
+
   return (
     <div className="ajusta h-auto">
       <div className="mb-8 mt-8  h-auto ">
-        <div className="h-95  flex flex-row  gap-14  ">
+        <div className="flex  h-95 flex-row  gap-14  ">
           <div className="flex flex-col gap-2 lg:w-8/12">
             <div className="mb-3 h-auto w-full ">
-              <p className="font-open-sans text-center text-3xl font-bold md:text-left">
+              <p className="text-center font-open-sans text-3xl font-bold md:text-left">
                 Casa en alquiler <br className="flex md:hidden"></br>(Cartago,
                 Valle del cauca)
               </p>
             </div>
-            <div className="embla h-450  relative flex w-full ">
-              <div className="embla__viewport  " ref={emblaRef}>
+            <div className="embla relative  flex h-450 w-full ">
+              {/* <div className="embla__viewport  " ref={emblaRef}>
                 <div className="embla__container  h-full w-auto">
-                  {infoH.map((info, index) => (
+                  {data.map((info, index) => (
                     <div className="embla__slide" key={index}>
                       <div className="embla__slide__number ">
                         <span className=" border border-gray-100 bg-white  md:border md:bg-gray-100 ">
@@ -95,7 +130,7 @@ const Info = ({ info, infoH, options }) => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
               <div className="embla__buttons ">
                 <PrevButton onClick={scrollPrev} disabled={prevBtnDisabled} />
                 <NextButton onClick={scrollNext} disabled={nextBtnDisabled} />
@@ -104,9 +139,9 @@ const Info = ({ info, infoH, options }) => {
 
             <div className=" m-auto flex h-auto w-full  flex-row ">
               <div className="embla-thumbs  ">
-                <div className="embla-thumbs__viewport" ref={emblaThumbsRef}>
+                {/* <div className="embla-thumbs__viewport" ref={emblaThumbsRef}>
                   <div className="embla-thumbs__container">
-                    {infoH.map((info, index) => (
+                    {propertyData.map((info, index) => (
                       <Thumb
                         onClick={() => onThumbClick(index)}
                         selected={index === selectedIndex}
@@ -116,14 +151,14 @@ const Info = ({ info, infoH, options }) => {
                       />
                     ))}
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
           <div className="hidden w-1/4 gap-4   lg:flex lg:flex-col">
             <div className=" flex h-auto w-full flex-row">
               <div className="flex w-2/5 items-center ">
-                <p className="text-blue-new text-base font-bold">EN VENTA</p>
+                <p className="text-base font-bold text-blue-new">EN VENTA</p>
               </div>
               <div className="flex w-3/5 justify-end ">
                 <p className="text-lg font-bold sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
@@ -138,7 +173,7 @@ const Info = ({ info, infoH, options }) => {
                   src={share}
                   alt="Your alt text"
                 />
-                <p className="font-fira-sans cursor-pointer text-sm font-bold ">
+                <p className="cursor-pointer font-fira-sans text-sm font-bold ">
                   LINK
                 </p>
               </div>
@@ -148,7 +183,7 @@ const Info = ({ info, infoH, options }) => {
                   src={like}
                   alt="Your alt text"
                 />
-                <p className="font-fira-sans cursor-pointer text-sm font-bold">
+                <p className="cursor-pointer font-fira-sans text-sm font-bold">
                   ME GUSTA
                 </p>
               </div>
@@ -156,13 +191,13 @@ const Info = ({ info, infoH, options }) => {
             <div className="flex h-full w-full flex-col rounded-xl border ">
               <div className="h-1/2 ">
                 <div className="flex h-1/4 ">
-                  <p className="font-open-sans m-auto text-center font-medium">
+                  <p className="m-auto text-center font-open-sans font-medium">
                     Habla con un <span className="text-blue-new">agente </span>{" "}
                     para conocer más de esta propiedad.
                   </p>
                 </div>
                 <div className="flex h-1/2 ">
-                  <div className="w-30  m-auto h-5/6  rounded-full ">
+                  <div className="m-auto  h-5/6 w-30  rounded-full ">
                     <img
                       className="h-full w-full rounded-full object-cover"
                       src={mujer}
@@ -177,19 +212,19 @@ const Info = ({ info, infoH, options }) => {
                       alt=""
                       className="relative right-2 h-4 w-4 text-center"
                     />
-                    <p className="text-blue-new font-open-sans text-xl font-bold">
+                    <p className="font-open-sans text-xl font-bold text-blue-new">
                       Yessenia Méndez
                     </p>
                   </div>
                   <div className=" flex h-1/2">
-                    <p className="font-open-sans text-new m-auto text-center text-sm font-normal">
+                    <p className="m-auto text-center font-open-sans text-sm font-normal text-new">
                       Miembro desde 2022
                     </p>
                   </div>
                 </div>
               </div>
               <div className="flex h-1/2 flex-col items-center  gap-2 ">
-                <div className="h-90 flex w-11/12 flex-col gap-3 ">
+                <div className="flex h-90 w-11/12 flex-col gap-3 ">
                   <div className=" mt-2 h-full w-full rounded-xl border">
                     <input
                       className="h-full w-full rounded-xl"
@@ -211,8 +246,8 @@ const Info = ({ info, infoH, options }) => {
                       placeholder="Numero telefonico"
                     ></input>
                   </div>
-                  <div className=" bg-blue-new mb-1 flex h-full w-full cursor-pointer rounded-xl">
-                    <p className="font-fira-sans m-auto text-white">
+                  <div className=" mb-1 flex h-full w-full cursor-pointer rounded-xl bg-blue-new">
+                    <p className="m-auto font-fira-sans text-white">
                       CONTACTAR AGENTE
                     </p>
                   </div>
@@ -255,7 +290,7 @@ const Info = ({ info, infoH, options }) => {
                     <img src={bed} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full ">
-                    <p className="text-new text-base md:text-lg">Cuartos: 5</p>
+                    <p className="text-base text-new md:text-lg">Cuartos: 5</p>
                   </div>
                 </div>
                 <div className="flex h-12 w-1/2 flex-row items-center justify-center">
@@ -263,8 +298,8 @@ const Info = ({ info, infoH, options }) => {
                     <img src={car} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full">
-                    <p className="text-new text-base md:text-lg">
-                      Estacionamientos: 5
+                    <p className="text-base text-new md:text-lg">
+                      {data.estacionamientos}
                     </p>
                   </div>
                 </div>
@@ -275,7 +310,7 @@ const Info = ({ info, infoH, options }) => {
                     <img src={bath} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full">
-                    <p className="text-new text-base md:text-lg">Banos: 5</p>
+                    <p className="text-base text-new md:text-lg">Banos: 5</p>
                   </div>
                 </div>
                 <div className=" flex h-12 w-1/2 flex-row items-center justify-center">
@@ -283,8 +318,8 @@ const Info = ({ info, infoH, options }) => {
                     <img src={house} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full ">
-                    <p className="text-new text-base md:text-lg">
-                      Estado: usado
+                    <p className="text-base text-new md:text-lg">
+                      {data.estado}
                     </p>
                   </div>
                 </div>
@@ -295,7 +330,7 @@ const Info = ({ info, infoH, options }) => {
                     <img src={house} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full ">
-                    <p className="text-new text-base md:text-lg">
+                    <p className="text-base text-new md:text-lg">
                       Terreno: 8.5 x 20 mts
                     </p>
                   </div>
@@ -305,9 +340,7 @@ const Info = ({ info, infoH, options }) => {
                     <img src={house} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full ">
-                    <p className="text-new text-base md:text-lg">
-                      construcion: 245mts
-                    </p>
+                    <p className="text-base text-new md:text-lg">{data.area}</p>
                   </div>
                 </div>
               </div>
@@ -317,7 +350,7 @@ const Info = ({ info, infoH, options }) => {
                     <img src={location} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full ">
-                    <p className="text-new text-base md:text-lg">
+                    <p className="text-base text-new md:text-lg">
                       Barrio: Alamos
                     </p>
                   </div>
@@ -327,7 +360,7 @@ const Info = ({ info, infoH, options }) => {
                     <img src={house} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full ">
-                    <p className="text-new text-base md:text-lg">
+                    <p className="text-base text-new md:text-lg">
                       construcion: 245mts
                     </p>
                   </div>
@@ -337,7 +370,7 @@ const Info = ({ info, infoH, options }) => {
           </div>
         </div>
 
-        <div className="w-30 hidden  lg:flex"></div>
+        <div className="hidden w-30  lg:flex"></div>
       </div>
 
       <div className="  mb-6 flex h-auto w-full flex-col  xl:w-8/12">
@@ -347,7 +380,7 @@ const Info = ({ info, infoH, options }) => {
           </p>
         </div>
         <div className="m-auto  flex h-full w-full  md:m-0 xl:w-full ">
-          <p className="font-open-sans text-new2 mt-2 text-base md:text-xl">
+          <p className="mt-2 font-open-sans text-base text-new2 md:text-xl">
             Two bedroom apartment in the Hotel Riviera Atitlan. Overlooks one of
             the most beautiful lakes in the world. restaurant, grounds and
             swimming pool , spectacular view, lovely balcony. Is av ery quiet

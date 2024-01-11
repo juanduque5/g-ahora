@@ -34,7 +34,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      info: [],
+      info: null,
+      properties: [],
       new: {},
       token: null,
       expiryDate: null,
@@ -81,8 +82,8 @@ class App extends Component {
         console.log("Error al obtener datos iniciales");
       }
       const data = await response.json();
-      this.setState({ properties: data });
-      console.log("data", data);
+      this.setState({ properties: data.data });
+      console.log("properties data:", data.data);
     } catch (error) {
       console.error("Error al obtener datos iniciales:", error);
     }
@@ -112,13 +113,14 @@ class App extends Component {
   };
 
   render() {
-    const { info } = this.state;
+    const { info, properties } = this.state;
 
     const name = localStorage.getItem("name");
 
     const OPTIONS = {};
+    // const intenta = properties;
 
-    const newArr = info.slice(0, 3);
+    const newArr = properties.slice(0, 3);
 
     return (
       <div>
@@ -149,7 +151,7 @@ class App extends Component {
                   logoutHandler={this.logoutHandler}
                 />
                 <ListaPropiedades />
-                <Cards title={false} infoH={info} fill={this.fill} />
+                <Cards title={false} infoH={properties} fill={this.fill} />
                 <Footer />
               </>
             }
@@ -169,7 +171,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/Info"
+            path="/PropertyInfo/:id"
             element={
               <>
                 <Header

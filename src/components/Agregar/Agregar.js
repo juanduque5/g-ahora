@@ -9,6 +9,8 @@ import househ from "../../images/househ.png";
 import land from "../../images/land.png";
 import apartment from "../../images/apartment.png";
 import business from "../../images/business-goal.png";
+import sell from "../../images/sell.png";
+import rent from "../../images/rent.png";
 
 const Agregar = ({ logged, isAuth, logoutHandler }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
@@ -19,6 +21,13 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
     apartamento: false,
     local: false,
     lote: false,
+    venta: false,
+    renta: false,
+  });
+
+  const [Option, setOption] = useState({
+    venta: false,
+    renta: false,
   });
 
   const { id } = useParams();
@@ -42,8 +51,12 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
     const selectedOption = Object.keys(filterOption).find(
       (key) => filterOption[key],
     );
-    if (selectedOption) {
-      navigate(`/Detalles/${id}/${selectedOption}`);
+    const selectedOption2 = Object.keys(Option).find((key) => Option[key]);
+    if (selectedOption && selectedOption2) {
+      navigate(`/Detalles/${id}/${selectedOption}`, {
+        state: { selectedOption2 },
+      });
+
       window.location.reload();
     } else {
       openModal();
@@ -65,6 +78,17 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
     });
 
     setFilterOption(updatedFilterOption);
+  };
+
+  const filterSearch2 = (option, type) => {
+    const updatedFilterOption = {};
+
+    // Set the selected option to true and others to false
+    Object.keys(Option).forEach((key) => {
+      updatedFilterOption[key] = key === option ? true : false;
+    });
+
+    setOption(updatedFilterOption);
   };
 
   const openModal = () => {
@@ -286,11 +310,35 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
             <p className="m-auto">Lote</p>
           </div>
         </div>
-        <div className="borde m-auto flex h-20">
-          <div className="m-auto">
+        <div className="borde m-auto h-auto w-full flex-col">
+          <div className=" flex h-20 w-full border">
+            <p className="m-auto font-semibold">Venta o Renta</p>
+          </div>
+          <div className="m-auto flex h-52 w-full flex-row items-center justify-center gap-4 border">
+            <div
+              onClick={() => filterSearch2("venta")}
+              className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+                Option.venta ? "myBorder" : ""
+              } `}
+            >
+              <img src={sell} className="m-auto" alt="Hi"></img>
+              <p className="m-auto">Venta</p>
+            </div>
+            <div
+              onClick={() => filterSearch2("renta")}
+              className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+                Option.renta ? "myBorder" : ""
+              } `}
+            >
+              <img src={rent} className="m-auto" alt="Hi"></img>
+              <p className="m-auto">Renta</p>
+            </div>
+          </div>
+
+          <div className="flex">
             <button
               onClick={accessAgregar}
-              className="rounded-lg bg-blue-new p-4 text-white"
+              className="m-auto rounded-lg bg-blue-new p-4 text-white"
             >
               Siguiente
             </button>
