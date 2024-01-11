@@ -9,6 +9,8 @@ import down from "../../images/chevron-down.png";
 const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const { state } = useLocation();
   const { id, selectedOption } = useParams();
+  const [files, setFiles] = useState([]);
+  const [numFiles, setNumFiles] = useState(0);
   const { selectedOption2 } = state || {};
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
   const [info, setInfo] = useState({
@@ -23,6 +25,40 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   });
 
   const navigate = useNavigate();
+
+  // const handleUpload = () => {
+  //   const formData = new FormData();
+  //   files.forEach((file, index) => {
+  //     formData.append(`imagen${index}`, file);
+  //   });
+
+  //   const properData0 = {
+  //     method: "POST",
+  //     headers: {
+  //       // No uses "application/json" para FormData, utiliza "multipart/form-data"
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //     body: formData, // No necesitas JSON.stringify para FormData
+  //   };
+
+  //   fetch("http://localhost:2001/properties/properties", properData0)
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         return response.json().then((errorData) => {
+  //           console.log(errorData);
+  //         });
+  //       }
+
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+
+  //       console.log("Property data:", data);
+  //     })
+  //     .catch((error) => {
+  //       console.log("ERROR", error);
+  //     });
+  // };
 
   useEffect(() => {
     if (!logged) {
@@ -49,45 +85,71 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     });
   };
 
-  const uploadInfo = (e) => {
-    e.preventDefault();
-    const datosCombinados = {
-      ...info,
-      tipo: selectedOption,
-      id: id,
-      uso: selectedOption2,
-    };
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
+    setNumFiles((prevNumFiles) => prevNumFiles + selectedFiles.length);
+  };
 
-    console.log("datos combinados:", datosCombinados);
+  console.log("files:", files);
+  console.log("info", info);
 
-    const properData = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(datosCombinados),
-    };
+  const uploadInfo = async () => {
+    try {
+      if (files.length === 0) {
+        alert("Selecciona al menos una imagen.");
+        return;
+      }
 
-    fetch("http://localhost:2001/properties/properties", properData)
-      .then((response) => {
+      const formData = new FormData();
+      // formData.append("prueba", "Hola, esto es una prueba");
+
+      // Agrega datos específicos
+      formData.append("ciudad", info.ciudad);
+      formData.append("barrio", info.barrio);
+      formData.append("description", info.description);
+      formData.append("habitaciones", info.habitaciones);
+      formData.append("banos", info.banos);
+      formData.append("estacionamientos", info.estacionamientos);
+      formData.append("area", info.area);
+      formData.append("estado", info.estado);
+      formData.append("tipo", selectedOption);
+      formData.append("id", id);
+      formData.append("uso", selectedOption2);
+
+      // Verifica si files contiene archivos válidos
+      if (files.some((file) => file instanceof File)) {
+        // Agrega archivos al FormData
+        files.forEach((file, index) => {
+          console.log(`Agregando archivo ${index}:`, file);
+          formData.append("imagen", file);
+        });
+
+        console.log("Claves del FormData:", [...formData.keys()]);
+        console.log("id:", formData.get("id"));
+        console.log("Ciudad:", formData.get("ciudad"));
+        console.log("Barrio:", formData.get("barrio"));
+        console.log("Imagen 0:", formData.get("imagen"));
+
+        const response = await fetch(
+          "http://localhost:2001/properties/properties",
+          {
+            method: "POST",
+            body: formData,
+          },
+        );
         if (!response.ok) {
-          return response.json().then((errorData) => {
-            console.log(errorData);
-          });
+          console.log("error");
         }
 
-        return response.json();
-      })
-      .then((data) => {
-        // navigate("/");
-        // window.location.reload();
-        console.log("Property data:", data);
-      })
-      .catch((error) => {
-        console.log("ERROR", error);
-      });
-
-    // console.log("DATOS COMBINED:", datosCombinados);
+        // Resto del código...
+      } else {
+        alert("La lista de archivos no contiene elementos válidos.");
+      }
+    } catch (error) {
+      console.log("ERROR", error);
+      // Handle error as needed
+    }
   };
 
   console.log("isAuth", isAuth);
@@ -327,14 +389,20 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
               </div>
             </div>
             <div className="order-1 flex h-2/4 w-full border md:order-2 md:h-full md:w-1/4">
-              <div className="m-auto flex h-4/6 w-11/12 cursor-pointer border border-dashed border-gray-600 bg-slate-100 md:h-5/6">
-                <p className="m-auto">
-                  {" "}
-                  <span className="text-blue-new underline">
-                    Subir imagenes
-                  </span>{" "}
-                  o arrastrarlas
-                </p>
+              <div className="m-auto h-4/6 w-11/12 cursor-pointer flex-col border border-dashed border-gray-600 bg-slate-100 md:h-5/6">
+                <div className=" flex h-1/2 w-full flex-col border">
+                  <input
+                    className=" relative left-10 m-auto "
+                    type="file"
+                    onChange={handleFileChange}
+                  />
+                </div>
+
+                <div className=" flex h-1/2 w-full items-center justify-center border">
+                  <p className="flex w-full justify-center   text-black">
+                    Fotos selecionadas: {numFiles}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

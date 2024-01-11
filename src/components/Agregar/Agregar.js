@@ -252,7 +252,7 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
         </div>
       </div>
 
-      <div className="ajusta mb-40">
+      <div className="ajusta mb-32">
         <div className="flex h-auto w-full justify-between ">
           <div className="flex">
             <p className=" m-auto font-semibold">Nueva propiedad</p>
@@ -268,7 +268,7 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
         </div>
       </div>
 
-      <div className="ajusta relative top-24 flex h-auto flex-col border">
+      <div className="ajusta relative top-11 flex h-auto flex-col border">
         <div className=" flex h-20 w-full border">
           <p className="m-auto font-semibold">Seleciona tipo de inmueble</p>
         </div>
