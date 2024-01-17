@@ -14,7 +14,7 @@ import "./Cards.css";
 
 const Cards = ({ title, infoH, fill, vacation }) => {
   const navigate = useNavigate();
-  console.log("infoH:", infoH);
+  // console.log("infoH:", infoH[0].imageURL);
   const redirect = (info) => {
     console.log("id", info.id);
     // fill(info);
@@ -51,13 +51,13 @@ const Cards = ({ title, infoH, fill, vacation }) => {
               key={index}
             >
               <div className="relative h-3/5 ">
-                <div className="absolute left-0 top-0 bg-slate-600 p-2 text-white opacity-75">
+                <div className="absolute left-0 top-0 bg-black p-2 text-white opacity-60">
                   {info.uso}
                 </div>
 
                 <img
                   className="m-auto h-full w-full rounded-t-lg"
-                  src={info.url}
+                  src={info.imageURL}
                   alt="Hi"
                 ></img>
               </div>

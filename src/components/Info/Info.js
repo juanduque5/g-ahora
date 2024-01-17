@@ -28,6 +28,7 @@ const Info = ({ info, infoH, options }) => {
     containScroll: "keepSnaps",
     dragFree: true,
   });
+  const [propertyData, setPropertyData] = useState([]);
   const [data, setData] = useState([]);
 
   const scrollPrev = useCallback(() => {
@@ -86,6 +87,7 @@ const Info = ({ info, infoH, options }) => {
         }
         const data = await response.json();
         // console.log("data", data.data);
+        setPropertyData(data.data[0]);
         setData(data.data);
         // Guardar la información en el estado local o hacer lo que sea necesario
       } catch (error) {
@@ -100,6 +102,7 @@ const Info = ({ info, infoH, options }) => {
   }, [id]);
 
   console.log(data);
+  console.log("PropertyData", propertyData);
 
   return (
     <div className="ajusta h-auto">
@@ -108,12 +111,12 @@ const Info = ({ info, infoH, options }) => {
           <div className="flex flex-col gap-2 lg:w-8/12">
             <div className="mb-3 h-auto w-full ">
               <p className="text-center font-open-sans text-3xl font-bold md:text-left">
-                Casa en alquiler <br className="flex md:hidden"></br>(Cartago,
-                Valle del cauca)
+                Casa en {propertyData.uso} <br className="flex md:hidden"></br>(
+                {propertyData.ciudad})
               </p>
             </div>
             <div className="embla relative  flex h-450 w-full ">
-              {/* <div className="embla__viewport  " ref={emblaRef}>
+              <div className="embla__viewport  " ref={emblaRef}>
                 <div className="embla__container  h-full w-auto">
                   {data.map((info, index) => (
                     <div className="embla__slide" key={index}>
@@ -124,13 +127,13 @@ const Info = ({ info, infoH, options }) => {
                       </div>
                       <img
                         className=" m-auto h-full w-full md:w-full"
-                        src={info.url}
+                        src={info.imageUrl}
                         alt="Your alt text"
                       />
                     </div>
                   ))}
                 </div>
-              </div> */}
+              </div>
               <div className="embla__buttons ">
                 <PrevButton onClick={scrollPrev} disabled={prevBtnDisabled} />
                 <NextButton onClick={scrollNext} disabled={nextBtnDisabled} />
@@ -139,19 +142,19 @@ const Info = ({ info, infoH, options }) => {
 
             <div className=" m-auto flex h-auto w-full  flex-row ">
               <div className="embla-thumbs  ">
-                {/* <div className="embla-thumbs__viewport" ref={emblaThumbsRef}>
+                <div className="embla-thumbs__viewport" ref={emblaThumbsRef}>
                   <div className="embla-thumbs__container">
-                    {propertyData.map((info, index) => (
+                    {data.map((info, index) => (
                       <Thumb
                         onClick={() => onThumbClick(index)}
                         selected={index === selectedIndex}
                         index={index}
-                        imgSrc={info.url}
+                        imgSrc={info.imageUrl}
                         key={index}
                       />
                     ))}
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>
@@ -290,7 +293,9 @@ const Info = ({ info, infoH, options }) => {
                     <img src={bed} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full ">
-                    <p className="text-base text-new md:text-lg">Cuartos: 5</p>
+                    <p className="text-base text-new md:text-lg">
+                      {propertyData.habitaciones}
+                    </p>
                   </div>
                 </div>
                 <div className="flex h-12 w-1/2 flex-row items-center justify-center">
@@ -299,7 +304,7 @@ const Info = ({ info, infoH, options }) => {
                   </div>
                   <div className="w-full">
                     <p className="text-base text-new md:text-lg">
-                      {data.estacionamientos}
+                      {propertyData.estacionamientos}
                     </p>
                   </div>
                 </div>
@@ -310,7 +315,9 @@ const Info = ({ info, infoH, options }) => {
                     <img src={bath} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full">
-                    <p className="text-base text-new md:text-lg">Banos: 5</p>
+                    <p className="text-base text-new md:text-lg">
+                      {propertyData.banos}
+                    </p>
                   </div>
                 </div>
                 <div className=" flex h-12 w-1/2 flex-row items-center justify-center">
@@ -319,7 +326,7 @@ const Info = ({ info, infoH, options }) => {
                   </div>
                   <div className="w-full ">
                     <p className="text-base text-new md:text-lg">
-                      {data.estado}
+                      {propertyData.estado}
                     </p>
                   </div>
                 </div>
@@ -340,7 +347,9 @@ const Info = ({ info, infoH, options }) => {
                     <img src={house} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full ">
-                    <p className="text-base text-new md:text-lg">{data.area}</p>
+                    <p className="text-base text-new md:text-lg">
+                      {propertyData.area}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -351,7 +360,7 @@ const Info = ({ info, infoH, options }) => {
                   </div>
                   <div className="w-full ">
                     <p className="text-base text-new md:text-lg">
-                      Barrio: Alamos
+                      {propertyData.barrio}
                     </p>
                   </div>
                 </div>
@@ -361,7 +370,7 @@ const Info = ({ info, infoH, options }) => {
                   </div>
                   <div className="w-full ">
                     <p className="text-base text-new md:text-lg">
-                      construcion: 245mts
+                      {propertyData.area}
                     </p>
                   </div>
                 </div>
@@ -381,13 +390,7 @@ const Info = ({ info, infoH, options }) => {
         </div>
         <div className="m-auto  flex h-full w-full  md:m-0 xl:w-full ">
           <p className="mt-2 font-open-sans text-base text-new2 md:text-xl">
-            Two bedroom apartment in the Hotel Riviera Atitlan. Overlooks one of
-            the most beautiful lakes in the world. restaurant, grounds and
-            swimming pool , spectacular view, lovely balcony. Is av ery quiet
-            and private place. Just outside the bustle of town. Including
-            deliveries for breakfast. spectacular view, lovely balcony. Is av
-            ery quiet and private place. Just outside the bustle of town.
-            Including deliveries for breakfast.
+            {propertyData.description}
           </p>
         </div>
 
