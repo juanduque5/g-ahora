@@ -11,6 +11,7 @@ import edit from "../../images/edit.png";
 
 const Header = ({ logged, isAuth, logoutHandler }) => {
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const [lista, setLista] = useState([]);
   const { id } = useParams();
   console.log("id daddy", id);
 
@@ -31,7 +32,38 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
     return () => {};
   }, [logged, navigate]); // Dependencias que activarán el efecto
 
+  useEffect(() => {
+    // Lógica para llamar al backend y obtener la información basada en el ID
+    // Puedes utilizar una función asíncrona y gestionar el estado local para la información
+    // Ejemplo:
+    const fetchLista = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:2001/properties/allPropertiesByUser/${id}`,
+        );
+        if (!response.ok) {
+          console.log(
+            "NOT RESPONSE OK: Error al obtener datos de las propiedades",
+          );
+        }
+        const data = await response.json();
+        console.log("data", data.propertiesById);
+        setLista(data.propertiesById);
+
+        // Guardar la información en el estado local o hacer lo que sea necesario
+      } catch (error) {
+        console.error(
+          "CATCH ERROR: Error al obtener datos de las propiedades",
+          error,
+        );
+      }
+    };
+
+    fetchLista();
+  }, [id]);
+
   console.log("isAuth", isAuth);
+  console.log("lista", lista);
 
   return (
     <div className="">
@@ -204,9 +236,40 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
             </button>
           </div>
         </div>
+        <div className=" mt-12 flex h-auto flex-col gap-1  border border-red-600">
+          {lista.map((info, index) => (
+            <div
+              key={index}
+              className="flex h-1/4 flex-row  gap-6 border shadow-md"
+            >
+              <div className=" w-20 border">jaja</div>
+              <div className="flex w-10/12 flex-col justify-start ">
+                <div className="flex h-full font-semibold">{info.tipo}</div>
+                <div className="flex h-full text-gray-k">{info.ciudad}</div>
+                <div className="flex h-full font-semibold">$ 38,00000</div>
+              </div>
+              <div className="flex w-10 flex-row gap-1">
+                <button className="m-auto flex rounded-lg border p-2 shadow-md">
+                  <img
+                    className="m-auto  flex h-6 w-6 select-none"
+                    src={edit}
+                    alt="Hi"
+                  ></img>
+                </button>
+                <button className="m-auto rounded-lg  border p-2 shadow-md">
+                  <img
+                    className="m-auto  flex h-6 w-6 select-none"
+                    src={deletee}
+                    alt="Hi"
+                  ></img>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="ajusta relative top-6 mt-12 flex h-96 flex-col gap-1  ">
+      {/* <div className=" mt-12 flex h-96 flex-col gap-1  ">
         <div className="flex h-1/4 flex-row  gap-6 border shadow-md">
           <div className=" w-20 border">jaja</div>
           <div className="flex w-10/12 flex-col justify-start ">
@@ -233,7 +296,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
