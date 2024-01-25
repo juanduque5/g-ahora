@@ -1,11 +1,11 @@
 import { React, useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 import "./Account.css";
 import deletee from "../../images/deletee.png";
-import down from "../../images/chevron-down.png";
+// import down from "../../images/chevron-down.png";
 import plus from "../../images/plus.png";
 import edit from "../../images/edit.png";
 
@@ -66,8 +66,8 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
   console.log("lista", lista);
 
   return (
-    <div className="">
-      <div className="header-shadow   mb-10 flex h-20 w-full">
+    <div className="ajusta">
+      {/* <div className="header-shadow   mb-10 flex h-20 w-full">
         <div className="ajusta m-auto flex h-full w-full flex-row  ">
           <div className="m-auto flex h-3/4 w-9/12  sm:w-1/2 md:w-1/2 md:border-r  lg:w-1/2 lg:border-r xl:w-1/2 xl:border-r">
             <div className="m-auto ml-0 w-auto cursor-pointer  sm:m-auto sm:ml-0 sm:w-auto md:w-auto lg:w-2/5 xl:w-2/5">
@@ -215,9 +215,9 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
             ></img>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <div className="ajusta ">
+      <div className="mt-12">
         <div className="flex h-auto w-full justify-between ">
           <div className="flex">
             <p className=" m-auto font-semibold">Mis Propiedades</p>
