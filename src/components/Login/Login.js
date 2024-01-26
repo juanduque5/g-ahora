@@ -59,12 +59,12 @@ const Login = ({ setAutoLogout }) => {
         return response.json();
       })
       .then((data) => {
-        console.log("DATA", data);
         // name(data.name);
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.id);
         localStorage.setItem("name", data.name);
         const remainingMilliseconds = 60 * 60 * 1000;
+
         //two minutes
         // const remainingMilliseconds = 2 * 60 * 1000;
         const expiryDate = new Date(
@@ -77,6 +77,7 @@ const Login = ({ setAutoLogout }) => {
 
         setAutoLogout(remainingMilliseconds);
         navigate("/"); // Reemplaza 'NombreDeLaPantalla' con el nombre de tu pantalla
+        // console.log("DATAAA:", data);
         window.location.reload();
       })
       .catch((error) => {

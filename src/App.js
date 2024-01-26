@@ -69,7 +69,7 @@ class App extends Component {
 
     this.setState({ isAuth: true, token: token, userId: userId });
     console.log("expiryDate componentDidMount", expiryDate);
-    console.log("TOKEN", token);
+    console.log("TOKEN IN APP:", token);
     console.log("remainingMilliseconds", remainingMilliseconds);
 
     this.setAutoLogout(remainingMilliseconds);

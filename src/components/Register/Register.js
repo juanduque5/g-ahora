@@ -6,7 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 
 const Login = () => {
-  const [name, setName] = useState("");
+  const [first, setFirst] = useState("");
+  const [last, setLast] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
@@ -21,11 +22,10 @@ const Login = () => {
   //Handle Sign up API
 
   const handleSignupClick = () => {
- 
-
     const postData = {
       email: email,
-      name: name,
+      first: first,
+      last: last,
       password: password,
     };
 
@@ -61,9 +61,9 @@ const Login = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("data", data);
+        console.log("data signing up:", data);
 
-        navigate("/Login"); // Reemplaza '/dashboard' con la ruta deseada
+        // navigate("/Login"); // Reemplaza '/dashboard' con la ruta deseada
       })
       .catch((error) => {
         console.error("Error :", error);
@@ -75,9 +75,14 @@ const Login = () => {
 
   //Handle names, email and passwords
 
-  const handleName = (event) => {
-    setName(event.target.value);
+  const handleFirst = (event) => {
+    setFirst(event.target.value);
   };
+
+  const handleLast = (event) => {
+    setLast(event.target.value);
+  };
+
   const handleEmail = (event) => {
     setEmail(event.target.value);
   };
@@ -123,16 +128,22 @@ const Login = () => {
           </div>
 
           <div className="h-4/6  ">
-            <div className="m-auto flex h-1/4 w-11/12 flex-col  ">
+            <div className="m-auto flex h-1/4 w-11/12 flex-col  border">
               <div className="flex h-2/5 items-center  ">
                 <p className="font-open-sans text-sm font-bold">Nombre</p>
               </div>
-              <div className="flex h-3/5 items-center ">
+              <div className="flex h-3/5 items-center gap-2 border">
                 <input
                   className="h-5/6 w-full rounded-lg border"
                   type="text"
-                  placeholder="Nombre"
-                  onChange={handleName}
+                  placeholder="First"
+                  onChange={handleFirst}
+                ></input>
+                <input
+                  className="h-5/6 w-full rounded-lg border"
+                  type="text"
+                  placeholder="Last"
+                  onChange={handleLast}
                 ></input>
               </div>
             </div>
