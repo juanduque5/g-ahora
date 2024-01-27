@@ -43,6 +43,9 @@ class App extends Component {
       isAuth: false,
       userId: null,
       reload: true,
+      first: null,
+      last: null,
+      email: null,
     };
   }
 
@@ -64,10 +67,15 @@ class App extends Component {
     }
 
     const userId = localStorage.getItem("userId");
+
     const remainingMilliseconds =
       new Date(expiryDate).getTime() - new Date().getTime();
 
-    this.setState({ isAuth: true, token: token, userId: userId });
+    this.setState({
+      isAuth: true,
+      token: token,
+      userId: userId,
+    });
     console.log("expiryDate componentDidMount", expiryDate);
     console.log("TOKEN IN APP:", token);
     console.log("remainingMilliseconds", remainingMilliseconds);
@@ -91,11 +99,17 @@ class App extends Component {
   };
 
   logoutHandler = () => {
-    this.setState({ isAuth: false, token: null, userId: null });
+    this.setState({
+      isAuth: false,
+      token: null,
+      userId: null,
+    });
     localStorage.removeItem("token");
     localStorage.removeItem("expiryDate");
     localStorage.removeItem("userId");
-    localStorage.removeItem("name");
+    localStorage.removeItem("first");
+    localStorage.removeItem("last");
+    localStorage.removeItem("email");
 
     window.location.reload();
   };
@@ -106,22 +120,40 @@ class App extends Component {
     }, milliseconds);
   };
 
-  fill = (info) => {
-    // console.log("app", info);
-    this.setState((prevState) => ({
-      new: info,
-    }));
-  };
+  // fill = (info) => {
+  //   // console.log("app", info);
+  //   this.setState((prevState) => ({
+  //     new: info,
+  //   }));
+  // };
 
   render() {
-    const { info, properties } = this.state;
+    const { info, properties, isAuth, token, userId } = this.state;
 
-    const name = localStorage.getItem("name");
+    const first = localStorage.getItem("first");
+    const last = localStorage.getItem("last");
+    const email = localStorage.getItem("email");
 
     const OPTIONS = {};
+
     // const intenta = properties;
 
     const newArr = properties.slice(0, 3);
+
+    console.log(
+      "first:",
+      first,
+      "last:",
+      last,
+      "email:",
+      email,
+      "isAuth:",
+      isAuth,
+      "token:",
+      token,
+      "userId:",
+      userId,
+    );
 
     return (
       <div>
@@ -131,7 +163,7 @@ class App extends Component {
             element={
               <>
                 <Header
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
@@ -147,7 +179,7 @@ class App extends Component {
             element={
               <>
                 <Header
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
@@ -162,7 +194,7 @@ class App extends Component {
             element={
               <>
                 <Header
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
@@ -176,7 +208,7 @@ class App extends Component {
             element={
               <>
                 <Header
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
@@ -190,7 +222,7 @@ class App extends Component {
             element={
               <>
                 <Header
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
@@ -238,11 +270,11 @@ class App extends Component {
             element={
               <>
                 <Header
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
-                <Profile />
+                <Profile first={first} last={last} email={email} />
               </>
             }
           />
@@ -251,12 +283,12 @@ class App extends Component {
             element={
               <>
                 <Header
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
                 <Account
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
@@ -268,7 +300,7 @@ class App extends Component {
             element={
               <>
                 <Account
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
@@ -280,7 +312,7 @@ class App extends Component {
             element={
               <>
                 <Agregar
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
@@ -292,7 +324,7 @@ class App extends Component {
             element={
               <>
                 <Detalles
-                  logged={name}
+                  logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
