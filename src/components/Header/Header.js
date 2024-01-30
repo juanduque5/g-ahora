@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 import "./Header.css";
@@ -10,7 +10,14 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
   const navigate = useNavigate();
   const [menu, setMenu] = useState(false);
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const location = useLocation();
 
+  const handleClick = () => {
+    // Navegar a la ruta solo si no estamos en /propiedades
+    if (location.pathname !== "/propiedades") {
+      navigate("/propiedades");
+    }
+  };
   const toggleOpciones = () => {
     setMostrarOpciones(!mostrarOpciones);
   };
@@ -158,9 +165,12 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                 </svg>
               </Link>
             </div>
-            <div className="m-auto hidden w-30  cursor-pointer lg:block">
+            <div
+              className="m-auto hidden w-30  cursor-pointer lg:block"
+              onClick={handleClick}
+            >
               <h1 className="text-center text-base font-semibold ">
-                <Link to="/Propiedades"> Propiedades </Link>
+                Propiedades
               </h1>
             </div>
             <div className="m-auto hidden w-30  cursor-pointer lg:block">
