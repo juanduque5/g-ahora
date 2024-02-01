@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 //import { Link } from "react-router-dom";
@@ -19,12 +19,16 @@ import linkedin from "../../images/linkedin.png";
 import tiktok from "../../images/tiktok.png";
 import { Header } from "./header";
 import SelectCheckBox from "./checkBox";
+import { Cards } from "./cards";
+
 import "./Catalogo.css";
 
 const Catalogo = () => {
   const ventaoRenta = ["Venta", "Renta"];
   const [isOptionOpen, setIsOptionOPen] = useState(false);
   const [Selected, setSelected] = useState([]);
+  const [lista, setLista] = useState([]);
+  const { id } = useParams();
   const handleSelectedChange = (option) => {
     if (Selected.includes(option)) {
       const newSelected = Selected.filter((items) => items !== option);
@@ -45,6 +49,36 @@ const Catalogo = () => {
     setIsOptionOPen(!isOptionOpen);
     // console.log("adentro", isOptionOpen);
   };
+
+  useEffect(() => {
+    // Lógica para llamar al backend y obtener la información basada en el ID
+    // Puedes utilizar una función asíncrona y gestionar el estado local para la información
+    // Ejemplo:
+    const fetchLista = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:2001/properties/allPropertiesByUser/${id}`,
+        );
+        if (!response.ok) {
+          console.log(
+            "NOT RESPONSE OK: Error al obtener datos de las propiedades",
+          );
+        }
+        const data = await response.json();
+        console.log("data", data.propertiesById);
+        setLista(data.propertiesById);
+
+        // Guardar la información en el estado local o hacer lo que sea necesario
+      } catch (error) {
+        console.error(
+          "CATCH ERROR: Error al obtener datos de las propiedades",
+          error,
+        );
+      }
+    };
+
+    fetchLista();
+  }, [id]);
 
   return (
     <div className="">
@@ -131,6 +165,9 @@ const Catalogo = () => {
               handleSelectedChange={handleSelectedChange}
             />
           </div>
+        </div>
+        <div>
+          <Cards lista={lista} />
         </div>
       </div>
     </div>
