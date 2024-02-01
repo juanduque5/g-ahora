@@ -21,6 +21,7 @@ const ListaPropiedades = () => {
   const [value, setValue] = useState([0, 10000]);
   const Numeros = [1, 2, 3, 4, 5, 6, "Cualquiera"];
   const ventaoRenta = ["Venta", "Renta", "alquiler", "cualquiera"];
+
   const [filterOption, setFilterOption] = useState({
     venta: false,
     renta: false,
@@ -197,7 +198,7 @@ const ListaPropiedades = () => {
               onClick={openOption}
               className="flex h-full border border-red-500"
             >
-              <p className="font-open-sans m-auto text-base font-bold lg:text-sm xl:text-base">
+              <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
                 Venta o alquiler
               </p>
               <div className="m-auto">
@@ -205,8 +206,8 @@ const ListaPropiedades = () => {
               </div>
             </div>
             <div
-              className={`h-auto  border bg-white ${
-                isOptionOpen ? "block" : "hidden"
+              className={` h-auto border bg-white ${
+                isOptionOpen ? "relative" : "hidden"
               }`}
             >
               <SelectCheckBox
@@ -218,36 +219,36 @@ const ListaPropiedades = () => {
           </div>
           {/* {isOptionOpen && <SelectCheckBox opciones={ventaoRenta} />} */}
 
-          <div className="w-32.5  flex rounded-md border border-blue-400">
+          <div className="flex  w-32.5 rounded-md border border-blue-400">
             <input className="w-11/12" type="text" id="texto" />
             <img className="m-auto cursor-pointer" src={times} alt="Hi"></img>
           </div>
-          <div className="w-cinco flex cursor-pointer rounded-md border">
-            <p className="font-open-sans m-auto text-base font-bold lg:text-sm xl:text-base">
+          <div className="flex w-cinco cursor-pointer rounded-md border">
+            <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
               Banos
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>
-          <div className="w-cinco flex cursor-pointer rounded-md border">
-            <p className="font-open-sans md m-auto text-base font-bold lg:text-sm xl:text-base">
+          <div className="flex w-cinco cursor-pointer rounded-md border">
+            <p className="md m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
               Cuartos
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>
-          <div className="w-cinco flex cursor-pointer rounded-md border">
-            <p className="font-open-sans m-auto text-base font-bold lg:text-sm xl:text-base">
+          <div className="flex w-cinco cursor-pointer rounded-md border">
+            <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
               Precio
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>
           <div className=" flex w-10 cursor-pointer rounded-md border">
-            <p className="font-open-sans m-auto text-base font-bold lg:text-sm xl:text-base ">
+            <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base ">
               Condicion
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>
-          <div className=" w-cinco flex cursor-pointer rounded-md border">
-            <p className="font-open-sans m-auto text-base font-bold lg:text-sm xl:text-base ">
+          <div className=" flex w-cinco cursor-pointer rounded-md border">
+            <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base ">
               Ciudad
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
@@ -261,7 +262,7 @@ const ListaPropiedades = () => {
           className="w- flex  h-10 cursor-pointer rounded-md border  shadow-sm hover:border-black md:h-14 md:w-28"
         >
           <img className="m-auto  h-auto w-8 " src={filter} alt="Hi"></img>
-          <p className="font-open-sans m-auto text-sm font-medium md:text-base">
+          <p className="m-auto font-open-sans text-sm font-medium md:text-base">
             Filtro
           </p>
         </div>
@@ -344,7 +345,7 @@ const ListaPropiedades = () => {
               <div className="mb-5 flex flex-row gap-3 ">
                 {Numeros.map((numeros) => (
                   <p
-                    className="hover:bg-blue-new flex   w-8 cursor-pointer justify-center border hover:text-white"
+                    className="flex w-8   cursor-pointer justify-center border hover:bg-blue-new hover:text-white"
                     key={numeros}
                     style={{
                       backgroundColor:
@@ -355,8 +356,8 @@ const ListaPropiedades = () => {
                       width: colorMap[numeros]
                         ? "auto"
                         : "" || nums[numeros]
-                        ? "100%"
-                        : "",
+                          ? "100%"
+                          : "",
                     }}
                     onClick={() => filterSearch(numeros, "cuartos")}
                   >
@@ -370,7 +371,7 @@ const ListaPropiedades = () => {
               <div className="mb-5 flex  flex-row gap-3 ">
                 {Numeros.map((numeros) => (
                   <p
-                    className="hover:bg-blue-new flex w-8 cursor-pointer justify-center border  hover:text-white"
+                    className="flex w-8 cursor-pointer justify-center border hover:bg-blue-new  hover:text-white"
                     key={numeros}
                     style={{
                       backgroundColor:
@@ -380,8 +381,8 @@ const ListaPropiedades = () => {
                       width: colorMap[numeros]
                         ? "auto"
                         : "" || nums[numeros]
-                        ? "100%"
-                        : "",
+                          ? "100%"
+                          : "",
                     }}
                     onClick={() => filterSearch(numeros, "banos")}
                   >
@@ -427,8 +428,8 @@ const ListaPropiedades = () => {
                       value[1] > 10000
                         ? "10,000"
                         : "" || value[1]
-                        ? value[1].toLocaleString()
-                        : ""
+                          ? value[1].toLocaleString()
+                          : ""
                     }
                     onChange={handleInputMax}
                     placeholder="$ Precio maximo"
@@ -488,12 +489,12 @@ const ListaPropiedades = () => {
           <div className="flex h-10 w-full items-end justify-between ">
             <p
               onClick={closed}
-              className=" font-open-sans flex cursor-pointer justify-start underline"
+              className=" flex cursor-pointer justify-start font-open-sans underline"
             >
               Limpiar busqueda
             </p>
 
-            <div className="bg-blue-new flex h-11 w-28 cursor-pointer rounded-lg border">
+            <div className="flex h-11 w-28 cursor-pointer rounded-lg border bg-blue-new">
               <p className="m-auto text-white">Buscar</p>
             </div>
           </div>
