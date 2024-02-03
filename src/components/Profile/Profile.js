@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 //import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 // import car from "../../images/car.png";
 // import house from "../../images/house.png";
 // import bath from "../../images/bath.png";
-// import bed from "../../images/bed.png";
+import account from "../../images/account.png";
 import "./Profile.css";
 
 const Profile = ({ first, last, email }) => {
@@ -18,6 +18,8 @@ const Profile = ({ first, last, email }) => {
   const [first2, setFirst2] = useState(first);
   const [last2, setLast2] = useState(last);
   const [edit, setEdit] = useState(false);
+  // const [files, setFiles] = useState([]);
+  const fileInputRef = useRef(null);
   const { id } = useParams();
 
   console.log("id profile", id);
@@ -85,7 +87,39 @@ const Profile = ({ first, last, email }) => {
       });
   };
 
-  console.log(first2);
+  const handleFileChange = async (e) => {
+    const selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+      try {
+        // Crea un objeto FormData
+        const formData = new FormData();
+        formData.append("imagen", selectedFile);
+
+        // Envía la solicitud al backend
+        const response = await fetch(
+          `http://localhost:2001/auth/imageUpdate/${id}`,
+          {
+            method: "PUT",
+            body: formData,
+          },
+        );
+
+        // Maneja la respuesta del backend
+        const responseData = await response.json();
+        console.log("Respuesta del backend:", responseData);
+      } catch (error) {
+        console.error("Error al enviar la imagen al backend:", error);
+      }
+    }
+  };
+
+  const updateImage = () => {
+    // Activa el input de tipo file al hacer clic en el botón
+    fileInputRef.current.click();
+  };
+
+  // console.log(first2);
   return (
     <div className="ajusta">
       <div className="mt-12 flex w-full flex-col gap-5 bg-white px-3 text-[#161931] md:flex-row md:px-16 lg:px-28">
@@ -118,17 +152,26 @@ const Profile = ({ first, last, email }) => {
                 <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
                   <img
                     className="h-40 w-40 rounded-full object-cover p-1 ring-2 ring-indigo-300 dark:ring-indigo-500"
-                    src=""
+                    src={account}
                     alt=""
                   ></img>
 
                   <div className="flex flex-col space-y-5 sm:ml-8">
-                    <button
-                      type="button"
-                      className="rounded-lg border border-indigo-200 bg-[#202142] px-7 py-3.5 text-base font-medium text-indigo-100 hover:bg-indigo-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-indigo-200 "
-                    >
-                      Change picture
-                    </button>
+                    <div>
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        style={{ display: "none" }} // Oculta el input
+                        onChange={handleFileChange}
+                      />
+                      <button
+                        type="button"
+                        onClick={updateImage}
+                        className="rounded-lg border border-indigo-200 bg-[#202142] px-7 py-3.5 text-base font-medium text-indigo-100 hover:bg-indigo-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-indigo-200"
+                      >
+                        Change picture
+                      </button>
+                    </div>
                     <button
                       type="button"
                       className="rounded-lg border border-indigo-200 bg-white px-7 py-3.5 text-base font-medium text-indigo-900 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:outline-none focus:ring-4 focus:ring-indigo-200 "

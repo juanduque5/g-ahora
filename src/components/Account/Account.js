@@ -242,7 +242,13 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               key={index}
               className="flex h-1/4 flex-row  gap-6 border shadow-md"
             >
-              <div className=" w-20 border">jaja</div>
+              <div className=" w-20 border border-red-300">
+                <img
+                  className="m-auto h-full w-full rounded-t-lg"
+                  src={info.imageURL}
+                  alt="Hi"
+                ></img>
+              </div>
               <div className="flex w-10/12 flex-col justify-start ">
                 <div className="flex h-full font-semibold">{info.tipo}</div>
                 <div className="flex h-full text-gray-k">{info.ciudad}</div>
