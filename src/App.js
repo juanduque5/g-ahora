@@ -134,6 +134,7 @@ class App extends Component {
     const first = localStorage.getItem("first");
     const last = localStorage.getItem("last");
     const email = localStorage.getItem("email");
+    const url = localStorage.getItem("url");
 
     const OPTIONS = {};
 
@@ -275,7 +276,7 @@ class App extends Component {
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
-                <Profile first={first} last={last} email={email} />
+                <Profile first={first} last={last} email={email} url={url} />
               </>
             }
           />

@@ -13,11 +13,12 @@ import { useParams } from "react-router-dom";
 import account from "../../images/account.png";
 import "./Profile.css";
 
-const Profile = ({ first, last, email }) => {
+const Profile = ({ first, last, email, url }) => {
   const [email2, setEmail2] = useState(email);
   const [first2, setFirst2] = useState(first);
   const [last2, setLast2] = useState(last);
   const [edit, setEdit] = useState(false);
+  const [image, setImageLink] = useState(url);
   // const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
   const { id } = useParams();
@@ -108,9 +109,35 @@ const Profile = ({ first, last, email }) => {
         // Maneja la respuesta del backend
         const responseData = await response.json();
         console.log("Respuesta del backend:", responseData);
+        console.log("Respuesta del backend:", responseData.image);
+        // setImageLink(responseData.image);
+        localStorage.setItem("url", responseData.image);
+        window.location.reload();
       } catch (error) {
         console.error("Error al enviar la imagen al backend:", error);
       }
+    }
+  };
+
+  const handleDeleteImg = async () => {
+    try {
+      // Envía la solicitud al backend
+      const response = await fetch(
+        `http://localhost:2001/auth/deleteProfileImage/${id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      // Maneja la respuesta del backend
+      const responseData = await response.json();
+      console.log("Respuesta del backend:", responseData);
+      console.log("Respuesta del backend:", responseData.image);
+      // setImageLink(responseData.image);
+      localStorage.setItem("url", responseData.image);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error al enviar la imagen al backend:", error);
     }
   };
 
@@ -151,8 +178,8 @@ const Profile = ({ first, last, email }) => {
               <div className="mx-auto mt-8 grid max-w-2xl">
                 <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
                   <img
-                    className="h-40 w-40 rounded-full object-cover p-1 ring-2 ring-indigo-300 dark:ring-indigo-500"
-                    src={account}
+                    className="h-40 w-40 rounded-full  p-1 ring-2 ring-indigo-300 dark:ring-indigo-500"
+                    src={image ? image : account}
                     alt=""
                   ></img>
 
@@ -173,6 +200,7 @@ const Profile = ({ first, last, email }) => {
                       </button>
                     </div>
                     <button
+                      onClick={handleDeleteImg}
                       type="button"
                       className="rounded-lg border border-indigo-200 bg-white px-7 py-3.5 text-base font-medium text-indigo-900 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:outline-none focus:ring-4 focus:ring-indigo-200 "
                     >

@@ -60,11 +60,13 @@ const Login = ({ setAutoLogout }) => {
       })
       .then((data) => {
         // name(data.name);
+        console.log("DATAAA:", data);
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.id);
         localStorage.setItem("first", data.first);
         localStorage.setItem("last", data.last);
         localStorage.setItem("email", data.email);
+        localStorage.setItem("url", data.imageURL);
         const remainingMilliseconds = 60 * 60 * 1000;
 
         //two minutes
