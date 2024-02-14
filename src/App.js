@@ -19,6 +19,7 @@ import Agregar from "./components/Agregar/Agregar";
 import Detalles from "./components/Detalles/Detalles";
 import Profile from "./components/Profile/Profile";
 import Catalogo from "./components/Catalogo/Catalogo";
+import Landing from "./components/Landing/Landing";
 
 // import image5 from "./images/image5.png";
 // import image6 from "./images/image6.png";
@@ -326,6 +327,14 @@ class App extends Component {
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
+              </>
+            }
+          />
+          <Route
+            path="/UniquePage"
+            element={
+              <>
+                <Landing />
               </>
             }
           />

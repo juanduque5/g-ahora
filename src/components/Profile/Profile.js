@@ -132,9 +132,9 @@ const Profile = ({ first, last, email, url }) => {
       // Maneja la respuesta del backend
       const responseData = await response.json();
       console.log("Respuesta del backend:", responseData);
-      console.log("Respuesta del backend:", responseData.image);
-      // setImageLink(responseData.image);
-      localStorage.setItem("url", responseData.image);
+      localStorage.removeItem("url");
+      setImageLink(null);
+      // localStorage.setItem("url", responseData.image);
       window.location.reload();
     } catch (error) {
       console.error("Error al enviar la imagen al backend:", error);
