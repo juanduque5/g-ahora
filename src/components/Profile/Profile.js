@@ -18,7 +18,7 @@ const Profile = ({ first, last, email, url }) => {
   const [first2, setFirst2] = useState(first);
   const [last2, setLast2] = useState(last);
   const [edit, setEdit] = useState(false);
-  const [image, setImageLink] = useState(url);
+  const [image, setImageLink] = useState(url.length > 50 ? url : null);
   // const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
   const { id } = useParams();
@@ -146,7 +146,6 @@ const Profile = ({ first, last, email, url }) => {
     fileInputRef.current.click();
   };
 
-  // console.log(first2);
   return (
     <div className="ajusta">
       <div className="mt-12 flex w-full flex-col gap-5 bg-white px-3 text-[#161931] md:flex-row md:px-16 lg:px-28">

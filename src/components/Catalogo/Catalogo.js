@@ -20,14 +20,16 @@ import tiktok from "../../images/tiktok.png";
 import { Header } from "./header";
 import SelectCheckBox from "./checkBox";
 import { Cards } from "./cards";
+import account from "../../images/account.png";
 
 import "./Catalogo.css";
 
-const Catalogo = () => {
+const Catalogo = ({ url }) => {
   const ventaoRenta = ["Venta", "Renta"];
   const [isOptionOpen, setIsOptionOPen] = useState(false);
   const [Selected, setSelected] = useState([]);
   const [lista, setLista] = useState([]);
+  const [image, setImageLink] = useState(url.length > 50 ? url : null);
   const { id } = useParams();
   const handleSelectedChange = (option) => {
     if (Selected.includes(option)) {
@@ -100,7 +102,7 @@ const Catalogo = () => {
           <div className="flex h-2/4 w-full flex-col">
             <img
               className="m-auto mt-4 h-40 w-40 rounded-full bg-gray-300 object-cover ring-2 dark:ring-white"
-              src=""
+              src={image ? image : account}
               alt=""
             />
             <button className="relative bottom-7 left-16 m-auto flex h-7 w-7 rounded-full border bg-gray-300 ring-2 dark:ring-white">

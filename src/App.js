@@ -156,6 +156,8 @@ class App extends Component {
       token,
       "userId:",
       userId,
+      "url",
+      url.length,
     );
 
     return (
@@ -302,7 +304,7 @@ class App extends Component {
             path="/Catalogo/:id"
             element={
               <>
-                <Catalogo />
+                <Catalogo url={url} />
               </>
             }
           />
@@ -331,10 +333,10 @@ class App extends Component {
             }
           />
           <Route
-            path="/UniquePage"
+            path="/Unique"
             element={
               <>
-                <Landing />
+                <Landing options={OPTIONS} />
               </>
             }
           />
