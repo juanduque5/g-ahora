@@ -43,11 +43,11 @@ const Cards = ({ title, infoH, fill, vacation }) => {
           </div>
         )}
 
-        <div className="try mb-16 flex h-auto w-full flex-col justify-between gap-10 sm:flex-row sm:flex-wrap  md:flex-row md:gap-7 lg:gap-10">
+        <div className="try grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
           {infoH.map((info, index) => (
             <div
               onClick={() => redirect(info)}
-              className=" flex h-500 w-auto cursor-pointer flex-col flex-wrap rounded-lg shadow-md   sm:w-76 md:w-full lg:w-30   xl:w-30 "
+              className="h-500  w-full   cursor-pointer flex-col    rounded-lg border border-gray-700   shadow-md md:w-full  "
               key={index}
             >
               <div className="relative h-3/5 ">

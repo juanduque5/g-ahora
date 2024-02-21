@@ -206,8 +206,8 @@ const ListaPropiedades = () => {
               </div>
             </div>
             <div
-              className={` h-auto border bg-white ${
-                isOptionOpen ? "relative" : "hidden"
+              className={`relative z-10 h-auto border bg-white ${
+                isOptionOpen ? "block" : "hidden"
               }`}
             >
               <SelectCheckBox

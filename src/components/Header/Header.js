@@ -179,135 +179,141 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               </h1>
             </div>
           </div>
-          <div className="m-auto flex h-3/4 w-1/2 ">
-            <div className="m-auto hidden w-1/2 cursor-pointer  lg:block">
+          <div className="m-auto flex h-3/4 w-1/2 border border-blue-700">
+            <div className="m-auto hidden w-1/2 cursor-pointer border border-green-500  lg:block">
               <p className="ml-16 text-base font-semibold">
                 <Link to="/Vacations">🏖️️ Un lugar para vacacionar</Link>
               </p>
             </div>
-            <div className="m-auto hidden w-2/5  cursor-pointer lg:block">
-              {isAuth ? (
-                <p className="blue-new mr-3 flex justify-end text-base font-bold text-blue-new">
-                  {logged}
-                </p>
-              ) : (
-                <p
-                  onClick={accessLogin}
-                  className="blue-new  mr-1 flex justify-end  text-base font-bold"
+            <div className="m-auto hidden h-90 w-1/2 cursor-pointer justify-end border  border-yellow-500  lg:flex ">
+              <div className="hidden w-1/4 items-center border border-red-600 lg:flex">
+                {isAuth ? (
+                  <p className="blue-new m-auto  border text-base font-bold text-blue-new">
+                    {logged}
+                  </p>
+                ) : (
+                  <p
+                    onClick={accessLogin}
+                    className="blue-new m-auto   text-base font-bold"
+                  >
+                    Acceder
+                  </p>
+                )}
+              </div>
+              <div className="relative my-auto w-30">
+                <div
+                  onClick={toggleOpciones}
+                  className="hidden w-full cursor-pointer flex-row border border-green-400  text-center lg:flex    "
                 >
-                  Acceder
-                </p>
-              )}
+                  <div className="flex h-full w-1/2 items-center border">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      // width="auto"
+                      // height="auto"
+                      viewBox="0 0 46 46"
+                      fill="none"
+                      className="m-auto hidden h-full w-9 lg:flex"
+                    >
+                      <circle
+                        cx="23"
+                        cy="23"
+                        r="21"
+                        fill="#D9D9D9"
+                        fillOpacity="0.2"
+                      />
+                      <circle
+                        cx="23"
+                        cy="23"
+                        r="22"
+                        stroke="black"
+                        strokeOpacity="0.2"
+                        strokeWidth="2"
+                      />
+                      <svg
+                        x="10"
+                        y="9"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="55%"
+                        height="55%"
+                        viewBox="0 0 22 25"
+                        fill="none"
+                      >
+                        <path
+                          d="M11 12.5C7.51339 12.5 4.71429 9.7168 4.71429 6.25C4.71429 2.83203 7.51339 0 11 0C14.4375 0 17.2857 2.83203 17.2857 6.25C17.2857 9.7168 14.4375 12.5 11 12.5ZM13.4554 14.8438C18.1696 14.8438 22 18.6523 22 23.3398C22 24.2676 21.2143 25 20.2812 25H1.66964C0.736607 25 0 24.2676 0 23.3398C0 18.6523 3.78125 14.8438 8.49554 14.8438H13.4554Z"
+                          fill="black"
+                          fillOpacity="0.1"
+                        />
+                      </svg>
+                    </svg>
+                  </div>
+                  <div className="flex w-1/2 border">
+                    <img
+                      className={`m-auto hidden h-auto w-4 select-none lg:flex ${
+                        isAuth && mostrarOpciones ? "rotate-180" : "-rotate-0"
+                      }`}
+                      src={down}
+                      alt="Hi"
+                    ></img>
+                  </div>
+
+                  <div
+                    className={`absolute left-0 top-full hidden w-full ${
+                      isAuth && mostrarOpciones ? "lg:block" : "hidden"
+                    }`}
+                  >
+                    <div className="rounded-md border bg-white shadow-2xl">
+                      <div
+                        onClick={() => handleAuth("account")}
+                        className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                      >
+                        <p className="m-auto">Account</p>
+                      </div>
+                      <div
+                        onClick={() => handleAuth("propiedades")}
+                        className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                      >
+                        <p className="m-auto">Propiedades</p>
+                      </div>
+                      <div
+                        onClick={() => handleAuth("catalogo")}
+                        className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                      >
+                        <p className="m-auto">Catalogo</p>
+                      </div>
+                      <div
+                        onClick={logoutHandler}
+                        className="flex cursor-pointer rounded-sm rounded-b-md border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                      >
+                        <p className="m-auto">Log out</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* {isAuth && mostrarOpciones && ( */}
+              </div>
             </div>
+
             <div
-              onClick={toggleOpciones}
-              className="relative m-auto mr-0 flex h-auto w-16 cursor-pointer justify-end   lg:w-10   xl:w-10"
+              onClick={openMobileMenu}
+              className="menu my-auto ml-auto flex h-5 w-9 cursor-pointer flex-col justify-between border  lg:hidden "
             >
               <div
-                onClick={openMobileMenu}
-                className="flex h-5 w-9 cursor-pointer flex-col  justify-between   lg:hidden"
-              >
-                <div
-                  className={` h-1 rounded-lg bg-new ${
-                    menu ? "burger-bar" : "unclick"
-                  }`}
-                ></div>
-                <div
-                  className={` h-1 rounded-lg bg-new ${
-                    menu ? "burger-bar" : "unclick"
-                  }`}
-                ></div>
-                <div
-                  className={` h-1 rounded-lg bg-new ${
-                    menu ? "burger-bar" : "unclick"
-                  }`}
-                ></div>
-              </div>
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="48%"
-                height="45%"
-                viewBox="0 0 46 46"
-                fill="none"
-                className="hidden lg:flex"
-              >
-                <circle
-                  cx="23"
-                  cy="23"
-                  r="21"
-                  fill="#D9D9D9"
-                  fillOpacity="0.2"
-                />
-                <circle
-                  cx="23"
-                  cy="23"
-                  r="22"
-                  stroke="black"
-                  strokeOpacity="0.2"
-                  strokeWidth="2"
-                />
-                <svg
-                  x="10"
-                  y="9"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="55%"
-                  height="55%"
-                  viewBox="0 0 22 25"
-                  fill="none"
-                >
-                  <path
-                    d="M11 12.5C7.51339 12.5 4.71429 9.7168 4.71429 6.25C4.71429 2.83203 7.51339 0 11 0C14.4375 0 17.2857 2.83203 17.2857 6.25C17.2857 9.7168 14.4375 12.5 11 12.5ZM13.4554 14.8438C18.1696 14.8438 22 18.6523 22 23.3398C22 24.2676 21.2143 25 20.2812 25H1.66964C0.736607 25 0 24.2676 0 23.3398C0 18.6523 3.78125 14.8438 8.49554 14.8438H13.4554Z"
-                    fill="black"
-                    fillOpacity="0.1"
-                  />
-                </svg>
-              </svg>
-              <img
-                className={`m-auto hidden select-none lg:flex ${
-                  isAuth && mostrarOpciones ? "rotate-180" : "-rotate-0"
+                className={` h-1 rounded-lg bg-new ${
+                  menu ? "burger-bar" : "unclick"
                 }`}
-                src={down}
-                alt="Hi"
-              ></img>
-            </div>
-
-            {isAuth && mostrarOpciones && (
+              ></div>
               <div
-                className="relative hidden select-none rounded-md border bg-gray-50 shadow-2xl lg:block"
-                style={{
-                  position: "absolute",
-                  left: "89%",
-                  width: "110px",
-                  top: "8.2%",
-                }}
-              >
-                <div
-                  onClick={() => handleAuth("account")}
-                  className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
-                >
-                  <p className="m-auto">Account</p>
-                </div>
-                <div
-                  onClick={() => handleAuth("propiedades")}
-                  className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
-                >
-                  <p className="m-auto">Propiedades</p>
-                </div>
-                <div
-                  onClick={() => handleAuth("catalogo")}
-                  className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
-                >
-                  <p className="m-auto">Catalogo</p>
-                </div>
-                <div
-                  onClick={logoutHandler}
-                  className="flex cursor-pointer rounded-sm rounded-b-md border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
-                >
-                  <p className="m-auto">Log out</p>
-                </div>
-              </div>
-            )}
+                className={` h-1 rounded-lg bg-new ${
+                  menu ? "burger-bar" : "unclick"
+                }`}
+              ></div>
+              <div
+                className={` h-1 rounded-lg bg-new ${
+                  menu ? "burger-bar" : "unclick"
+                }`}
+              ></div>
+            </div>
           </div>
         </div>
       </div>

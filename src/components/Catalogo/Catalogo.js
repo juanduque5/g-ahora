@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 //import { Link } from "react-router-dom";
 //import { useMediaQuery } from "react-responsive";
@@ -31,6 +31,7 @@ const Catalogo = ({ url }) => {
   const [lista, setLista] = useState([]);
   const [image, setImageLink] = useState(url.length > 50 ? url : null);
   const { id } = useParams();
+
   const handleSelectedChange = (option) => {
     if (Selected.includes(option)) {
       const newSelected = Selected.filter((items) => items !== option);
@@ -105,9 +106,9 @@ const Catalogo = ({ url }) => {
               src={image ? image : account}
               alt=""
             />
-            <button className="relative bottom-7 left-16 m-auto flex h-7 w-7 rounded-full border bg-gray-300 ring-2 dark:ring-white">
-              <p className="m-auto text-center text-lg text-white">+</p>
-            </button>
+            {/* <button className="relative bottom-7 left-16 m-auto flex h-7 w-7 rounded-full border bg-gray-300 ring-2 dark:ring-white">
+              <img className="m-auto  " src={add} alt=""></img>
+            </button> */}
           </div>
           <div className="flex h-30 w-full flex-col border border-black">
             <div className="flex h-full border border-red-500">
@@ -144,7 +145,7 @@ const Catalogo = ({ url }) => {
         <div className="mt-9 flex h-12 w-full border">
           <p className="m-auto text-xl font-bold">Propiedades disponibles</p>
         </div>
-        <div className="mt-5 h-12 w-44 cursor-pointer">
+        <div className="mb-6 mt-5 h-12 w-44 cursor-pointer">
           <div
             onClick={openOption}
             className="flex h-full border border-red-500"
@@ -157,8 +158,8 @@ const Catalogo = ({ url }) => {
             </div>
           </div>
           <div
-            className={` h-auto border bg-white ${
-              isOptionOpen ? "relative" : "hidden"
+            className={`relative z-10 w-full border bg-white ${
+              isOptionOpen ? "block" : "hidden"
             }`}
           >
             <SelectCheckBox
@@ -168,7 +169,7 @@ const Catalogo = ({ url }) => {
             />
           </div>
         </div>
-        <div>
+        <div className="">
           <Cards lista={lista} />
         </div>
       </div>

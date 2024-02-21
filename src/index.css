@@ -49,14 +49,13 @@ body {
     width: 80%;
     margin: auto;
   }
-  .try {
+  /* .try {
     display: grid;
     grid-template-columns: repeat(
       2,
       1fr
     ); /* Divide en 2 columnas de igual tamaño */
-    /* Espacio entre elementos */
-  }
+  /* Espacio entre elementos */
 }
 
 /* Para pantallas de 1280x800 o más grandes */

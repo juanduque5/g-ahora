@@ -6,7 +6,7 @@ function SelectCheckbox({
   handleSelectedChange,
 }) {
   return (
-    <div className=" ajusta rounded-lg shadow-md">
+    <div className="  rounded-lg shadow-md">
       {opciones.map((opcion) => (
         <label
           key={opcion}
