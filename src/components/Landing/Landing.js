@@ -8,6 +8,11 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import image5 from "../../images/image5.png";
 import image6 from "../../images/image6.png";
 import image7 from "../../images/image7.png";
+import wpp from "../../images/wpp.png";
+import instagram2 from "../../images/instagram2.png";
+import facebook2 from "../../images/facebook2.png";
+import linkedin from "../../images/linkedin.png";
+import tiktok from "../../images/tiktok.png";
 // import car from "../../images/car.png";
 // import house from "../../images/house.png";
 // import bath from "../../images/bath.png";
@@ -15,7 +20,9 @@ import location2 from "../../images/location2.png";
 import { Header } from "./header";
 import useEmblaCarousel from "embla-carousel-react";
 import { Thumb } from "./thumb";
+import Description from "./description";
 import { PrevButton, NextButton } from "./arrows";
+import SocialMedia from "./socialMedia";
 import "./Landing.css";
 import "./embla.css";
 
@@ -117,38 +124,32 @@ const Landing = ({ first, last, email, url, options }) => {
                 Antigua guatemala
               </p>
             </div>
-            <div className="flex h-full w-full border">
-              <button className="rounde m-auto h-11 w-40 rounded-lg bg-orange-dark text-center md:h-12 md:w-44">
-                <p className="text-white">Contactar agente</p>
-              </button>
-            </div>
+
+            <SocialMedia
+              wpp={wpp}
+              instagram={instagram2}
+              facebook={facebook2}
+              linkedin={linkedin}
+              tiktok={tiktok}
+            />
           </div>
         </div>
       </div>
-      <div className="elbackg mt-10 flex h-60 w-full justify-center">
-        <div className="ajusta m-auto flex h-77 flex-col border">
-          <div className="flex h-14 items-center justify-center border">
-            <p className="text-xl font-bold">Descripcion</p>
-          </div>
-          <div className="h-full w-full break-words border ">
-            <p className="">
-              hermosa cada al lado de un lugar maravilloso que es palmas del
-              mar, tiene muchas cosas cercas alrededor de la cual podras
-              disfrutar,
-            </p>
-          </div>
-        </div>
+      <div>
+        <Description />
       </div>
 
-      <div className="flex h-380 border">
-        <div className="ajusta m-auto flex h-77  border">
-          <div className="w-1/2 rounded-xl border">
+      <div className="flex h-auto w-full border border-green-400  ">
+        <div className="ajusta m-auto flex h-auto  flex-col border border-red-700 md:flex-row xl:h-380">
+          <div className="h-auto w-full  rounded-xl border md:w-1/2">
             <img className="h-full w-full rounded-xl" src={image7} alt=""></img>
           </div>
-          <div className="flex w-1/2 border">
-            <div className="m-auto flex h-full w-90 flex-col border">
-              <div className="h-full border">
-                <p className="text-xl font-bold">Detalles de la propiedad</p>
+          <div className="flex w-full border md:w-1/2">
+            <div className="m-auto flex h-full w-full flex-col border md:w-90">
+              <div className="flex h-full ">
+                <p className="text-lg font-semibold md:text-xl md:font-bold">
+                  Detalles de la propiedad
+                </p>
               </div>
               <div className="flex h-full items-center border">
                 <p>Detalles de la propiedad</p>
@@ -216,8 +217,8 @@ const Landing = ({ first, last, email, url, options }) => {
         </div>
       </div>
       <div className="mt-5 h-90 w-full  pb-5 xl:w-full">
-        <div className="ajusta flex h-full w-full flex-row   ">
-          <div className=" h-auto w-full ">
+        <div className="ajusta flex h-full w-full flex-col md:flex-row   ">
+          <div className=" order-2 h-auto w-full md:order-1">
             <div className="flex h-11  w-full ">
               <p className="m-auto text-xl font-bold">Contact</p>
             </div>
@@ -265,8 +266,8 @@ const Landing = ({ first, last, email, url, options }) => {
               </button>
             </div>
           </div>
-          <div className="flex w-full">
-            <div className="ml-auto w-90">
+          <div className="order-1 flex w-full md:order-2">
+            <div className="ml-auto w-full md:w-90">
               <MapContainer
                 center={[51.505, -0.09]}
                 zoom={10}

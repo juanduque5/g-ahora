@@ -200,10 +200,10 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                   </p>
                 )}
               </div>
-              <div className="relative my-auto w-30">
+              <div className="relative my-auto w-auto border md:w-2/5">
                 <div
                   onClick={toggleOpciones}
-                  className="hidden w-full cursor-pointer flex-row border border-green-400  text-center lg:flex    "
+                  className=" hidden cursor-pointer flex-row border border-green-400  text-center lg:flex    "
                 >
                   <div className="flex h-full w-1/2 items-center border">
                     <svg
@@ -261,7 +261,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                       isAuth && mostrarOpciones ? "lg:block" : "hidden"
                     }`}
                   >
-                    <div className="rounded-md border bg-white shadow-2xl">
+                    <div className=" rounded-md border bg-white shadow-2xl">
                       <div
                         onClick={() => handleAuth("account")}
                         className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"

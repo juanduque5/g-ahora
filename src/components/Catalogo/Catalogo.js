@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 //import { Link } from "react-router-dom";
 //import { useMediaQuery } from "react-responsive";
@@ -17,9 +17,10 @@ import instagram2 from "../../images/instagram2.png";
 import facebook2 from "../../images/facebook2.png";
 import linkedin from "../../images/linkedin.png";
 import tiktok from "../../images/tiktok.png";
-import { Header } from "./header";
+import Header from "./header";
 import SelectCheckBox from "./checkBox";
-import { Cards } from "./cards";
+import Cards from "./cards";
+import SocialMedia from "./socialMedia";
 import account from "../../images/account.png";
 
 import "./Catalogo.css";
@@ -29,7 +30,7 @@ const Catalogo = ({ url }) => {
   const [isOptionOpen, setIsOptionOPen] = useState(false);
   const [Selected, setSelected] = useState([]);
   const [lista, setLista] = useState([]);
-  const [image, setImageLink] = useState(url.length > 50 ? url : null);
+  // const [image, setImageLink] = useState(url.length > 50 ? url : null);
   const { id } = useParams();
 
   const handleSelectedChange = (option) => {
@@ -103,7 +104,7 @@ const Catalogo = ({ url }) => {
           <div className="flex h-2/4 w-full flex-col">
             <img
               className="m-auto mt-4 h-40 w-40 rounded-full bg-gray-300 object-cover ring-2 dark:ring-white"
-              src={image ? image : account}
+              src={url.length > 50 ? url : account}
               alt=""
             />
             {/* <button className="relative bottom-7 left-16 m-auto flex h-7 w-7 rounded-full border bg-gray-300 ring-2 dark:ring-white">
@@ -122,25 +123,13 @@ const Catalogo = ({ url }) => {
               </p>
             </div>
           </div>
-          <div className="flex h-1/5 w-full justify-center border border-black">
-            <div className="mt-2 flex w-auto gap-2 border border-black">
-              <div className="cursor-pointer">
-                <img className="h-8 w-8" src={wpp} alt=""></img>
-              </div>
-              <div className="cursor-pointer">
-                <img className="h-8 w-8" src={instagram2} alt=""></img>
-              </div>
-              <div className="cursor-pointer">
-                <img className="h-8 w-8" src={facebook2} alt=""></img>
-              </div>
-              <div className="cursor-pointer">
-                <img className="h-8 w-8" src={tiktok} alt=""></img>
-              </div>
-              <div className="cursor-pointer">
-                <img className="h-8 w-8" src={linkedin} alt=""></img>
-              </div>
-            </div>
-          </div>
+          <SocialMedia
+            wpp={wpp}
+            instagram={instagram2}
+            facebook={facebook2}
+            linkedin={linkedin}
+            tiktok={tiktok}
+          />
         </div>
         <div className="mt-9 flex h-12 w-full border">
           <p className="m-auto text-xl font-bold">Propiedades disponibles</p>
@@ -177,3 +166,29 @@ const Catalogo = ({ url }) => {
   );
 };
 export default Catalogo;
+
+// const IconoRedSocial = ({ imagen, link }) => {
+//   return (
+//     <a
+//       href={link}
+//       target="_blank"
+//       rel="noopener noreferrer"
+//       className="cursor-pointer"
+//     >
+//       <img className="h-8 w-8" src={imagen} alt=""></img>
+//     </a>
+//   );
+// };
+
+// <RedesSociales
+//   wpp={wpp}
+//   wppLink="https://wa.me/xxxxxxxxxx" // Reemplaza 'https://wa.me/xxxxxxxxxx' con tu enlace de WhatsApp
+//   instagram={instagram2}
+//   instagramLink="https://www.instagram.com/tu_usuario/" // Reemplaza 'https://www.instagram.com/tu_usuario/' con tu enlace de Instagram
+//   facebook={facebook2}
+//   facebookLink="https://www.facebook.com/tu_pagina/" // Reemplaza 'https://www.facebook.com/tu_pagina/' con tu enlace de Facebook
+//   linkedin={linkedin}
+//   linkedinLink="https://www.linkedin.com/in/tu_perfil/" // Reemplaza 'https://www.linkedin.com/in/tu_perfil/' con tu enlace de LinkedIn
+//   tiktok={tiktok}
+//   tiktokLink="https://www.tiktok.com/@tu_usuario/" // Reemplaza 'https://www.tiktok.com/@tu_usuario/' con tu enlace de TikTok
+// />;
