@@ -20,6 +20,7 @@ import Detalles from "./components/Detalles/Detalles";
 import Profile from "./components/Profile/Profile";
 import Catalogo from "./components/Catalogo/Catalogo";
 import Landing from "./components/Landing/Landing";
+import Favoritos from "./components/Favoritos/Favoritos";
 
 // import image5 from "./images/image5.png";
 // import image6 from "./images/image6.png";
@@ -169,7 +170,7 @@ class App extends Component {
               <>
                 <Header
                   logged={first}
-                  isAuth={this.state.isAuth}
+                  isAuth={isAuth}
                   logoutHandler={this.logoutHandler}
                 />
                 <PropiedadesYa />
@@ -189,7 +190,12 @@ class App extends Component {
                   logoutHandler={this.logoutHandler}
                 />
                 <ListaPropiedades />
-                <Cards title={false} infoH={properties} fill={this.fill} />
+                <Cards
+                  title={false}
+                  infoH={properties}
+                  userId={userId}
+                  isAuth={isAuth}
+                />
                 <Footer />
               </>
             }
@@ -305,6 +311,19 @@ class App extends Component {
             element={
               <>
                 <Catalogo url={url} />
+              </>
+            }
+          />
+          <Route
+            path="/Favoritos"
+            element={
+              <>
+                <Header
+                  logged={first}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
+                <Favoritos />
               </>
             }
           />

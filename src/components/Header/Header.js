@@ -52,6 +52,8 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
           navigate(`/Account/${data.id}`);
         } else if (value === "propiedades") {
           navigate(`/Propiedades/${data.id}`);
+        } else if (value === "favoritos") {
+          navigate(`/Favoritos`);
         } else {
           navigate(`/Catalogo/${data.id}`);
         }
@@ -185,8 +187,8 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                 <Link to="/Vacations">🏖️️ Un lugar para vacacionar</Link>
               </p>
             </div>
-            <div className="m-auto hidden h-90 w-1/2 cursor-pointer justify-end border  border-yellow-500  lg:flex ">
-              <div className="hidden w-1/4 items-center border border-red-600 lg:flex">
+            <div className="m-auto hidden h-90 w-1/2  justify-end border  border-yellow-500  lg:flex ">
+              <div className="hidden w-1/4 cursor-pointer items-center border border-red-600 lg:flex">
                 {isAuth ? (
                   <p className="blue-new m-auto  border text-base font-bold text-blue-new">
                     {logged}
@@ -201,11 +203,11 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                 )}
               </div>
               <div className="relative my-auto w-auto border md:w-2/5">
-                <div
-                  onClick={toggleOpciones}
-                  className=" hidden cursor-pointer flex-row border border-green-400  text-center lg:flex    "
-                >
-                  <div className="flex h-full w-1/2 items-center border">
+                <div className=" hidden flex-row border border-green-400  text-center lg:flex    ">
+                  <div
+                    onClick={toggleOpciones}
+                    className="flex h-full w-1/2 cursor-pointer items-center border"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       // width="auto"
@@ -245,8 +247,6 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                         />
                       </svg>
                     </svg>
-                  </div>
-                  <div className="flex w-1/2 border">
                     <img
                       className={`m-auto hidden h-auto w-4 select-none lg:flex ${
                         isAuth && mostrarOpciones ? "rotate-180" : "-rotate-0"
@@ -254,6 +254,17 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                       src={down}
                       alt="Hi"
                     ></img>
+                  </div>
+
+                  <div className="flex w-1/2  border">
+                    <div className="m-auto flex w-full">
+                      <div className="m-auto w-1/2  border-r">
+                        <p className="cursor-pointer">EN</p>
+                      </div>
+                      <div className="m-auto w-1/2 ">
+                        <p className="cursor-pointer">ES</p>
+                      </div>
+                    </div>
                   </div>
 
                   <div
@@ -279,6 +290,12 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                         className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
                       >
                         <p className="m-auto">Catalogo</p>
+                      </div>
+                      <div
+                        onClick={() => handleAuth("favoritos")}
+                        className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                      >
+                        <p className="m-auto">Favoritos</p>
                       </div>
                       <div
                         onClick={logoutHandler}

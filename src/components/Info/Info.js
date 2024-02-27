@@ -17,7 +17,7 @@ import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
 import location from "../../images/location.png";
 
-const Info = ({ info, infoH, options }) => {
+const Info = ({ options }) => {
   const { id } = useParams();
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
