@@ -55,7 +55,7 @@ class App extends Component {
   componentDidMount() {
     console.log("App componentDidMount");
 
-    this.fetchData();
+    // this.fetchData();
 
     const token = localStorage.getItem("token");
     const expiryDate = localStorage.getItem("expiryDate");
@@ -86,20 +86,23 @@ class App extends Component {
     this.setAutoLogout(remainingMilliseconds);
   }
 
-  fetchData = async () => {
-    console.log("fetchio");
-    try {
-      const response = await fetch("http://localhost:2001/properties/info");
-      if (!response.ok) {
-        console.log("Error al obtener datos iniciales");
-      }
-      const data = await response.json();
-      this.setState({ properties: data.data });
-      console.log("properties data:", data.data);
-    } catch (error) {
-      console.error("Error al obtener datos iniciales:", error);
-    }
-  };
+  // fetchData = async () => {
+  //   console.log("fetchio");
+  //   try {
+  //     const isAuth = this.state.isAuth;
+  //     const response = await fetch(
+  //       `http://localhost:2001/properties/info?isAuth=${isAuth}`,
+  //     );
+  //     if (!response.ok) {
+  //       console.log("Error al obtener datos iniciales");
+  //     }
+  //     const data = await response.json();
+  //     this.setState({ properties: data.data });
+  //     console.log("properties data:", data.data);
+  //   } catch (error) {
+  //     console.error("Error al obtener datos iniciales:", error);
+  //   }
+  // };
 
   logoutHandler = () => {
     this.setState({
@@ -170,11 +173,16 @@ class App extends Component {
               <>
                 <Header
                   logged={first}
-                  isAuth={isAuth}
+                  isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
                 <PropiedadesYa />
-                <Cards title={true} infoH={newArr} />
+                <Cards
+                  title={true}
+                  infoH={newArr}
+                  isAuth={isAuth}
+                  userId={userId}
+                />
                 <PropiedadesYaS />
                 <Footer />
               </>

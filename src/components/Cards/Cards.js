@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useCallback, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 //import { Link } from "react-router-dom";
 //import { useMediaQuery } from "react-responsive";
 // import imageFilter from "../../images/image-filter.png";
@@ -15,22 +15,55 @@ import "./Cards.css";
 
 const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
   console.log("userId", userId);
-  const [heart, setHeart] = useState([]);
+  const [properties, setProperties] = useState([]);
+
   const navigate = useNavigate();
+  const location = useLocation();
   // console.log("infoH:", infoH[0].imageURL);
   const redirect = (info) => {
     console.log("id", info.id);
     // fill(info);
     navigate(`/PropertyInfo/${info.id}`);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("fetchio");
+      try {
+        const response = await fetch(
+          `http://localhost:2001/properties/info/${isAuth}/${userId}`,
+        );
+        if (!response.ok) {
+          console.log("Error al obtener datos iniciales");
+        }
+        if (location.pathname === "/") {
+          const data = await response.json();
+          setProperties(data.data.slice(0, 3));
+        } else {
+          const data = await response.json();
+          setProperties(data.data);
+        }
+      } catch (error) {
+        console.error("Error al obtener datos iniciales:", error);
+      }
+    };
+    fetchData();
+  }, [isAuth, location, userId]);
+
   const handleHeartClick = useCallback(
     (event, index, propertyId) => {
       if (isAuth && userId) {
         event.stopPropagation();
-        const updateHeartColors = [...heart];
-        updateHeartColors[index] = !updateHeartColors[index];
-        setHeart(updateHeartColors);
-        updateFavorites(propertyId, userId);
+        const updateHeartColors = [...properties];
+        console.log(updateHeartColors);
+        updateHeartColors[index].favorito_id =
+          !updateHeartColors[index].favorito_id;
+        setProperties(updateHeartColors);
+        updateFavorites(
+          propertyId,
+          userId,
+          updateHeartColors[index].favorito_id,
+        );
       } else {
         event.stopPropagation();
         navigate("/Login");
@@ -38,15 +71,18 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
 
       //(PENDING) crear if/else si esta autenticado y el userId no es null para poder activar el favorito
     },
-    [heart, setHeart, navigate, isAuth, userId],
+    [navigate, isAuth, userId, properties],
   );
 
-  const updateFavorites = async (propertyId, userId) => {
+  console.log("Properties", properties);
+
+  const updateFavorites = async (propertyId, userId, isLiked) => {
+    console.log("isLiked", isLiked);
     try {
       const response = await fetch(
         `http://localhost:2001/properties/favorites/${propertyId}/${userId}`, // Suponiendo que este sea el endpoint para marcar favorito
         {
-          method: "PUT",
+          method: isLiked ? "POST" : "DELETE",
           headers: {
             "Content-Type": "application/json", // Especificar el tipo de contenido si envías datos en formato JSON
           },
@@ -57,7 +93,8 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
           "NOT RESPONSE OK: Error al marcar la propiedad como favorita",
         );
       } else {
-        console.log("Propiedad marcada como favorita con éxito");
+        const data = await response.json();
+        console.log(data);
       }
     } catch (error) {
       console.error(
@@ -67,7 +104,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
     }
   };
 
-  console.log("hearts", heart);
+  // console.log("hearts", heart);
 
   return (
     <div className="ajusta">
@@ -93,7 +130,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
         )}
 
         <div className="try grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-          {infoH.map((info, index) => (
+          {properties.map((info, index) => (
             <div
               onClick={() => redirect(info)}
               className="h-500  w-full   cursor-pointer flex-col    rounded-lg border border-gray-700   shadow-md md:w-full  "
@@ -111,7 +148,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
                     strokeWidth="1.5"
                     stroke="currentColor"
                     className={`h-9 w-7 ${
-                      heart[index] ? "fill-red-600" : "fill-black"
+                      info.favorito_id ? "fill-red-600" : "fill-black"
                     }`}
                     onClick={(event) => handleHeartClick(event, index, info.id)}
                   >

@@ -6,6 +6,7 @@ import "./Header.css";
 import down from "../../images/chevron-down.png";
 
 const Header = ({ logged, isAuth, logoutHandler }) => {
+  // console.log("isAuth", isAuth);
   // window.location.reload();
   const navigate = useNavigate();
   const [menu, setMenu] = useState(false);
