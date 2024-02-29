@@ -323,7 +323,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/Favoritos"
+            path="/Favoritos/:id"
             element={
               <>
                 <Header

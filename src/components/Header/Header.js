@@ -54,7 +54,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
         } else if (value === "propiedades") {
           navigate(`/Propiedades/${data.id}`);
         } else if (value === "favoritos") {
-          navigate(`/Favoritos`);
+          navigate(`/Favoritos/${data.id}`);
         } else {
           navigate(`/Catalogo/${data.id}`);
         }

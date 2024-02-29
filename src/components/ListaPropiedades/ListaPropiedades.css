@@ -1,19 +1,16 @@
 @media (min-width: 901px) {
   .ReactModal__Content {
-    /* display: none; Oculta el contenido del modal */
-    width: 600px;
-    height: 80%;
+    width: 40%;
+    height: 60%;
     margin: auto;
   }
 }
 
-/* Estilos para pantallas más pequeñas (ejemplo: ancho menor a 768px) */
-@media (min-width: 650px) and (max-width: 900px) {
+/* Media queries para pantallas más pequeñas (ejemplo: ancho entre 650px y 900px) */
+@media (min-width: 250px) and (max-width: 900px) {
   .ReactModal__Content {
-    display: block; /* Muestra el contenido del modal */
-    width: 70%;
-    height: 70%;
+    width: auto;
+    height: auto;
     margin: auto;
-    overflow-y: auto;
   }
 }

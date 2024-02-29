@@ -273,12 +273,15 @@ const ListaPropiedades = () => {
           onRequestClose={closeModal}
           style={{
             overlay: {
-              backgroundColor: "rgba(0, 0, 0, 0.5)", // Cambia este valor al color que desees
+              backgroundColor: "rgba(0, 0, 0, 0.5)", // Establece el color de fondo del overlay
+            },
+            content: {
+              // Media query para pantallas más grandes que 768px
             },
           }}
         >
-          <div className="m-auto h-auto  w-full ">
-            <div className="flex flex-col ">
+          <div className="m-auto flex  h-auto w-full flex-col border ">
+            <div className="flex h-auto w-full flex-col">
               <div className="mb-5 flex justify-end ">
                 <img
                   onClick={closeModal}
@@ -287,7 +290,7 @@ const ListaPropiedades = () => {
                   alt="Hi"
                 ></img>
               </div>
-              <div className=" flex h-12  ">
+              <div className=" flex h-full  ">
                 <p className=" font-fira-sans font-semibold">
                   Selecciona una opción o ambas:
                 </p>
@@ -314,10 +317,10 @@ const ListaPropiedades = () => {
                   <p className="font-open-sans">Renta</p>
                 </div>
               </div>
-              <div className=" flex h-12  ">
+              <div className=" flex h-full  ">
                 <p className=" font-fira-sans font-semibold">Condicion:</p>
               </div>
-              <div className="mb-5 flex h-auto flex-row gap-5 ">
+              <div className="mb-5 flex h-full flex-row gap-5 ">
                 <div className="flex flex-row gap-5  ">
                   <input
                     id="1"
@@ -339,20 +342,24 @@ const ListaPropiedades = () => {
                   <p className="font-open-sans">Usado</p>
                 </div>
               </div>
-              <div className=" h-12  ">
+              <div className=" h-full  ">
                 <p className="font-fira-sans font-semibold">Cuartos: </p>
               </div>
               <div className="mb-5 flex flex-row gap-3 ">
                 {Numeros.map((numeros) => (
                   <p
-                    className="flex w-8   cursor-pointer justify-center border hover:bg-blue-new hover:text-white"
+                    className={`flex w-8 cursor-pointer justify-center border hover:bg-blue-new hover:text-white ${
+                      filterOption.cuartos === numeros
+                        ? "bg-blue-new text-white"
+                        : ""
+                    }`}
                     key={numeros}
                     style={{
-                      backgroundColor:
-                        filterOption.cuartos === numeros ? "#1D80F5" : "",
-                      color:
-                        filterOption.cuartos === numeros ? "white" : "black",
-                      hover: "white",
+                      // backgroundColor:
+                      //   filterOption.cuartos === numeros ? "#1D80F5" : "",
+                      // color:
+                      //   filterOption.cuartos === numeros ? "white" : "black",
+                      // hover: "white",
                       width: colorMap[numeros]
                         ? "auto"
                         : "" || nums[numeros]
@@ -365,19 +372,23 @@ const ListaPropiedades = () => {
                   </p>
                 ))}
               </div>
-              <div className=" h-12  ">
+              <div className=" h-full  ">
                 <p className="font-fira-sans font-semibold">Baños: </p>
               </div>
               <div className="mb-5 flex  flex-row gap-3 ">
                 {Numeros.map((numeros) => (
                   <p
-                    className="flex w-8 cursor-pointer justify-center border hover:bg-blue-new  hover:text-white"
+                    className={`flex w-8 cursor-pointer justify-center border hover:bg-blue-new hover:text-white ${
+                      filterOption.banos === numeros
+                        ? "bg-blue-new text-white"
+                        : ""
+                    }`}
                     key={numeros}
                     style={{
-                      backgroundColor:
-                        filterOption.banos === numeros ? "#1D80F5" : "",
-                      color: filterOption.banos === numeros ? "white" : "black",
-                      hover: "white",
+                      // backgroundColor:
+                      //   filterOption.banos === numeros ? "#1D80F5" : "",
+                      // color: filterOption.banos === numeros ? "white" : "black",
+
                       width: colorMap[numeros]
                         ? "auto"
                         : "" || nums[numeros]
@@ -386,14 +397,14 @@ const ListaPropiedades = () => {
                     }}
                     onClick={() => filterSearch(numeros, "banos")}
                   >
-                    {numeros}
+                    <span className="hover:text-white"> {numeros} </span>
                   </p>
                 ))}
               </div>
-              <div className=" h-9  ">
+              <div className=" flex  h-full items-center">
                 <p className="font-fira-sans font-semibold">Precio: </p>
               </div>
-              <div className="relative  flex w-11/12 ">
+              <div className="relative  flex w-full ">
                 <Slider
                   value={value}
                   onChange={rangeSelector}
@@ -403,7 +414,7 @@ const ListaPropiedades = () => {
                   max={10000} // Establece el valor máximo (10,000 en este caso)
                 />
               </div>
-              <div className="mb-4 flex h-auto flex-col gap-5  md:mb-8 md:h-12 md:flex-row md:gap-5">
+              <div className="flex h-full  flex-col  border md:h-auto ">
                 <div className="flex items-center justify-around ">
                   <p className="font-open-sans font-semibold">Min:</p>
                   <input
@@ -436,12 +447,12 @@ const ListaPropiedades = () => {
                   />
                 </div>
               </div>
-              <div className=" h-11  ">
+              <div className="flex h-full items-center ">
                 <p className="font-fira-sans font-semibold">
                   Tipo de inmueble:{" "}
                 </p>
               </div>
-              <div className="mb-3 flex h-auto flex-col gap-5  md:flex-row">
+              <div className="mb-3 flex  h-full flex-col gap-5 ">
                 <div className="flex flex-row gap-5  ">
                   <input
                     id="1"
@@ -450,7 +461,7 @@ const ListaPropiedades = () => {
                     checked={filterOption.casa}
                     onChange={() => filterSearch("casa")}
                   />
-                  <p className="font-open-sans md:m-auto">Casa</p>
+                  <p className="font-open-sans ">Casa</p>
                 </div>
                 <div className="flex flex-row gap-5 ">
                   <input
@@ -460,7 +471,7 @@ const ListaPropiedades = () => {
                     checked={filterOption.apartamento}
                     onChange={() => filterSearch("apartamento")}
                   />
-                  <p className="font-open-sans md:m-auto">Apartamento</p>
+                  <p className="font-open-sans ">Apartamento</p>
                 </div>
                 <div className="flex flex-row gap-5 ">
                   <input
@@ -470,7 +481,7 @@ const ListaPropiedades = () => {
                     checked={filterOption.local}
                     onChange={() => filterSearch("local")}
                   />
-                  <p className="font-open-sans md:m-auto">Local</p>
+                  <p className="font-open-sans ">Local</p>
                 </div>
                 <div className="flex flex-row gap-5 ">
                   <input
@@ -480,22 +491,21 @@ const ListaPropiedades = () => {
                     checked={filterOption.lote}
                     onChange={() => filterSearch("lote")}
                   />
-                  <p className="font-open-sans md:m-auto">Lote</p>
+                  <p className="font-open-sans ">Lote</p>
                 </div>
               </div>
             </div>
-          </div>
+            <div className="flex h-14 w-full items-end justify-between border ">
+              <p
+                onClick={closed}
+                className=" flex cursor-pointer justify-start font-open-sans underline"
+              >
+                Limpiar busqueda
+              </p>
 
-          <div className="flex h-10 w-full items-end justify-between ">
-            <p
-              onClick={closed}
-              className=" flex cursor-pointer justify-start font-open-sans underline"
-            >
-              Limpiar busqueda
-            </p>
-
-            <div className="flex h-11 w-28 cursor-pointer rounded-lg border bg-blue-new">
-              <p className="m-auto text-white">Buscar</p>
+              <div className="flex h-11 w-28 cursor-pointer rounded-lg border bg-blue-new">
+                <p className="m-auto text-white">Buscar</p>
+              </div>
             </div>
           </div>
         </Modal>
