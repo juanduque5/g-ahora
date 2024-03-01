@@ -147,22 +147,22 @@ class App extends Component {
 
     const newArr = properties.slice(0, 3);
 
-    console.log(
-      "first:",
-      first,
-      "last:",
-      last,
-      "email:",
-      email,
-      "isAuth:",
-      isAuth,
-      "token:",
-      token,
-      "userId:",
-      userId,
-      "url",
-      url.length,
-    );
+    // console.log(
+    //   "first:",
+    //   first,
+    //   "last:",
+    //   last,
+    //   "email:",
+    //   email,
+    //   "isAuth:",
+    //   isAuth,
+    //   "token:",
+    //   token,
+    //   "userId:",
+    //   userId,
+    //   "url",
+    //   url.length,
+    // );
 
     return (
       <div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // import Modal from "react-modal";
-import Slider from "@mui/material/Slider";
+
 // import Checkbox from "@mui/material/Checkbox";
 // import { Link } from "react-router-dom";
 // import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ import down from "../../images/chevron-down.png";
 import SelectCheckBox from "./SelectCheckBox";
 import times from "../../images/times.png";
 // import { Select } from "@mui/material";
-import "./ListaPropiedades.css";
+
 import Modal from "./modal";
 
 const ListaPropiedades = () => {
@@ -270,7 +270,20 @@ const ListaPropiedades = () => {
         </div>
       </div>
       <div>
-        <Modal open={isModalOpen} close={closeModal}>
+        <Modal
+          open={isModalOpen}
+          close={closeModal}
+          filterOption={filterOption}
+          filterSearch={filterSearch}
+          Numeros={Numeros}
+          nums={nums}
+          colorMap={colorMap}
+          rangeSelector={rangeSelector}
+          handleInputMax={handleInputMax}
+          handleInputMin={handleInputMin}
+          closed={closed}
+          value={value}
+        >
           text
         </Modal>
         {/* <Modal
@@ -291,67 +304,7 @@ const ListaPropiedades = () => {
         > */}
 
         {/* <div className="m-auto flex  h-auto w-full flex-col border ">
-              <div className="flex h-auto w-full flex-col">
-                <div className="mb-5 flex justify-end ">
-                  <img
-                    onClick={closeModal}
-                    className="h-auto w-3 cursor-pointer"
-                    src={times}
-                    alt="Hi"
-                  ></img>
-                </div>
-                <div className=" flex h-full  ">
-                  <p className=" font-fira-sans font-semibold">
-                    Selecciona una opción o ambas:
-                  </p>
-                </div>
-                <div className="mb-5 flex h-auto flex-row gap-5  ">
-                  <div className="flex flex-row gap-5  ">
-                    <input
-                      id="1"
-                      className="w-4 cursor-pointer"
-                      type="checkbox"
-                      checked={filterOption.venta}
-                      onChange={() => filterSearch("venta")}
-                    />
-                    <p className="font-open-sans ">Venta</p>
-                  </div>
-                  <div className="flex flex-row gap-5 ">
-                    <input
-                      id="2"
-                      className="w-4 cursor-pointer"
-                      type="checkbox"
-                      checked={filterOption.renta}
-                      onChange={() => filterSearch("renta")}
-                    />
-                    <p className="font-open-sans">Renta</p>
-                  </div>
-                </div>
-                <div className=" flex h-full  ">
-                  <p className=" font-fira-sans font-semibold">Condicion:</p>
-                </div>
-                <div className="mb-5 flex h-full flex-row gap-5 ">
-                  <div className="flex flex-row gap-5  ">
-                    <input
-                      id="1"
-                      className="w-4 cursor-pointer"
-                      type="checkbox"
-                      checked={filterOption.nuevo}
-                      onChange={() => filterSearch("nuevo")}
-                    />
-                    <p className="font-open-sans">Nuevo</p>
-                  </div>
-                  <div className="flex flex-row gap-5 ">
-                    <input
-                      id="2"
-                      className="w-4 cursor-pointer"
-                      type="checkbox"
-                      checked={filterOption.usado}
-                      onChange={() => filterSearch("usado")}
-                    />
-                    <p className="font-open-sans">Usado</p>
-                  </div>
-                </div>
+           
                 <div className=" h-full  ">
                   <p className="font-fira-sans font-semibold">Cuartos: </p>
                 </div>
