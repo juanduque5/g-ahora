@@ -19,32 +19,96 @@ const PropiedadesYa = () => {
   const ventaoRenta = ["Venta", "Renta", "Venta y alquiler"];
   const type = ["Casa", "Apartamento", "Lote", "Local"];
   const [filteredWords, setFilteredInformation] = useState([]);
+  const [selectedUso, setSelectedUso] = useState(["Venta y alquiler"]);
+  const [Selected, setSelected] = useState([]);
   const ciudades = [
     "Cartago",
     "Cartaguena",
     "Cartago",
     "Cartaguena",
     "Cartago",
-
-    "Cartaguena",
-    "Cartago",
-
-    "Cartaguena",
-    "Cartago",
-
-    "Cartaguena",
-    "Bogota",
-    "Bogota",
-    "Bogota",
-    "Bogota",
-    "Bogota",
-    "Bogota",
-    "Bogota",
-    "Bogota",
-    "Bogota",
-    "Bogota",
   ];
-  const [Selected, setSelected] = useState([]);
+  const [filterOption, setFilterOption] = useState({
+    tipo: {
+      Casa: false,
+      Apartamento: false,
+      Local: false,
+      Lote: false,
+    },
+    uso: {
+      Venta: false,
+      Renta: false,
+      "Venta y alquiler": true,
+    },
+  });
+  // const [Selected, setSelected] = useState([]);
+
+  //crear if/else statement
+  const handleSelectedChange = (key) => {
+    const option = key;
+    if (option === "Venta") {
+      setFilterOption({
+        ...filterOption,
+        uso: {
+          ...filterOption.uso,
+          Renta: false,
+          "Venta y alquiler": false,
+          [option]: true,
+        },
+      });
+      setSelectedUso(option);
+    } else if (option === "Renta") {
+      setFilterOption({
+        ...filterOption,
+        uso: {
+          ...filterOption.uso,
+          Venta: false,
+          "Venta y alquiler": false,
+          [option]: true,
+        },
+      });
+      setSelectedUso(option);
+    } else if (option === "Venta y alquiler") {
+      setFilterOption({
+        ...filterOption,
+        uso: {
+          ...filterOption.uso,
+          Venta: true,
+          Renta: true,
+          "Venta y alquiler": true,
+        },
+      });
+      setSelectedUso(option);
+    } else {
+      setFilterOption({
+        ...filterOption,
+        tipo: {
+          ...filterOption.tipo,
+          [option]: !filterOption.tipo[option],
+        },
+      });
+    }
+  };
+
+  const handleSelected = (option) => {
+    if (Selected.includes(option)) {
+      const newSelected = Selected.filter((items) => items !== option);
+
+      if (!newSelected) {
+        setSelected([]);
+      } else {
+        setSelected([...newSelected]);
+      }
+    } else {
+      setSelected([...Selected, option]);
+    }
+
+    // console.log("option", option);
+  };
+
+  console.log("selected", Selected);
+
+  console.log(filterOption);
 
   const openVentaOption = () => {
     setIsVentaOption(!isVentaOption);
@@ -63,23 +127,10 @@ const PropiedadesYa = () => {
     setFilteredInformation(result);
   };
 
-  console.log("filterwords", filteredWords);
+  // console.log("filterwords", filteredWords);
 
-  const handleSelectedChange = (option) => {
-    if (Selected.includes(option)) {
-      const newSelected = Selected.filter((items) => items !== option);
-      console.log("newSelected", newSelected);
-      if (newSelected[0] === undefined) {
-        setSelected([]);
-      } else {
-        setSelected([...newSelected]);
-      }
-    } else {
-      setSelected([...Selected, option]);
-    }
-
-    // console.log("option", option);
-  };
+  // console.log("opcion", ventaoRenta);
+  // console.log("selected", Selected);
 
   return (
     <div className="ajusta">
@@ -110,7 +161,7 @@ const PropiedadesYa = () => {
             </p>
           </div>
           <div className="aqui  flex h-auto w-full   sm:w-full md:h-1/6 lg:h-1/4 xl:h-1/4">
-            <div className="m-auto hidden h-20  border md:block md:w-full lg:block lg:w-11/12 xl:block xl:w-11/12">
+            <div className="m-auto hidden h-20   md:block md:w-full lg:block lg:w-11/12 xl:block xl:w-11/12">
               <div className="m-auto flex  h-20 w-full rounded-lg bg-white ">
                 <div className="flex w-1/2 cursor-pointer  border-r">
                   <div className="w-2/5">
@@ -119,7 +170,7 @@ const PropiedadesYa = () => {
                       className=" flex h-full cursor-pointer border-r "
                     >
                       <p className="m-auto text-center font-open-sans text-sm font-bold md:text-sm lg:text-base xl:text-base">
-                        venta y alquiler
+                        {selectedUso}
                       </p>
                       <img
                         className={`m-auto ${
@@ -135,17 +186,25 @@ const PropiedadesYa = () => {
                       }`}
                     >
                       <SelectCheckBox
+                        // handleSelected={false}
                         opciones={ventaoRenta}
-                        opcionesSeleccionadas={Selected}
+                        opcionesSeleccionadas={filterOption}
                         handleSelectedChange={handleSelectedChange}
                       />
                     </div>
                   </div>
                   <div onClick={openTypeOption} className="  w-3/5 border">
                     <div className="flex h-full cursor-pointer ">
-                      <p className="m-auto font-open-sans text-sm font-bold md:text-sm lg:text-base xl:text-base">
-                        tipo de inmueble
-                      </p>
+                      {Selected.length > 0 ? (
+                        <p className="m-auto truncate font-open-sans text-sm font-bold md:text-sm lg:text-base xl:text-base">
+                          {Selected.join(", ")}
+                        </p>
+                      ) : (
+                        <p className="m-auto font-open-sans text-sm font-bold md:text-sm lg:text-base xl:text-base">
+                          Tipo de inmueble
+                        </p>
+                      )}
+
                       <img
                         className={`m-auto ${
                           isTypeOption ? "rotate-180" : "rotate-0"
@@ -160,29 +219,31 @@ const PropiedadesYa = () => {
                       }`}
                     >
                       <SelectCheckBox
+                        type={true}
                         opciones={type}
-                        opcionesSeleccionadas={Selected}
+                        opcionesSeleccionadas={filterOption}
                         handleSelectedChange={handleSelectedChange}
+                        handleSelected={handleSelected}
                       />
                     </div>
                   </div>
                 </div>
-                <div className="flex w-1/2 cursor-pointer flex-row  border ">
-                  <div className=" h-full w-2/3 ">
-                    <div className="flex h-full items-center ">
+                <div className="flex w-1/2 cursor-pointer flex-row   ">
+                  <div className=" h-full w-full ">
+                    <div className="m-auto flex h-full items-center ">
                       {/* <p className="m-auto font-open-sans text-sm font-bold md:text-sm lg:text-base xl:text-base">
                       Cualquier propiedad{" "}
                     </p>
                     <img className="m-auto" src={down} alt="Hi"></img> */}
                       <input
                         onChange={locationInfo}
-                        className="h-9 w-full rounded-sm border "
+                        className="m-auto h-9 w-95 rounded-sm border "
                         type="text"
                         placeholder="Ciudad o Areas"
                       ></input>
                     </div>
                     <div
-                      className={`relative z-10 mt-1 max-h-48 w-full cursor-pointer overflow-y-auto border bg-white shadow-lg ${
+                      className={`relative z-10 m-auto mt-1 max-h-48 w-95 cursor-pointer overflow-y-auto  bg-white shadow-xl ${
                         filteredWords.length ? "block" : "hidden"
                       }`}
                     >

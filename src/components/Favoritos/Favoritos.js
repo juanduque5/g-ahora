@@ -24,8 +24,8 @@ const Favoritos = () => {
   const handleSelectedChange = (option) => {
     if (Selected.includes(option)) {
       const newSelected = Selected.filter((items) => items !== option);
-      console.log("newSelected", newSelected);
-      if (newSelected[0] === undefined) {
+
+      if (!newSelected) {
         setSelected([]);
       } else {
         setSelected([...newSelected]);
@@ -36,6 +36,7 @@ const Favoritos = () => {
 
     // console.log("option", option);
   };
+
   useEffect(() => {
     // Useeffect will be use to call favorite properties depending on the id
     const fetchData = async () => {
