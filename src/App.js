@@ -189,7 +189,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/Propiedades"
+            path="/Propiedades/"
             element={
               <>
                 <Header

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-//import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 //import { useMediaQuery } from "react-responsive";
 // import imageFilter from "../../images/image-filter.png";
 import down from "../../images/chevron-down.png";
@@ -14,20 +14,17 @@ const PropiedadesYa = () => {
   // const handleSeleccionarOpcion = (e) => {
   //   setOpcionSeleccionada(e.target.value);
   // };
+  const Navigate = useNavigate();
   const [isVentaOption, setIsVentaOption] = useState(false);
   const [isTypeOption, setTypeOption] = useState(false);
-  const ventaoRenta = ["Venta", "Renta", "Venta y alquiler"];
+  const ventaoRenta = ["Venta", "Renta", "Venta y renta"];
   const type = ["Casa", "Apartamento", "Lote", "Local"];
   const [filteredWords, setFilteredInformation] = useState([]);
-  const [selectedUso, setSelectedUso] = useState(["Venta y alquiler"]);
+  const [selectedUso, setSelectedUso] = useState(["Venta y renta"]);
   const [Selected, setSelected] = useState([]);
-  const ciudades = [
-    "Cartago",
-    "Cartaguena",
-    "Cartago",
-    "Cartaguena",
-    "Cartago",
-  ];
+  const [Selected2, setSelected2] = useState(["Venta y renta"]);
+  //if you use null, then you'll encounter an issue
+  const [location, setLocation] = useState("");
   const [filterOption, setFilterOption] = useState({
     tipo: {
       Casa: false,
@@ -38,12 +35,41 @@ const PropiedadesYa = () => {
     uso: {
       Venta: false,
       Renta: false,
-      "Venta y alquiler": true,
+      "Venta y renta": true,
+    },
+    place: {
+      location: "",
     },
   });
+  const ciudades = [
+    "Cartago",
+    "Cartaguena",
+    "Cartago",
+    "Cartaguena",
+    "Cartago",
+    "medellin",
+  ];
+
+  //Update place.location using useffect
+  useEffect(() => {
+    setFilterOption((prevFilterOption) => ({
+      ...prevFilterOption,
+      place: {
+        ...prevFilterOption.place,
+        location: location.length > 3 ? location : "",
+      },
+    }));
+  }, [location]);
+
+  //set location equals to value selected
+  const placeInformation = (place) => {
+    setLocation(place);
+    console.log(place);
+  };
+
   // const [Selected, setSelected] = useState([]);
 
-  //crear if/else statement
+  //Filtering type / used property
   const handleSelectedChange = (key) => {
     const option = key;
     if (option === "Venta") {
@@ -52,7 +78,7 @@ const PropiedadesYa = () => {
         uso: {
           ...filterOption.uso,
           Renta: false,
-          "Venta y alquiler": false,
+          "Venta y renta": false,
           [option]: true,
         },
       });
@@ -63,19 +89,19 @@ const PropiedadesYa = () => {
         uso: {
           ...filterOption.uso,
           Venta: false,
-          "Venta y alquiler": false,
+          "Venta y renta": false,
           [option]: true,
         },
       });
       setSelectedUso(option);
-    } else if (option === "Venta y alquiler") {
+    } else if (option === "Venta y renta") {
       setFilterOption({
         ...filterOption,
         uso: {
           ...filterOption.uso,
           Venta: true,
           Renta: true,
-          "Venta y alquiler": true,
+          "Venta y renta": true,
         },
       });
       setSelectedUso(option);
@@ -90,6 +116,7 @@ const PropiedadesYa = () => {
     }
   };
 
+  //Using this to display the options selected on type option
   const handleSelected = (option) => {
     if (Selected.includes(option)) {
       const newSelected = Selected.filter((items) => items !== option);
@@ -102,13 +129,18 @@ const PropiedadesYa = () => {
     } else {
       setSelected([...Selected, option]);
     }
+  };
 
-    // console.log("option", option);
+  //handle select options from used
+  const handleSelected2 = (option) => {
+    setSelected2([option]);
   };
 
   console.log("selected", Selected);
+  console.log("selected2", Selected2);
 
-  console.log(filterOption);
+  console.log("filtered Option", filterOption);
+  console.log("location", location);
 
   const openVentaOption = () => {
     setIsVentaOption(!isVentaOption);
@@ -118,6 +150,7 @@ const PropiedadesYa = () => {
     setTypeOption(!isTypeOption);
   };
 
+  //filter location option
   const locationInfo = (e) => {
     console.log(e.target.value);
     const search = e.target.value.toLocaleLowerCase();
@@ -125,6 +158,14 @@ const PropiedadesYa = () => {
       (info) => info.toLocaleLowerCase().includes(search) && search.length >= 3,
     );
     setFilteredInformation(result);
+    setLocation(e.target.value);
+  };
+
+  //handle search button
+  const handleSearch = () => {
+    if (Selected2.length > 0) {
+      Navigate("/Propiedades", { state: { filterOption } });
+    }
   };
 
   // console.log("filterwords", filteredWords);
@@ -186,7 +227,8 @@ const PropiedadesYa = () => {
                       }`}
                     >
                       <SelectCheckBox
-                        // handleSelected={false}
+                        type={false}
+                        handleSelected2={handleSelected2}
                         opciones={ventaoRenta}
                         opcionesSeleccionadas={filterOption}
                         handleSelectedChange={handleSelectedChange}
@@ -240,6 +282,7 @@ const PropiedadesYa = () => {
                         className="m-auto h-9 w-95 rounded-sm border "
                         type="text"
                         placeholder="Ciudad o Areas"
+                        value={location}
                       ></input>
                     </div>
                     <div
@@ -247,10 +290,16 @@ const PropiedadesYa = () => {
                         filteredWords.length ? "block" : "hidden"
                       }`}
                     >
-                      <SearchBox filteredWords={filteredWords} />
+                      <SearchBox
+                        placeInformation={placeInformation}
+                        filteredWords={filteredWords}
+                      />
                     </div>
                   </div>
-                  <div className="m-auto mr-2 flex h-16 w-30 cursor-pointer rounded-xl bg-blue-new ">
+                  <div
+                    onClick={() => Navigate(handleSearch)}
+                    className="m-auto mr-2 flex h-16 w-30 cursor-pointer rounded-xl bg-blue-new "
+                  >
                     <p className="m-auto text-center font-fira-sans text-sm font-bold text-white md:text-sm lg:text-base xl:text-base">
                       BUSCAR
                     </p>

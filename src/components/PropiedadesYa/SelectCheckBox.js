@@ -6,6 +6,7 @@ const SelectCheckBox = ({
   handleSelectedChange,
   type,
   handleSelected,
+  handleSelected2,
 }) => {
   return (
     <div className="flex w-full cursor-pointer flex-col  rounded-lg shadow-md">
@@ -27,6 +28,8 @@ const SelectCheckBox = ({
                 handleSelectedChange(option);
                 if (type) {
                   handleSelected(option);
+                } else {
+                  handleSelected2(option);
                 }
               }}
             />

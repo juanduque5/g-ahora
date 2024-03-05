@@ -1,12 +1,15 @@
 import React from "react";
 
-const SearchBox = ({ filteredWords }) => {
+const SearchBox = ({ filteredWords, placeInformation }) => {
   return (
     <div className=" m-auto flex w-full flex-col ">
-      {filteredWords.map((information, index) => (
+      {filteredWords.map((place, index) => (
         <div key={index} className="border">
-          <div className="hover:bg-slate-100 hover:text-blue-new">
-            <p>{information}</p>
+          <div
+            onClick={() => placeInformation(place)}
+            className="hover:bg-slate-100 hover:text-blue-new"
+          >
+            <p>{place}</p>
           </div>
         </div>
       ))}

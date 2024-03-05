@@ -5,7 +5,7 @@ import React, { useState } from "react";
 // import { Link } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
-
+import { useLocation } from "react-router-dom";
 // import search from "../../images/search.png";
 import filter from "../../images/filter.png";
 import down from "../../images/chevron-down.png";
@@ -23,6 +23,7 @@ const ListaPropiedades = () => {
   const [value, setValue] = useState([0, 10000]);
   const Numeros = [1, 2, 3, 4, 5, 6, "Cualquiera"];
   const ventaoRenta = ["Venta", "Renta", "alquiler", "cualquiera"];
+  const location = useLocation();
 
   const [filterOption, setFilterOption] = useState({
     venta: false,
