@@ -189,7 +189,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/Propiedades/"
+            path="/Propiedades"
             element={
               <>
                 <Header
@@ -197,13 +197,13 @@ class App extends Component {
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
-                <ListaPropiedades />
-                <Cards
+                <ListaPropiedades userId={userId} isAuth={isAuth} />
+                {/* <Cards
                   title={false}
                   infoH={properties}
                   userId={userId}
                   isAuth={isAuth}
-                />
+                /> */}
                 <Footer />
               </>
             }

@@ -163,15 +163,13 @@ const PropiedadesYa = () => {
 
   //handle search button
   const handleSearch = () => {
-    if (Selected2.length > 0) {
-      Navigate("/Propiedades", { state: { filterOption } });
-    }
+    Navigate("/Propiedades", { state: { filterOption } });
   };
 
   // console.log("filterwords", filteredWords);
 
   // console.log("opcion", ventaoRenta);
-  // console.log("selected", Selected);
+  console.log("selected", Selected2.length);
 
   return (
     <div className="ajusta">
@@ -297,7 +295,7 @@ const PropiedadesYa = () => {
                     </div>
                   </div>
                   <div
-                    onClick={() => Navigate(handleSearch)}
+                    onClick={handleSearch}
                     className="m-auto mr-2 flex h-16 w-30 cursor-pointer rounded-xl bg-blue-new "
                   >
                     <p className="m-auto text-center font-fira-sans text-sm font-bold text-white md:text-sm lg:text-base xl:text-base">

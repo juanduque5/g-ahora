@@ -11,11 +11,14 @@ import house from "../../images/house.png";
 import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
 
-import "./Cards.css";
-
-const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
+const Cards = ({ userId, isAuth, data }) => {
   console.log("userId", userId);
+  console.log("isAuth", isAuth);
+  console.log("data", data);
   const [properties, setProperties] = useState([]);
+  const [searchData, setSearchData] = useState(data);
+
+  console.log("search data", searchData);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,25 +34,36 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
     const fetchData = async () => {
       console.log("fetchio");
       try {
-        const response = await fetch(
-          `http://localhost:2001/properties/info/${isAuth}/${userId}`,
-        );
-        if (!response.ok) {
-          console.log("Error al obtener datos iniciales");
-        }
-        if (location.pathname === "/") {
-          const data = await response.json();
-          setProperties(data.data.slice(0, 3));
+        if (data) {
+          //   const response = await fetch(
+          //     `http://localhost:2001/properties/info/${isAuth}/${userId}`,
+          //   );
+
+          //   if (!response.ok) {
+          //     console.log("Error al obtener datos iniciales");
+          //   }
+
+          //   const data = await response.json();
+          //   setProperties(data.data);
+          console.log("ji");
         } else {
+          const response = await fetch(
+            `http://localhost:2001/properties/info/${isAuth}/${userId}`,
+          );
+          if (!response.ok) {
+            console.log("Error al obtener datos iniciales");
+          }
+
           const data = await response.json();
           setProperties(data.data);
+          setSearchData(null);
         }
       } catch (error) {
         console.error("Error al obtener datos iniciales:", error);
       }
     };
     fetchData();
-  }, [isAuth, location, userId]);
+  }, [isAuth, location, userId, data]);
 
   //handle heart favorite clicks
   const handleHeartClick = useCallback(
@@ -110,22 +124,8 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
   // console.log("hearts", heart);
 
   return (
-    <div className="ajusta">
+    <div className="">
       <div className="m-auto mb-20 flex h-auto w-full flex-col md:w-full">
-        {title && (
-          <div className="mb-16 flex h-10 justify-center ">
-            {vacation ? (
-              <p className="m-auto text-center  font-open-sans text-3xl font-semibold">
-                Destinos populares
-              </p>
-            ) : (
-              <p className="m-auto text-center  font-open-sans text-3xl font-semibold">
-                Explora propiedades cerca de ti
-              </p>
-            )}
-          </div>
-        )}
-
         <div className="try grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
           {properties.map((info, index) => (
             <div
