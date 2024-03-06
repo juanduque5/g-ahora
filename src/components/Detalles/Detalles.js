@@ -1,5 +1,7 @@
 import { React, useState, useEffect } from "react";
 import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
+
+import config from "../../config";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 // import "./Agregar.css";
@@ -13,6 +15,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const [numFiles, setNumFiles] = useState(0);
   const { selectedOption2 } = state || {};
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const [autoComplete, setAutoComplete] = useState([]);
+  const [adress, setAdress] = useState("");
   const [info, setInfo] = useState({
     ciudad: "",
     barrio: "",
@@ -77,13 +81,37 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     window.location.reload();
   };
 
+  //handling input
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setInfo({
-      ...info,
-      [name]: value,
-    });
+    if (
+      (!isNaN(value) && name === "habitaciones") ||
+      (!isNaN(value) && name === "banos") ||
+      (!isNaN(value) && name === "estacionamientos") ||
+      (!isNaN(value) && name === "area")
+    ) {
+      setInfo({
+        ...info,
+        [name]: value,
+      });
+    } else if (
+      name === "ciudad" ||
+      name === "barrio" ||
+      name === "description"
+    ) {
+      setInfo({
+        ...info,
+        [name]: value,
+      });
+    } else if (name === "estado") {
+      setInfo({
+        ...info,
+        [name]: value,
+      });
+    }
   };
+
+  console.log("estado", info.estado);
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
@@ -152,7 +180,34 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     }
   };
 
+  //handling map input
+  const handleMapInput = (e) => {
+    const textInput = e.target.value;
+    setAdress(textInput);
+  };
+
+  console.log(adress);
+
+  //Call Geocode Google API
+  useEffect(() => {
+    const handleSearch = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:2001/properties/maps/api/place/autocomplete/json?input=${adress}`,
+        );
+
+        const data = await response.json();
+        setAutoComplete(data.predictions);
+      } catch (error) {
+        console.error("Error message from autoComplete:", error);
+      }
+    };
+
+    handleSearch(); // Llamar a handleSearch cuando el componente se monta inicialmente
+  }, [adress]); // handleSearch se ejecutará cada vez que el valor de input cambie
+
   console.log("isAuth", isAuth);
+  console.log(autoComplete);
 
   return (
     <div className="flex flex-col">
@@ -328,7 +383,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
             <p className="font-medium">Datos principales</p>
           </div>
           <div className="flex h-96 w-full flex-col border md:h-72  md:flex-row">
-            <div className="order-2 flex w-full flex-col border md:order-1 md:w-9/12">
+            <div className="order-2 flex w-full flex-col border md:order-1 md:w-67">
               <div className="flex h-auto flex-col border md:h-1/2 md:flex-row">
                 <div className="flex w-full flex-col border md:w-1/2">
                   <div className="flex h-1/2 items-center border">
@@ -340,7 +395,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                       value={info.ciudad}
                       onChange={handleChange}
                       type="text"
-                      className="h-full w-11/12 rounded-md border border-gray-400 p-1 md:h-3/5 "
+                      className="h-full w-95 rounded-md border border-gray-400 p-1 md:h-3/5 "
                     ></input>
                   </div>
                 </div>
@@ -354,7 +409,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                       value={info.barrio}
                       onChange={handleChange}
                       type="text"
-                      className="h-full w-11/12  rounded-md border border-gray-400 p-1 md:h-3/5"
+                      className="h-full w-95  rounded-md border border-gray-400 p-1 md:h-3/5"
                     ></input>
                   </div>
                 </div>
@@ -376,8 +431,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                     value={info.description}
                     onChange={handleChange}
                     style={{
-                      width: "95%",
-                      height: "94%",
+                      width: "99%",
+                      height: "90%",
+                      maxHeight: "90%",
                       borderRadius: "4px",
                       border: "1px solid rgb(156 163 175)",
                       padding: "8px",
@@ -388,11 +444,11 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                 </div>
               </div>
             </div>
-            <div className="order-1 flex h-2/4 w-full border md:order-2 md:h-full md:w-1/4">
+            <div className="md:w-33 order-1 flex h-2/4 w-full border md:order-2 md:h-full">
               <div className="m-auto h-4/6 w-11/12 cursor-pointer flex-col border border-dashed border-gray-600 bg-slate-100 md:h-5/6">
                 <div className=" flex h-1/2 w-full flex-col border">
                   <input
-                    className=" relative left-10 m-auto "
+                    className="m-auto w-1/2 "
                     type="file"
                     onChange={handleFileChange}
                   />
@@ -413,7 +469,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
             <div className="flex h-1/2 flex-col border md:flex-row">
               <div className="flex w-full flex-col border">
                 <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">Numero Habitaciones:</p>
+                  <p className="font-semibold">Habitaciones:</p>
                 </div>
                 <div className="flex h-1/2 items-center border">
                   <input
@@ -421,13 +477,14 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                     value={info.habitaciones}
                     onChange={handleChange}
                     type="text"
-                    className="h-3/5 w-11/12  rounded-md border border-gray-400 p-1 "
+                    className="h-3/5 w-95  rounded-md border border-gray-400 p-1 "
+                    placeholder="Ingresar numero"
                   ></input>
                 </div>
               </div>
               <div className="flex w-full flex-col border">
                 <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">Numero Banos:</p>
+                  <p className="font-semibold">Banos:</p>
                 </div>
                 <div className="flex h-1/2 items-center border">
                   <input
@@ -435,7 +492,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                     value={info.banos}
                     onChange={handleChange}
                     type="text"
-                    className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
+                    className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
+                    placeholder="Ingresar numero"
                   ></input>
                 </div>
               </div>
@@ -449,7 +507,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                     value={info.estacionamientos}
                     onChange={handleChange}
                     type="text"
-                    className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
+                    className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
+                    placeholder="Ingresar numero"
                   ></input>
                 </div>
               </div>
@@ -467,7 +526,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                     value={info.area}
                     onChange={handleChange}
                     type="text"
-                    className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
+                    className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
+                    placeholder="Ingresar numero"
                   ></input>
                 </div>
               </div>
@@ -476,13 +536,22 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                   <p className="font-semibold">Nuevo o usado:</p>
                 </div>
                 <div className="flex h-1/2 items-center border">
-                  <input
+                  {/* <input
                     name="estado"
                     value={info.estado}
                     onChange={handleChange}
                     type="text"
                     className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
-                  ></input>
+                  ></input> */}
+                  <select
+                    name="estado"
+                    value={info.estado}
+                    onChange={handleChange}
+                    className="h-3/5 w-95 rounded-md border border-gray-400"
+                  >
+                    <option value="usado">Usado</option>
+                    <option value="nuevo">Nuevo</option>
+                  </select>
                 </div>
               </div>
               <div className="flex w-full flex-col border md:w-4/12">
@@ -492,7 +561,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                 <div className="flex h-1/2 items-center border">
                   <input
                     type="text"
-                    className="h-3/5 w-11/12 rounded-md border border-gray-400 p-1"
+                    value={adress}
+                    onChange={handleMapInput}
+                    className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
                   ></input>
                 </div>
               </div>
