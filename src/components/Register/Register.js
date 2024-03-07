@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import "./Register.css";
 
 import visible from "../../images/visible.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Modal from "react-modal";
 
 const Login = () => {
@@ -17,7 +17,6 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-  const navigate = useNavigate();
 
   //Handle Sign up API
 

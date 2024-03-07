@@ -397,17 +397,17 @@ const Info = ({ options }) => {
         <div className="mt-5 w-full border xl:w-full">
           <div>
             <MapContainer
-              center={[51.505, -0.09]}
-              zoom={10}
+              center={[4.747221199999999, -75.91162890000001]}
+              zoom={13}
               style={{ width: "100%", height: "400px" }}
             >
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
-              <Marker position={[51.505, -0.09]}>
+              <Marker position={[4.747221199999999, -75.91162890000001]}>
                 <Popup>
-                  A pretty CSS3 popup. <br /> Easily customizable.
+                  <p>cartago</p>
                 </Popup>
               </Marker>
             </MapContainer>

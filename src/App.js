@@ -134,7 +134,7 @@ class App extends Component {
   // };
 
   render() {
-    const { info, properties, isAuth, token, userId } = this.state;
+    const { info, properties, isAuth, userId } = this.state;
 
     const first = localStorage.getItem("first");
     const last = localStorage.getItem("last");
@@ -339,6 +339,11 @@ class App extends Component {
             path="/Agregar/:id"
             element={
               <>
+                <Header
+                  logged={first}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
                 <Agregar
                   logged={first}
                   isAuth={this.state.isAuth}
@@ -351,6 +356,11 @@ class App extends Component {
             path="/Detalles/:id/:selectedOption"
             element={
               <>
+                <Header
+                  logged={first}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
                 <Detalles
                   logged={first}
                   isAuth={this.state.isAuth}

@@ -10,16 +10,11 @@ import plus from "../../images/plus.png";
 import edit from "../../images/edit.png";
 
 const Header = ({ logged, isAuth, logoutHandler }) => {
-  const [mostrarOpciones, setMostrarOpciones] = useState(false);
   const [lista, setLista] = useState([]);
   const { id } = useParams();
   console.log("id daddy", id);
 
   const navigate = useNavigate();
-  const accessLogin = () => {
-    navigate("/Login");
-    window.location.reload();
-  };
 
   const accessAgregar = () => {
     navigate(`/Agregar/${id}`);
