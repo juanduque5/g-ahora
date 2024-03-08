@@ -199,20 +199,20 @@ const PropiedadesYa = () => {
               Únete a nosotros y toma el control de tu futuro inmobiliario.
             </p>
           </div>
-          <div className="aqui  flex h-auto w-full   sm:w-full md:h-1/6 lg:h-1/4 xl:h-1/4">
-            <div className="m-auto hidden h-20   md:block md:w-full lg:block lg:w-11/12 xl:block xl:w-11/12">
-              <div className="m-auto flex  h-20 w-full rounded-lg bg-white ">
-                <div className="flex w-1/2 cursor-pointer  border-r">
-                  <div className="w-2/5">
+          <div className="aqui  flex  w-full   sm:w-full md:h-1/6 lg:h-1/4 xl:h-1/4">
+            <div className="m-auto  w-full md:block md:h-20 md:w-full lg:block lg:w-11/12 xl:block xl:w-11/12">
+              <div className="m-auto flex  h-95 w-full flex-col gap-3 rounded-lg border  border-green-700 md:h-20 md:flex-row md:gap-0 ">
+                <div className="flex w-full cursor-pointer flex-col gap-3 border border-yellow-500 md:w-1/2  md:flex-row md:gap-0 md:border-r">
+                  <div className="h-9 w-full border  bg-white md:h-auto md:w-2/5">
                     <div
                       onClick={openVentaOption}
-                      className=" flex h-full cursor-pointer border-r "
+                      className=" flex h-full cursor-pointer items-center border-r "
                     >
-                      <p className="m-auto text-center font-open-sans text-sm font-bold md:text-sm lg:text-base xl:text-base">
+                      <p className="ml-5 font-open-sans text-sm font-bold md:m-auto md:text-center md:text-sm lg:text-base xl:text-base">
                         {selectedUso}
                       </p>
                       <img
-                        className={`m-auto ${
+                        className={`m-auto mr-5 ${
                           isVentaOption ? "rotate-180" : "rotate-0"
                         }`}
                         src={down}
@@ -220,7 +220,7 @@ const PropiedadesYa = () => {
                       ></img>
                     </div>
                     <div
-                      className={`relative z-10 mt-1 w-full cursor-pointer border bg-white ${
+                      className={`absolute  z-30 mt-1 w-82 cursor-pointer border bg-white md:relative md:w-full ${
                         isVentaOption ? "block" : "hidden"
                       }`}
                     >
@@ -233,20 +233,23 @@ const PropiedadesYa = () => {
                       />
                     </div>
                   </div>
-                  <div onClick={openTypeOption} className="  w-3/5 border">
-                    <div className="flex h-full cursor-pointer ">
+                  <div
+                    onClick={openTypeOption}
+                    className="h-9  w-full border bg-white md:h-auto md:w-3/5"
+                  >
+                    <div className="flex h-full cursor-pointer items-center ">
                       {Selected.length > 0 ? (
-                        <p className="m-auto truncate font-open-sans text-sm font-bold md:text-sm lg:text-base xl:text-base">
+                        <p className="ml-5 truncate font-open-sans text-sm font-bold md:m-auto md:text-sm lg:text-base xl:text-base">
                           {Selected.join(", ")}
                         </p>
                       ) : (
-                        <p className="m-auto font-open-sans text-sm font-bold md:text-sm lg:text-base xl:text-base">
+                        <p className="ml-5 font-open-sans text-sm font-bold md:m-auto md:text-sm lg:text-base xl:text-base">
                           Tipo de inmueble
                         </p>
                       )}
 
                       <img
-                        className={`m-auto ${
+                        className={`m-auto mr-5 ${
                           isTypeOption ? "rotate-180" : "rotate-0"
                         }`}
                         src={down}
@@ -254,7 +257,7 @@ const PropiedadesYa = () => {
                       ></img>
                     </div>
                     <div
-                      className={`relative z-10 mt-1 w-full cursor-pointer border bg-white shadow-lg  ${
+                      className={`absolute z-20 mt-1 w-82 cursor-pointer border bg-white shadow-lg md:relative md:w-full  ${
                         isTypeOption ? "block" : "hidden"
                       }`}
                     >
@@ -268,23 +271,23 @@ const PropiedadesYa = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex w-1/2 cursor-pointer flex-row   ">
+                <div className="flex w-full cursor-pointer flex-col gap-3  border md:w-1/2  md:flex-row  md:bg-white">
                   <div className=" h-full w-full ">
-                    <div className="m-auto flex h-full items-center ">
+                    <div className="flex h-full w-full items-center md:m-auto ">
                       {/* <p className="m-auto font-open-sans text-sm font-bold md:text-sm lg:text-base xl:text-base">
                       Cualquier propiedad{" "}
                     </p>
                     <img className="m-auto" src={down} alt="Hi"></img> */}
                       <input
                         onChange={locationInfo}
-                        className="m-auto h-9 w-95 rounded-sm border "
+                        className="m-auto h-9 w-full rounded-sm border md:w-95 "
                         type="text"
                         placeholder="Ciudad o Areas"
                         value={location}
                       ></input>
                     </div>
                     <div
-                      className={`relative z-10 m-auto mt-1 max-h-48 w-95 cursor-pointer overflow-y-auto  bg-white shadow-xl ${
+                      className={`absolute z-10 m-auto mt-1 max-h-48 w-82 cursor-pointer overflow-y-auto bg-white shadow-xl  md:relative md:w-95 ${
                         filteredWords.length ? "block" : "hidden"
                       }`}
                     >
@@ -296,16 +299,16 @@ const PropiedadesYa = () => {
                   </div>
                   <div
                     onClick={handleSearch}
-                    className="m-auto mr-2 flex h-16 w-30 cursor-pointer rounded-xl bg-blue-new "
+                    className="m-auto flex h-9 w-full cursor-pointer rounded-xl bg-blue-new md:mr-2 md:h-16 md:w-30 "
                   >
-                    <p className="m-auto text-center font-fira-sans text-sm font-bold text-white md:text-sm lg:text-base xl:text-base">
+                    <p className="text-md m-auto text-center font-fira-sans font-bold text-white md:text-sm lg:text-base xl:text-base">
                       BUSCAR
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className=" flex h-56 w-full flex-col  md:hidden">
+            {/* <div className=" flex h-56 w-full flex-col  md:hidden">
               <div className="flex h-full justify-center  ">
                 <div className="m-auto flex h-5/6 w-full cursor-pointer border-2 bg-white hover:border-blue-new">
                   <p className="m-auto text-center font-open-sans text-base font-bold">
@@ -334,7 +337,7 @@ const PropiedadesYa = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex h-15 w-full justify-center">
