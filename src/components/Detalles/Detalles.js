@@ -7,16 +7,17 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const [isListOpen, setIsListOPen] = useState(false);
   const { id, selectedOption } = useParams();
   const [files, setFiles] = useState([]);
-  const [numFiles, setNumFiles] = useState(0);
+  // const [numFiles, setNumFiles] = useState(0);
   const { selectedOption2 } = state || {};
   const [autoComplete, setAutoComplete] = useState([]);
   const [coordinates, setCoordinates] = useState([]);
   const [error, setError] = useState([]);
   const [error2, setError2] = useState(null);
+  const [error3, setError3] = useState("");
   const [searchAddress, setSearchAddress] = useState("");
 
   const [info, setInfo] = useState({
-    ciudad: "",
+    ciudad: "Guatemala",
     barrio: "",
     description: "",
     habitaciones: "",
@@ -25,6 +26,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     area: "",
     estado: "usado",
     direccion: "",
+    currency: "QTZ",
+    precio: "",
+    coordinates: null,
   });
 
   const navigate = useNavigate();
@@ -54,14 +58,16 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
       (!isNaN(value) && name === "estacionamientos") ||
       (!isNaN(value) && name === "area")
     ) {
+      const rawValue = value.replace(/[^\d]/g, "");
       setInfo({
         ...info,
-        [name]: value,
+        [name]: rawValue,
       });
     } else if (
       name === "ciudad" ||
       name === "barrio" ||
-      name === "description"
+      name === "description" ||
+      name === "currency"
     ) {
       setInfo({
         ...info,
@@ -77,18 +83,55 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         ...info,
         [name]: value,
       });
+    } else if (name === "precio") {
+      // const formattedValue = Number(value).toLocaleString(); // Formatear el valor con comas
+      if (value.includes(".") || value.includes(",")) {
+        setError3("No utilizar comma or punto");
+      } else {
+        setError3("");
+      }
+      const rawValue = value.replace(/[^\d]/g, "");
+      setInfo({
+        ...info,
+        [name]: rawValue,
+      });
     }
+  };
+
+  //Delete image from files array
+  const deleteImage = (value) => {
+    const arrayObjects = files.filter(
+      (file) => file.name !== value && file.lastModified !== value.lastModified,
+    );
+
+    setFiles([...arrayObjects]);
   };
 
   //Selecting all the files(pictures) and updating its constants
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
-    setNumFiles((prevNumFiles) => prevNumFiles + selectedFiles.length);
+    console.log("selectedFiles", selectedFiles);
+
+    // Filtrar solo archivos de tipo MIME de imagen
+    const imageFiles = selectedFiles.filter((file) =>
+      file.type.startsWith("image/"),
+    );
+
+    const areDuplicates = imageFiles.some((selectedFile) =>
+      files.some((file) => file.name === selectedFile.name),
+    );
+
+    if (!areDuplicates) {
+      // Agrega solo los archivos seleccionados que no son duplicados al array de files
+      setFiles((prevFiles) => [...prevFiles, ...imageFiles]);
+    }
+
+    e.target.value = ""; // Limpiar el valor del input file para permitir selecciones adicionales
   };
 
   console.log("files:", files);
-  console.log("info", info);
+
+  // console.log("precio", info.precio);
 
   //Sending all information required to the backend
   const uploadInfo = async (info) => {
@@ -99,18 +142,16 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
       //   return;
       // }
 
-      console.log("info obj", info.ciudad.length > 0 ? info.ciudad : "nada");
-
       for (const key in info) {
         if (info.hasOwnProperty(key)) {
-          if (info[key].length === 0 && numFiles < 5) {
-            console.log("numfiles si", numFiles);
+          if (info[key].length === 0 && files.length < 5) {
+            // console.log("numfiles si", numFiles);
             errorKeys.push(key);
             setError2("You need at least 5 photos");
           } else if (info[key].length === 0) {
             errorKeys.push(key);
             setError2("");
-          } else if (numFiles < 5) {
+          } else if (files.length < 5) {
             setError("");
             setError2("You need at least 5 photos");
             setIsModalOpen(true);
@@ -209,25 +250,28 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      setInfo({
-        ...info,
-        direccion: place,
-      });
-      setIsListOPen(false);
 
+      setIsListOPen(false);
       const result = await response.json();
       console.log(result);
       const location = result;
-      setCoordinates([location]);
+      setCoordinates(location);
+
+      setInfo({
+        ...info,
+        direccion: place,
+        coordinates: location,
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log("isAuth", isAuth);
-  console.log(autoComplete);
+  // console.log("isAuth", isAuth);
+  // console.log(autoComplete);
   console.log("coordinates", coordinates);
-  console.log("info.address", info.direccion);
+  console.log("info", info);
+  // console.log("info.address", info.direccion);
 
   return (
     <div className="ajusta flex flex-col">
@@ -306,50 +350,123 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                   </div>
                 </div>
               </div>
-              <div className="flex h-full flex-col border md:h-3/5">
-                <div className="h-auto border">
-                  <p className="font-semibold">Description:</p>
+              <div className="flex  h-full w-full flex-col border md:h-3/5 md:flex-row">
+                <div className="flex w-full flex-col border md:w-1/2">
+                  <div className="border">
+                    <p className="font-semibold">Descripcion:</p>
+                  </div>
+                  <div
+                    className="h-full w-95 "
+                    // style={{
+                    //   height: "100%",
+                    //   border: "1px solid #ccc",
+                    //   padding: "8px",
+                    //   overflowY: "auto",
+                    // }}
+                  >
+                    <textarea
+                      name="description"
+                      className="h-full w-full resize-none rounded-md border border-gray-400"
+                      value={info.description}
+                      onChange={handleChange}
+                      // style={{
+                      //   width: "99%",
+                      //   height: "90%",
+                      //   maxHeight: "90%",
+                      //   borderRadius: "4px",
+                      //   border: "1px solid rgb(156 163 175)",
+                      //   padding: "8px",
+                      //   boxSizing: "border-box",
+                      //   resize: "none", // Evitar que se redimensione
+                      // }}
+                    />
+                  </div>
                 </div>
-                <div
-                  style={{
-                    height: "100%",
-                    border: "1px solid #ccc",
-                    padding: "8px",
-                    overflowY: "auto",
-                  }}
-                >
-                  <textarea
-                    name="description"
-                    value={info.description}
-                    onChange={handleChange}
-                    style={{
-                      width: "99%",
-                      height: "90%",
-                      maxHeight: "90%",
-                      borderRadius: "4px",
-                      border: "1px solid rgb(156 163 175)",
-                      padding: "8px",
-                      boxSizing: "border-box",
-                      resize: "none", // Evitar que se redimensione
-                    }}
-                  />
+                <div className="flex w-full flex-col border md:w-1/2">
+                  <div className="flex w-full border">
+                    <div>
+                      <p className="font-semibold">Precio: </p>
+                    </div>
+
+                    {error3 && (
+                      <div>
+                        <p className="m-auto ml-1 text-red-500">
+                          No utilizar commas o puntos
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex h-full w-full items-center border ">
+                    <div className="w-full">
+                      <input
+                        name="precio"
+                        value={info.precio}
+                        onChange={handleChange}
+                        className="h-9 w-full rounded-md border border-gray-400"
+                        placeholder="Ex. 100000"
+                      />
+                    </div>
+                    <div className="flex w-30 ">
+                      <select
+                        name="currency"
+                        value={info.currency}
+                        onChange={handleChange}
+                        className="h-9 w-80 rounded-md border border-gray-400 "
+                      >
+                        <option>QTZ</option>
+                        <option>USD</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
             <div className="order-1 flex h-2/4 w-full border md:order-2 md:h-full md:w-33">
-              <div className="m-auto h-4/6 w-11/12 cursor-pointer flex-col border border-dashed border-gray-600 bg-slate-100 md:h-5/6">
-                <div className=" flex h-1/2 w-full flex-col border">
+              <div className="m-auto h-90 w-11/12 cursor-pointer flex-col border border-dashed border-gray-600 bg-slate-100 md:h-5/6">
+                <div className=" flex h-2/5 w-full flex-col  md:h-1/4">
                   <input
                     className="m-auto w-1/2 "
                     type="file"
                     onChange={handleFileChange}
+                    multiple
                   />
                 </div>
 
-                <div className=" flex h-1/2 w-full items-center justify-center border">
-                  <p className="flex w-full justify-center   text-black">
-                    Fotos selecionadas: {numFiles}
-                  </p>
+                <div className=" flex h-3/5 w-full flex-col  md:h-75">
+                  <div>
+                    <p className="flex w-full justify-center font-semibold  text-black">
+                      Total: {files.length}
+                    </p>
+                  </div>
+                  <div className="h-95 max-h-72 overflow-y-auto border">
+                    {files.map((files, index) => (
+                      <div className="flex gap-2 border" key={index}>
+                        <div>
+                          <p>{files.name}</p>
+                        </div>
+                        <div
+                          onClick={() => deleteImage(files.name)}
+                          className="ml-auto mr-1 flex items-center"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="h-4 w-4 fill-red-100"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -441,7 +558,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
               </div>
               <div className="flex w-full flex-col border md:w-4/12">
                 <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">Ubicación:</p>
+                  <p className="font-semibold">Ubicación (Ex. direccion):</p>
                 </div>
                 <div className="h-1/2 w-full ">
                   <div className="flex h-full items-center border">
@@ -463,8 +580,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                     }`}
                   >
                     <div className="">
-                      {autoComplete.map((suggestion) => (
-                        <div key={suggestion.place_id}>
+                      {autoComplete.map((suggestion, index) => (
+                        <div key={index}>
                           <div
                             onClick={() =>
                               handleSelectSuggestion(

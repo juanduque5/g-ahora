@@ -117,7 +117,7 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
         <div className=" flex h-20 w-full border">
           <p className="m-auto font-semibold">Seleciona tipo de inmueble</p>
         </div>
-        <div className="m-auto flex h-52 w-full flex-row items-center justify-center gap-4 border">
+        <div className="m-auto flex h-auto w-full flex-wrap items-center justify-center gap-4 border md:h-52 md:flex-row">
           <div
             onClick={() => filterSearch("casa")}
             className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
@@ -129,11 +129,11 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
           </div>
           <div
             onClick={() => filterSearch("apartamento")}
-            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+            className={`flex cursor-pointer flex-col border pb-5 pl-1 pr-1 pt-5 hover:border-blue-new ${
               filterOption.apartamento ? "myBorder" : ""
             } `}
           >
-            <img src={apartment} className="m-auto h-12 w-12" alt="Hi"></img>
+            <img src={apartment} className="m-auto" alt="Hi"></img>
             <p className="m-auto">Apartamento</p>
           </div>
           <div
