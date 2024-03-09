@@ -208,7 +208,7 @@ const PropiedadesYa = () => {
                       onClick={openVentaOption}
                       className=" flex h-full cursor-pointer items-center border-r "
                     >
-                      <p className="ml-5 font-open-sans text-sm font-bold md:m-auto md:text-center md:text-sm lg:text-base xl:text-base">
+                      <p className="text-md ml-5 font-open-sans font-bold md:m-auto md:text-center md:text-sm lg:text-base xl:text-base">
                         {selectedUso}
                       </p>
                       <img
@@ -239,11 +239,11 @@ const PropiedadesYa = () => {
                   >
                     <div className="flex h-full cursor-pointer items-center ">
                       {Selected.length > 0 ? (
-                        <p className="ml-5 truncate font-open-sans text-sm font-bold md:m-auto md:text-sm lg:text-base xl:text-base">
+                        <p className="text-md ml-5 truncate font-open-sans font-bold md:m-auto md:text-sm lg:text-base xl:text-base">
                           {Selected.join(", ")}
                         </p>
                       ) : (
-                        <p className="ml-5 font-open-sans text-sm font-bold md:m-auto md:text-sm lg:text-base xl:text-base">
+                        <p className="text-md ml-5 font-open-sans font-bold md:m-auto md:text-sm lg:text-base xl:text-base">
                           Tipo de inmueble
                         </p>
                       )}
@@ -280,7 +280,7 @@ const PropiedadesYa = () => {
                     <img className="m-auto" src={down} alt="Hi"></img> */}
                       <input
                         onChange={locationInfo}
-                        className="m-auto h-9 w-full rounded-sm border md:w-95 "
+                        className="text-md m-auto h-9 w-full rounded-sm border pl-4 md:w-95 md:p-0"
                         type="text"
                         placeholder="Ciudad o Areas"
                         value={location}

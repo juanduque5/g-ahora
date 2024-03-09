@@ -25,10 +25,11 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     estacionamientos: "",
     area: "",
     estado: "usado",
-    direccion: "",
-    currency: "QTZ",
-    precio: "",
-    coordinates: null,
+    //
+    // direccion: "",
+    // currency: "QTZ",
+    // precio: "",
+    // coordinates: "",
   });
 
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     setIsModalOpen(false);
   };
 
-  //handling all input text
+  //handling all input text, updates info keys
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (
@@ -112,19 +113,29 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     const selectedFiles = Array.from(e.target.files);
     console.log("selectedFiles", selectedFiles);
 
-    // Filtrar solo archivos de tipo MIME de imagen
+    // Filter only type(image) files
     const imageFiles = selectedFiles.filter((file) =>
       file.type.startsWith("image/"),
     );
-
+    // Verificar duplicados
     const areDuplicates = imageFiles.some((selectedFile) =>
       files.some((file) => file.name === selectedFile.name),
     );
 
-    if (!areDuplicates) {
-      // Agrega solo los archivos seleccionados que no son duplicados al array de files
-      setFiles((prevFiles) => [...prevFiles, ...imageFiles]);
+    // Si hay duplicados, filtrar archivos únicos
+    let uniqueFiles = [];
+    if (areDuplicates) {
+      // Filtrar los archivos únicos
+      uniqueFiles = imageFiles.filter((selectedFile) =>
+        files.every((file) => file.name !== selectedFile.name),
+      );
+    } else {
+      // Si no hay duplicados, todos los archivos en imageFiles son únicos
+      uniqueFiles = imageFiles;
     }
+
+    // Insertar archivos únicos en el estado
+    setFiles((prevFiles) => [...prevFiles, ...uniqueFiles]);
 
     e.target.value = ""; // Limpiar el valor del input file para permitir selecciones adicionales
   };
@@ -137,11 +148,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const uploadInfo = async (info) => {
     const errorKeys = [];
     try {
-      // if (files.length === 0) {
-      //   alert("Selecciona al menos una imagen.");
-      //   return;
-      // }
-
+      //Check if any key in the obj is empty and/or files length is incorrect
       for (const key in info) {
         if (info.hasOwnProperty(key)) {
           if (info[key].length === 0 && files.length < 5) {
@@ -163,51 +170,55 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         setIsModalOpen(true);
       }
 
-      // const formData = new FormData();
-      // formData.append("prueba", "Hola, esto es una prueba");
+      const formData = new FormData();
+      formData.append("prueba", "Hola, esto es una prueba");
 
-      // Agrega datos específicos
-      // formData.append("ciudad", info.ciudad);
-      // formData.append("barrio", info.barrio);
-      // formData.append("description", info.description);
-      // formData.append("habitaciones", info.habitaciones);
-      // formData.append("banos", info.banos);
-      // formData.append("estacionamientos", info.estacionamientos);
-      // formData.append("area", info.area);
-      // formData.append("estado", info.estado);
-      // formData.append("tipo", selectedOption);
-      // formData.append("id", id);
-      // formData.append("uso", selectedOption2);
+      //Agrega datos específicos
+      formData.append("ciudad", info.ciudad);
+      formData.append("barrio", info.barrio);
+      formData.append("description", info.description);
+      formData.append("habitaciones", info.habitaciones);
+      formData.append("banos", info.banos);
+      formData.append("estacionamientos", info.estacionamientos);
+      formData.append("area", info.area);
+      formData.append("estado", info.estado);
+      formData.append("tipo", selectedOption);
+      formData.append("id", id);
+      formData.append("uso", selectedOption2);
+      // formData.append("direccion", info.direccion);
+      // formData.append("currency", info.currency);
+      // formData.append("precio", info.precio);
+      // formData.append("coordinates", info.coordinates);
 
-      // Verifica si files contiene archivos válidos
-      // if (files.some((file) => file instanceof File)) {
-      //   // Agrega archivos al FormData
-      //   files.forEach((file, index) => {
-      //     console.log(`Agregando archivo ${index}:`, file);
-      //     formData.append("imagen", file);
-      //   });
+      //Verifica si files contiene archivos válidos
+      if (files.some((file) => file instanceof File)) {
+        // Agrega archivos al FormData
+        files.forEach((file, index) => {
+          console.log(`Agregando archivo ${index}:`, file);
+          formData.append("imagen", file);
+        });
 
-      //   console.log("Claves del FormData:", [...formData.keys()]);
-      //   console.log("id:", formData.get("id"));
-      //   console.log("Ciudad:", formData.get("ciudad"));
-      //   console.log("Barrio:", formData.get("barrio"));
-      //   console.log("Imagen 0:", formData.get("imagen"));
+        console.log("Claves del FormData:", [...formData.keys()]);
+        console.log("id:", formData.get("id"));
+        console.log("Ciudad:", formData.get("ciudad"));
+        console.log("Barrio:", formData.get("barrio"));
+        console.log("Imagen 0:", formData.get("imagen"));
 
-      //   const response = await fetch(
-      //     "http://localhost:2001/properties/properties",
-      //     {
-      //       method: "POST",
-      //       body: formData,
-      //     },
-      //   );
-      //   if (!response.ok) {
-      //     console.log("error");
-      //   }
+        const response = await fetch(
+          "http://localhost:2001/properties/properties",
+          {
+            method: "POST",
+            body: formData,
+          },
+        );
+        if (!response.ok) {
+          console.log("error");
+        }
 
-      //   Resto del código...
-      // } else {
-      //   alert("La lista de archivos no contiene elementos válidos.");
-      // }
+        //Resto del código...
+      } else {
+        console.log("La lista de archivos no contiene elementos válidos.");
+      }
     } catch (error) {
       console.log("ERROR", error);
       // Handle error as needed

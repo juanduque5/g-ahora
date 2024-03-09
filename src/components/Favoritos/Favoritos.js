@@ -65,6 +65,8 @@ const Favoritos = () => {
     fetchData();
   }, [id]);
 
+  console.log("favorite", properties);
+
   const handleHeartClick = useCallback(
     (event, index, propertyId) => {
       event.stopPropagation();
