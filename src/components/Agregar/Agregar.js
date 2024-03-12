@@ -51,8 +51,6 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
       navigate(`/Detalles/${id}/${selectedOption}`, {
         state: { selectedOption2 },
       });
-
-      window.location.reload();
     } else {
       openModal();
       setError("Please select both options");

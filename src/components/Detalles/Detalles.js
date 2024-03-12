@@ -1,7 +1,24 @@
 import { React, useState, useEffect } from "react";
+// import {
+//   MapContainer,
+//   TileLayer,
+//   Marker,
+//   Popup,
+//   ZoomControl,
+// } from "react-leaflet";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+// import { Loader } from "@googlemaps/js-api-loader";
+import {
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  InfoWindow,
+} from "@vis.gl/react-google-maps";
+
 import Modal from "./modal";
 const Detalles = ({ logged, isAuth, logoutHandler }) => {
+  const geoKey = process.env.REACT_APP_GEO_KEY;
+  console.log("here", geoKey);
   const { state } = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isListOpen, setIsListOPen] = useState(false);
@@ -15,6 +32,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const [error2, setError2] = useState(null);
   const [error3, setError3] = useState("");
   const [searchAddress, setSearchAddress] = useState("");
+  const [open, setIsOpen] = useState(false);
 
   const [info, setInfo] = useState({
     ciudad: "Guatemala",
@@ -26,13 +44,17 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     area: "",
     estado: "usado",
     //
-    // direccion: "",
-    // currency: "QTZ",
-    // precio: "",
-    // coordinates: "",
+    direccion: "",
+    currency: "QTZ",
+    precio: "",
+    coordinates: { lat: 14.6349, lng: -90.5069 },
   });
 
   const navigate = useNavigate();
+
+  ////////////////////
+
+  // Solo se ejecuta una vez al montar el componente
 
   // useEffect(() => {
   //   if (!logged) {
@@ -225,12 +247,11 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     }
   };
 
-  console.log(error);
-
   //handling autoserach to call autoComplete fetch
   const handleSearch = (e) => {
     const textInput = e.target.value;
     setSearchAddress(textInput);
+    setIsOpen(false);
   };
 
   //Handling autoComplete
@@ -264,14 +285,13 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
 
       setIsListOPen(false);
       const result = await response.json();
-      console.log(result);
-      const location = result;
-      setCoordinates(location);
+      const { lat, lng } = result; // Extraer las coordenadas del resultado
+      setCoordinates({ lat, lng });
 
       setInfo({
         ...info,
         direccion: place,
-        coordinates: location,
+        coordinates: { lat, lng },
       });
     } catch (error) {
       console.log(error);
@@ -280,8 +300,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
 
   // console.log("isAuth", isAuth);
   // console.log(autoComplete);
-  console.log("coordinates", coordinates);
-  console.log("info", info);
+  console.log("coordinates", coordinates.lat, coordinates.lng);
+  console.log("info", info.coordinates.lat);
   // console.log("info.address", info.direccion);
 
   return (
@@ -302,12 +322,12 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         </div>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-2">
         <div className=" flex h-auto flex-col border">
           <div className="flex justify-start">
             <p className="font-medium">Datos principales</p>
           </div>
-          <div className="flex h-96 w-full flex-col border md:h-72  md:flex-row">
+          <div className="flex h-400 w-full flex-col border md:h-72  md:flex-row">
             <div className="order-2 flex w-full flex-col border md:order-1 md:w-67">
               <div className="flex h-auto flex-col border md:h-1/2 md:flex-row">
                 <div className="flex w-full flex-col border md:w-1/2">
@@ -450,7 +470,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                       Total: {files.length}
                     </p>
                   </div>
-                  <div className="h-95 max-h-72 overflow-y-auto border">
+                  <div className="h-95 max-h-72  overflow-y-auto border">
                     {files.map((files, index) => (
                       <div className="flex gap-2 border" key={index}>
                         <div>
@@ -569,7 +589,9 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
               </div>
               <div className="flex w-full flex-col border md:w-4/12">
                 <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">Ubicación (Ex. direccion):</p>
+                  <p className="font-semibold">
+                    Ubicación mapa (Ex. direccion):
+                  </p>
                 </div>
                 <div className="h-1/2 w-full ">
                   <div className="flex h-full items-center border">
@@ -586,7 +608,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                     ></input>
                   </div>
                   <div
-                    className={`relative  z-10 m-auto  max-h-48 w-95 cursor-pointer overflow-y-auto  bg-white shadow-xl ${
+                    className={`relative  z-20  max-h-48 w-95 cursor-pointer overflow-y-auto  bg-white shadow-xl ${
                       isListOpen ? "block" : "hidden"
                     }`}
                   >
@@ -615,13 +637,36 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         </div>
       </div>
 
+      <div className="z-10 mb-2 w-full border">
+        <div>
+          <APIProvider>
+            <div style={{ height: "400px", width: "100%", margin: "auto" }}>
+              <Map zoom={isListOpen ? 9 : 14} center={info.coordinates}>
+                <AdvancedMarker
+                  onClick={() => setIsOpen(true)}
+                  position={info.coordinates}
+                ></AdvancedMarker>
+                {open && (
+                  <InfoWindow
+                    position={info.coordinates}
+                    onCloseClick={() => setIsOpen(false)}
+                  >
+                    {info.direccion}
+                  </InfoWindow>
+                )}
+              </Map>
+            </div>
+          </APIProvider>
+        </div>
+      </div>
+
       <div className="mb-6">
         <div className="ajusta flex ">
           <button
             onClick={() => uploadInfo(info)}
-            className="m-auto rounded-lg border bg-blue-new p-4 "
+            className="m-auto w-28 rounded-lg border bg-blue-new p-4 "
           >
-            <p className="text-md font-semibold text-white">Crear</p>
+            <p className="text-lg font-semibold text-white">Crear</p>
           </button>
         </div>
       </div>
