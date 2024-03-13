@@ -639,9 +639,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
 
       <div className="z-10 mb-2 w-full border">
         <div>
-          <APIProvider>
-            <div style={{ height: "400px", width: "100%", margin: "auto" }}>
-              <Map zoom={isListOpen ? 9 : 14} center={info.coordinates}>
+          <
+              >
                 <AdvancedMarker
                   onClick={() => setIsOpen(true)}
                   position={info.coordinates}
