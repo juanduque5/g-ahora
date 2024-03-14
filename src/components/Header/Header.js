@@ -363,7 +363,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
           </div>
           <div className="w-full cursor-pointer border bg-blue-new">
             <p className="m-auto  flex h-9 w-full items-center justify-center font-fira-sans font-bold  text-white">
-              Login
+              <Link to="/Login">Login</Link>
             </p>
           </div>
           <div className=" w-full  cursor-pointer border bg-blue-dark">

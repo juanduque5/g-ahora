@@ -24,7 +24,6 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const [isListOpen, setIsListOPen] = useState(false);
   const { id, selectedOption } = useParams();
   const [files, setFiles] = useState([]);
-  // const [numFiles, setNumFiles] = useState(0);
   const { selectedOption2 } = state || {};
   const [autoComplete, setAutoComplete] = useState([]);
   const [coordinates, setCoordinates] = useState([]);
@@ -33,6 +32,10 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const [error3, setError3] = useState("");
   const [searchAddress, setSearchAddress] = useState("");
   const [open, setIsOpen] = useState(false);
+  const [departamentos, setDepartamentos] = useState([]);
+  const [municipios, setMunicipios] = useState([]);
+  const apiKey = process.env.REACT_APP_API_KEY;
+  const mapId = process.env.REACT_APP_MAP_ID;
 
   const [info, setInfo] = useState({
     ciudad: "Guatemala",
@@ -72,6 +75,53 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     setIsModalOpen(false);
   };
 
+  //request departamentos, and M...
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:2001/properties/departamentos/geo",
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setDepartamentos(data.departamentos);
+
+        console.log("departamentos", data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  //find the municipios according to the info.ciudad value
+  console.log(info);
+
+  useEffect(() => {
+    const fetchMunicipios = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:2001/properties/municipios/${info.ciudad}`,
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setMunicipios(data.municipios);
+        // setDepartamentos(data.departamentos);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchMunicipios();
+  }, [info.ciudad]);
+
   //handling all input text, updates info keys
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -87,7 +137,6 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         [name]: rawValue,
       });
     } else if (
-      name === "ciudad" ||
       name === "barrio" ||
       name === "description" ||
       name === "currency"
@@ -117,6 +166,12 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
       setInfo({
         ...info,
         [name]: rawValue,
+      });
+    } else if (name === "ciudad") {
+      setInfo({
+        ...info,
+        barrio: "",
+        [name]: value,
       });
     }
   };
@@ -327,61 +382,45 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
           <div className="flex justify-start">
             <p className="font-medium">Datos principales</p>
           </div>
-          <div className="flex h-400 w-full flex-col border md:h-72  md:flex-row">
+          <div className="flex h-auto w-full flex-col border md:h-72  md:flex-row">
             <div className="order-2 flex w-full flex-col border md:order-1 md:w-67">
               <div className="flex h-auto flex-col border md:h-1/2 md:flex-row">
                 <div className="flex w-full flex-col border md:w-1/2">
                   <div className="flex h-1/2 items-center border">
-                    <p className="font-semibold">Ciuadad:</p>
+                    <p className="font-semibold">Departamento:</p>
                   </div>
                   <div className="flex h-1/2 items-center border">
                     <select
                       name="ciudad"
                       value={info.ciudad}
                       onChange={handleChange}
-                      className="h-8 w-95 rounded-md border border-gray-400 md:h-3/5"
+                      className="h-11 max-h-8 w-95 overflow-y-auto rounded-md border border-gray-400 md:h-3/5 "
                     >
-                      <option value="Alta Verapaz">Alta Verapaz</option>
-                      <option value="Baja Verapaz">Baja Verapaz</option>
-                      <option value="Chimaltenango">Chimaltenango</option>
-                      <option value="Chiquimula">Chiquimula</option>
-                      <option value="El Peten">El Peten</option>
-                      <option value="Escuintla">Escuintla</option>
-                      <option value="Guatemala">Guatemala</option>
-                      <option value="Huehuetenango">Huehuetenango</option>
-                      <option value="Izabal">Izabal</option>
-                      <option value="Jalapa">Jalapa</option>
-                      <option value="Jutiapa">Jutiapa</option>
-                      <option value="Quetzaltenango">Quetzaltenango</option>
-                      <option value="Quiche">Quiche</option>
-                      <option value="Retalhuleu">Retalhuleu</option>
-                      <option value="Sacatepequez">Sacatepequez</option>
-                      <option value="San Marcos">San Marcos</option>
-                      <option value="Santa Rosa">Santa Rosa</option>
-                      <option value="Solola">Solola</option>
-                      <option value="Suchitepequez">Suchitepequez</option>
-                      <option value="Totonicapan">Totonicapan</option>
-                      <option value="Zacapa">Zacapa</option>
+                      {departamentos.map((departamento, index) => (
+                        <option key={index}>{departamento}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
                 <div className="flex w-full flex-col border md:w-1/2">
                   <div className="flex h-1/2 items-center border">
-                    <p className=" font-semibold">Area: </p>
+                    <p className=" font-semibold">Municipio: </p>
                   </div>
                   <div className="flex h-1/2 items-center border">
-                    <input
+                    <select
                       name="barrio"
                       value={info.barrio}
                       onChange={handleChange}
-                      type="text"
-                      placeholder="Ex. Zona 17"
-                      className="h-8 w-95  rounded-md border border-gray-400 p-1 md:h-3/5"
-                    ></input>
+                      className="h-11 max-h-8 w-95 overflow-y-auto rounded-md border border-gray-400 md:h-3/5 "
+                    >
+                      {municipios.map((municipios, index) => (
+                        <option key={index}>{municipios}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>
-              <div className="flex  h-full w-full flex-col border md:h-3/5 md:flex-row">
+              <div className="flex  h-full w-full flex-col border border-blue-500 md:h-3/5 md:flex-row">
                 <div className="flex w-full flex-col border md:w-1/2">
                   <div className="border">
                     <p className="font-semibold">Descripcion:</p>
@@ -413,8 +452,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                     />
                   </div>
                 </div>
-                <div className="flex w-full flex-col border md:w-1/2">
-                  <div className="flex w-full border">
+                <div className="flex w-full flex-col border border-green-300 md:w-1/2">
+                  <div className="flex w-full border border-red-600">
                     <div>
                       <p className="font-semibold">Precio: </p>
                     </div>
@@ -502,7 +541,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
               </div>
             </div>
           </div>
-          <div className=" flex h-auto w-full flex-col border md:h-72">
+          <div className=" flex h-auto w-full flex-col border border-yellow-400 md:h-72">
             <div className="h-10 border">
               <p className="font-semibold">Detalles</p>
             </div>
@@ -639,11 +678,18 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
 
       <div className="z-10 mb-2 w-full border">
         <div>
-          <
+          <APIProvider apiKey={apiKey}>
+            <div style={{ height: "400px", width: "100%", margin: "auto" }}>
+              <Map
+                defaultZoom={13} // Aquí cambiamos zoom a defaultZoom
+                center={info.coordinates}
+                mapId={mapId}
+                de
               >
                 <AdvancedMarker
                   onClick={() => setIsOpen(true)}
                   position={info.coordinates}
+                  defalt
                 ></AdvancedMarker>
                 {open && (
                   <InfoWindow
