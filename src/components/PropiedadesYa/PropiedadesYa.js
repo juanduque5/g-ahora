@@ -41,14 +41,6 @@ const PropiedadesYa = () => {
       location: "",
     },
   });
-  const ciudades = [
-    "Cartago",
-    "Cartaguena",
-    "Cartago",
-    "Cartaguena",
-    "Cartago",
-    "medellin",
-  ];
 
   //Update place.location using useffect
   useEffect(() => {
@@ -65,6 +57,7 @@ const PropiedadesYa = () => {
   const placeInformation = (place) => {
     setLocation(place);
     console.log(place);
+    setFilteredInformation([]);
   };
 
   // const [Selected, setSelected] = useState([]);
@@ -153,13 +146,34 @@ const PropiedadesYa = () => {
   //filter location option
   const locationInfo = (e) => {
     console.log(e.target.value);
-    const search = e.target.value.toLocaleLowerCase();
-    const result = ciudades.filter(
-      (info) => info.toLocaleLowerCase().includes(search) && search.length >= 3,
-    );
-    setFilteredInformation(result);
-    setLocation(e.target.value);
+
+    const textValue = e.target.value;
+    setLocation(textValue);
   };
+
+  //Handle autoComplete cities
+  useEffect(() => {
+    const dataFetch = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:2001/properties/autocomplete/guatemala/?searchTerm=" +
+            location,
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setFilteredInformation(data.places);
+        console.log("cities and all", data.places);
+      } catch (error) {
+        console.log("ERROR: autocomplete cities ", error);
+      }
+    };
+    dataFetch();
+  }, [location]);
+
+  console.log("location", location);
 
   //handle search button
   const handleSearch = () => {
@@ -170,6 +184,19 @@ const PropiedadesYa = () => {
 
   // console.log("opcion", ventaoRenta);
   console.log("selected", Selected2.length);
+
+  //sets scroll to top
+  useEffect(() => {
+    const scrollToTop = () => {
+      const container = document.querySelector(".overflow-y-auto");
+      if (container) {
+        container.scrollTop = 0;
+      }
+    };
+
+    //Once we have some filtered words it should be apply to it.
+    scrollToTop();
+  }, [filteredWords]);
 
   return (
     <div className="ajusta">
@@ -280,7 +307,7 @@ const PropiedadesYa = () => {
                     <img className="m-auto" src={down} alt="Hi"></img> */}
                       <input
                         onChange={locationInfo}
-                        className="text-md m-auto h-9 w-full rounded-sm border pl-4 md:w-95 md:p-0"
+                        className="text-md m-auto h-9 w-full truncate rounded-sm border pl-4 md:w-95 md:p-0"
                         type="text"
                         placeholder="Ciudad o Areas"
                         value={location}
