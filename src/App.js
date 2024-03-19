@@ -231,7 +231,7 @@ class App extends Component {
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
-                <Info options={OPTIONS} info={this.state.new} infoH={info} />
+                <Info options={OPTIONS} userId={userId} isAuth={isAuth} />
                 <Footer />
               </>
             }

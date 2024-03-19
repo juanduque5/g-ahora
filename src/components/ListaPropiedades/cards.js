@@ -130,14 +130,14 @@ const Cards = ({ userId, isAuth, data }) => {
           {properties.map((info, index) => (
             <div
               onClick={() => redirect(info)}
-              className="h-500  w-full   cursor-pointer flex-col    rounded-lg border border-gray-700   shadow-md md:w-full  "
+              className="h-500  w-full   cursor-pointer flex-col    rounded-lg    shadow-md md:w-full  "
               key={index}
             >
               <div className="relative h-3/5 ">
                 <div className="absolute left-0 top-0 bg-black p-2 text-white opacity-60">
                   {info.uso}
                 </div>
-                <div className="absolute right-0 top-0 border  text-white opacity-60">
+                <div className="absolute right-0 top-0   text-white opacity-60">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -167,17 +167,21 @@ const Cards = ({ userId, isAuth, data }) => {
                 <div className="m-auto flex h-44  w-11/12 flex-col ">
                   <div className=" flex h-full ">
                     <p className="m-auto ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-xl xl:text-xl">
-                      {info.tipo}
+                      {info.tipo.charAt(0).toUpperCase() + info.tipo.slice(1)}
                     </p>
                   </div>
                   <div className=" flex h-full ">
-                    <p className="m-auto  ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-22 xl:text-22">
-                      $ {info.precio}
+                    <p className="m-auto ml-0 font-open-sans text-lg font-bold  md:text-lg lg:text-22 xl:text-22">
+                      $ {info.precio.toLocaleString() + " "}{" "}
+                      <span className="font-semibold text-gray-new">
+                        {" "}
+                        {info.currency}
+                      </span>
                     </p>
                   </div>
                   <div className=" flex h-full ">
                     <p className="m-auto ml-0 font-open-sans text-base font-normal text-gray-new md:text-lg lg:text-xl xl:text-xl">
-                      {info.ciudad}
+                      {info.barrio}
                     </p>
                   </div>
                   <div className=" flex h-full flex-row ">
@@ -213,12 +217,12 @@ const Cards = ({ userId, isAuth, data }) => {
                     </div>
                     <div className="flex w-2/5 ">
                       <img
-                        className="m-auto ml-0 mr-2 h-5 w-5 "
+                        className="m-auto ml-0 mr-1 h-5 w-5 "
                         src={house}
                         alt="Hi"
                       ></img>
-                      <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                        {info.area}
+                      <p className="m-auto ml-0 text-base md:text-sm lg:text-lg xl:text-xl">
+                        {info.area.toLocaleString()}m²
                       </p>
                     </div>
                   </div>

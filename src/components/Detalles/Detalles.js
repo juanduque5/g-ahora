@@ -34,6 +34,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const [open, setIsOpen] = useState(false);
   const [departamentos, setDepartamentos] = useState([]);
   const [municipios, setMunicipios] = useState([]);
+
   const apiKey = process.env.REACT_APP_API_KEY;
   const mapId = process.env.REACT_APP_MAP_ID;
 
@@ -48,9 +49,11 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     estado: "usado",
     //
     direccion: "",
-    currency: "QTZ",
+    currency: "GTQ",
     precio: "",
     coordinates: { lat: 14.6349, lng: -90.5069 },
+    lat: 14.6349,
+    lng: -90.5069,
   });
 
   const navigate = useNavigate();
@@ -126,9 +129,12 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (
-      (!isNaN(value) && name === "habitaciones") ||
-      (!isNaN(value) && name === "banos") ||
-      (!isNaN(value) && name === "estacionamientos") ||
+      (name === "habitaciones" && !isNaN(value) && value >= 0 && value <= 9) ||
+      (name === "banos" && !isNaN(value) && value >= 0 && value <= 9) ||
+      (name === "estacionamientos" &&
+        !isNaN(value) &&
+        value >= 0 &&
+        value <= 9) ||
       (!isNaN(value) && name === "area")
     ) {
       const rawValue = value.replace(/[^\d]/g, "");
@@ -187,7 +193,10 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
 
   //Selecting all the files(pictures) and updating its constants
   const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
+    const limit = 5;
+    const length = files.length;
+    const setLimit = limit - length;
+    const selectedFiles = Array.from(e.target.files).slice(0, setLimit);
     console.log("selectedFiles", selectedFiles);
 
     // Filter only type(image) files
@@ -247,49 +256,53 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         setIsModalOpen(true);
       }
 
-      const formData = new FormData();
-      formData.append("prueba", "Hola, esto es una prueba");
+      if (errorKeys.length === 0 && isModalOpen === false) {
+        const formData = new FormData();
+        formData.append("prueba", "Hola, esto es una prueba");
 
-      //Agrega datos específicos
-      formData.append("ciudad", info.ciudad);
-      formData.append("barrio", info.barrio);
-      formData.append("description", info.description);
-      formData.append("habitaciones", info.habitaciones);
-      formData.append("banos", info.banos);
-      formData.append("estacionamientos", info.estacionamientos);
-      formData.append("area", info.area);
-      formData.append("estado", info.estado);
-      formData.append("tipo", selectedOption);
-      formData.append("id", id);
-      formData.append("uso", selectedOption2);
-      // formData.append("direccion", info.direccion);
-      // formData.append("currency", info.currency);
-      // formData.append("precio", info.precio);
-      // formData.append("coordinates", info.coordinates);
+        //Agrega datos específicos
+        formData.append("ciudad", info.ciudad);
+        formData.append("barrio", info.barrio);
+        formData.append("description", info.description);
+        formData.append("habitaciones", info.habitaciones);
+        formData.append("banos", info.banos);
+        formData.append("estacionamientos", info.estacionamientos);
+        formData.append("area", info.area);
+        formData.append("estado", info.estado);
+        formData.append("tipo", selectedOption);
+        formData.append("id", id);
+        formData.append("uso", selectedOption2);
+        formData.append("direccion", info.direccion);
+        formData.append("currency", info.currency);
+        formData.append("precio", info.precio);
+        // formData.append("coordinates", info.coordinates);
+        formData.append("lat", info.lat);
+        formData.append("lng", info.lng);
 
-      //Verifica si files contiene archivos válidos
-      if (files.some((file) => file instanceof File)) {
-        // Agrega archivos al FormData
-        files.forEach((file, index) => {
-          console.log(`Agregando archivo ${index}:`, file);
-          formData.append("imagen", file);
-        });
+        //Verifica si files contiene archivos válidos
+        if (files.some((file) => file instanceof File)) {
+          // Agrega archivos al FormData
+          files.forEach((file, index) => {
+            console.log(`Agregando archivo ${index}:`, file);
+            formData.append("imagen", file);
+          });
 
-        console.log("Claves del FormData:", [...formData.keys()]);
-        console.log("id:", formData.get("id"));
-        console.log("Ciudad:", formData.get("ciudad"));
-        console.log("Barrio:", formData.get("barrio"));
-        console.log("Imagen 0:", formData.get("imagen"));
+          console.log("Claves del FormData:", [...formData.keys()]);
+          console.log("id:", formData.get("id"));
+          console.log("Ciudad:", formData.get("ciudad"));
+          console.log("Barrio:", formData.get("barrio"));
+          console.log("Imagen 0:", formData.get("imagen"));
 
-        const response = await fetch(
-          "http://localhost:2001/properties/properties",
-          {
-            method: "POST",
-            body: formData,
-          },
-        );
-        if (!response.ok) {
-          console.log("error");
+          const response = await fetch(
+            "http://localhost:2001/properties/properties",
+            {
+              method: "POST",
+              body: formData,
+            },
+          );
+          if (!response.ok) {
+            console.log("error");
+          }
         }
 
         //Resto del código...
@@ -347,6 +360,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         ...info,
         direccion: place,
         coordinates: { lat, lng },
+        lat: lat,
+        lng: lng,
       });
     } catch (error) {
       console.log(error);
@@ -484,7 +499,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                         onChange={handleChange}
                         className="h-9 w-80 rounded-md border border-gray-400 "
                       >
-                        <option>QTZ</option>
+                        <option>GTQ</option>
                         <option>USD</option>
                       </select>
                     </div>
@@ -499,6 +514,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                     className="m-auto w-1/2 "
                     type="file"
                     onChange={handleFileChange}
+                    disabled={files.length >= 5 ? true : false}
                     multiple
                   />
                 </div>
@@ -563,7 +579,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
               </div>
               <div className="flex w-full flex-col border">
                 <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">Banos:</p>
+                  <p className="font-semibold">Banos: </p>
                 </div>
                 <div className="flex h-1/2 items-center border">
                   <input

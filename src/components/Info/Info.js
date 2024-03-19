@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { useParams, useNavigate } from "react-router-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import { Thumb } from "./thumb";
 import { PrevButton, NextButton } from "./arrows";
+import {
+  APIProvider,
+  Map,
+  AdvancedMarker,
+  InfoWindow,
+} from "@vis.gl/react-google-maps";
 import "./embla.css";
-import like from "../../images/like.png";
+
 import share from "../../images/share.png";
 import mujer from "../../images/mujer.jpg";
 import green from "../../images/green.png";
@@ -17,11 +22,15 @@ import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
 import location from "../../images/location.png";
 
-const Info = ({ options }) => {
+const Info = ({ options, userId, isAuth }) => {
   const { id } = useParams();
-
+  // const navigate = useNavigate();
+  const apiKey = process.env.REACT_APP_API_KEY;
+  const mapId = process.env.REACT_APP_MAP_ID;
+  const [open, setIsOpen] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  // const [properties, setProperties] = useState([]);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
@@ -30,6 +39,9 @@ const Info = ({ options }) => {
   });
   const [propertyData, setPropertyData] = useState([]);
   const [data, setData] = useState([]);
+  const [coordinates, setCoordinates] = useState({
+    coordinates: { lat: 14.6349, lng: -90.5069 },
+  });
 
   const scrollPrev = useCallback(() => {
     emblaApi && emblaApi.scrollPrev();
@@ -87,8 +99,15 @@ const Info = ({ options }) => {
         }
         const data = await response.json();
         // console.log("data", data.data);
-        setPropertyData(data.data[0]);
+        setPropertyData(data.data[0][0]);
         setData(data.data);
+        setCoordinates((prevCoordinates) => ({
+          ...prevCoordinates,
+          coordinates: {
+            lat: parseFloat(data.data[0][0].latitud),
+            lng: parseFloat(data.data[0][0].longitud),
+          },
+        }));
         // Guardar la información en el estado local o hacer lo que sea necesario
       } catch (error) {
         console.error(
@@ -103,7 +122,7 @@ const Info = ({ options }) => {
 
   console.log(data);
   console.log("PropertyData", propertyData);
-
+  // console.log(coordinates.coordinates);
   return (
     <div className="ajusta h-auto">
       <div className="mb-8 mt-8  h-auto ">
@@ -112,7 +131,7 @@ const Info = ({ options }) => {
             <div className="mb-3 h-auto w-full ">
               <p className="text-center font-open-sans text-3xl font-bold md:text-left">
                 Casa en {propertyData.uso} <br className="flex md:hidden"></br>(
-                {propertyData.ciudad})
+                {propertyData.barrio})
               </p>
             </div>
             <div className="embla relative  flex h-450 w-full ">
@@ -161,11 +180,16 @@ const Info = ({ options }) => {
           <div className="hidden w-1/4 gap-4   lg:flex lg:flex-col">
             <div className=" flex h-auto w-full flex-row">
               <div className="flex w-2/5 items-center ">
-                <p className="text-base font-bold text-blue-new">EN VENTA</p>
+                <p className="f text-2xl font-bold text-blue-new">
+                  {propertyData.currency}
+                </p>
               </div>
               <div className="flex w-3/5 justify-end ">
                 <p className="text-lg font-bold sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
-                  Q 1,400,000
+                  $
+                  {propertyData.precio !== undefined
+                    ? propertyData.precio.toLocaleString() + " "
+                    : ""}
                 </p>
               </div>
             </div>
@@ -181,11 +205,21 @@ const Info = ({ options }) => {
                 </p>
               </div>
               <div className="flex w-1/2 items-center justify-center  gap-3 rounded-xl border">
-                <img
-                  className="cursor-pointer"
-                  src={like}
-                  alt="Your alt text"
-                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className={`h-6 w-6 ${propertyData.propiedad_id ? "fill-red-600 text-gray-100" : ""}`}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                  />
+                </svg>
+
                 <p className="cursor-pointer font-fira-sans text-sm font-bold">
                   ME GUSTA
                 </p>
@@ -199,10 +233,10 @@ const Info = ({ options }) => {
                     para conocer más de esta propiedad.
                   </p>
                 </div>
-                <div className="flex h-1/2 ">
-                  <div className="m-auto  h-5/6 w-30  rounded-full ">
+                <div className="flex h-1/2 border">
+                  <div className="m-auto  h-auto w-auto rounded-full border ">
                     <img
-                      className="h-full w-full rounded-full object-cover"
+                      className="h-28 w-28 rounded-full object-cover"
                       src={mujer}
                       alt=""
                     />
@@ -255,16 +289,15 @@ const Info = ({ options }) => {
                     </p>
                   </div>
                 </div>
-                <div className=" flex w-11/12 gap-2 ">
-                  <div className=" flex w-11/12 cursor-pointer items-center gap-2 ">
+                <div className=" flex  w-30 ">
+                  <div className=" flex w-1/2 cursor-pointer items-center  gap-2 ">
                     <img
                       className="h-8 w-8 rounded-full object-cover"
                       src={call}
                       alt=""
                     />
-                    <p className="text-lg font-normal">+1 415-726-9876</p>
                   </div>
-                  <div className=" flex w-16 cursor-pointer justify-center ">
+                  <div className=" flex w-1/2 cursor-pointer justify-end ">
                     <img
                       className="h-11 w-9 items-center rounded-full object-cover"
                       src={whatsapp}
@@ -281,7 +314,7 @@ const Info = ({ options }) => {
       <div className="mb-10 flex h-auto w-full gap-14">
         <div className="flex h-1/2   w-full flex-col  xl:w-8/12">
           <div className=" h-auto w-full">
-            <div className="flex h-auto w-full ">
+            <div className="mb-6 flex h-auto w-full">
               <p className="font-open-sans  text-2xl font-bold  md:text-4xl">
                 Especificaciones
               </p>
@@ -294,7 +327,10 @@ const Info = ({ options }) => {
                   </div>
                   <div className="w-full ">
                     <p className="text-base text-new md:text-lg">
-                      {propertyData.habitaciones}
+                      Habitaciones:{" "}
+                      <span className="text-black">
+                        {propertyData.habitaciones}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -304,7 +340,10 @@ const Info = ({ options }) => {
                   </div>
                   <div className="w-full">
                     <p className="text-base text-new md:text-lg">
-                      {propertyData.estacionamientos}
+                      Estacionamientos:{" "}
+                      <span className="text-black">
+                        {propertyData.estacionamientos}
+                      </span>
                     </p>
                   </div>
                 </div>
@@ -316,7 +355,8 @@ const Info = ({ options }) => {
                   </div>
                   <div className="w-full">
                     <p className="text-base text-new md:text-lg">
-                      {propertyData.banos}
+                      Banos:{" "}
+                      <span className="text-black">{propertyData.banos}</span>
                     </p>
                   </div>
                 </div>
@@ -326,7 +366,8 @@ const Info = ({ options }) => {
                   </div>
                   <div className="w-full ">
                     <p className="text-base text-new md:text-lg">
-                      {propertyData.estado}
+                      Condicion:{" "}
+                      <span className="text-black">{propertyData.estado}</span>
                     </p>
                   </div>
                 </div>
@@ -338,39 +379,19 @@ const Info = ({ options }) => {
                   </div>
                   <div className="w-full ">
                     <p className="text-base text-new md:text-lg">
-                      Terreno: 8.5 x 20 mts
+                      Area de construccion:{" "}
+                      <span className="text-black">{propertyData.area}m²</span>
                     </p>
                   </div>
                 </div>
                 <div className="flex h-12 w-1/2 flex-row items-center justify-center">
                   <div className="flex w-9  ">
-                    <img src={house} alt="" className=" h-6 w-6 md:h-7" />
-                  </div>
-                  <div className="w-full ">
-                    <p className="text-base text-new md:text-lg">
-                      {propertyData.area}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="m-auto flex h-12 w-full flex-row justify-center">
-                <div className="flex h-12 w-1/2 flex-row items-center justify-center">
-                  <div className="flex w-8  ">
                     <img src={location} alt="" className=" h-6 w-6 md:h-7" />
                   </div>
                   <div className="w-full ">
                     <p className="text-base text-new md:text-lg">
-                      {propertyData.barrio}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex h-12 w-1/2 flex-row items-center justify-center">
-                  <div className="flex w-9  ">
-                    <img src={house} alt="" className=" h-6 w-6 md:h-7" />
-                  </div>
-                  <div className="w-full ">
-                    <p className="text-base text-new md:text-lg">
-                      {propertyData.area}
+                      Ubicación:{" "}
+                      <span className="text-black">{propertyData.barrio}</span>
                     </p>
                   </div>
                 </div>
@@ -382,35 +403,44 @@ const Info = ({ options }) => {
         <div className="hidden w-30  lg:flex"></div>
       </div>
 
-      <div className="  mb-6 flex h-auto w-full flex-col  xl:w-8/12">
-        <div className="h-auto w-full ">
+      <div className="  flex h-auto w-full flex-col  xl:w-8/12">
+        <div className="mb-6 h-auto w-full">
           <p className="font-open-sans text-2xl  font-bold md:text-4xl">
             Descripcion
           </p>
         </div>
-        <div className="m-auto  flex h-full w-full  md:m-0 xl:w-full ">
+        <div className="m-auto   flex h-full w-full md:m-0 xl:w-full ">
           <p className="mt-2 font-open-sans text-base text-new2 md:text-xl">
             {propertyData.description}
           </p>
         </div>
 
-        <div className="mt-5 w-full border xl:w-full">
+        <div className="mt-12 w-full border xl:w-full">
           <div>
-            <MapContainer
-              center={[4.747221199999999, -75.91162890000001]}
-              zoom={13}
-              style={{ width: "100%", height: "400px" }}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={[4.747221199999999, -75.91162890000001]}>
-                <Popup>
-                  <p>cartago</p>
-                </Popup>
-              </Marker>
-            </MapContainer>
+            <APIProvider apiKey={apiKey}>
+              <div style={{ height: "400px", width: "100%", margin: "auto" }}>
+                <Map
+                  defaultZoom={13} // Aquí cambiamos zoom a defaultZoom
+                  center={coordinates.coordinates}
+                  mapId={mapId}
+                  de
+                >
+                  <AdvancedMarker
+                    onClick={() => setIsOpen(true)}
+                    position={coordinates.coordinates}
+                    defalt
+                  ></AdvancedMarker>
+                  {open && (
+                    <InfoWindow
+                      position={coordinates}
+                      onCloseClick={() => setIsOpen(false)}
+                    >
+                      {propertyData.direccion}
+                    </InfoWindow>
+                  )}
+                </Map>
+              </div>
+            </APIProvider>
           </div>
         </div>
       </div>
