@@ -34,18 +34,34 @@ const Cards = ({ userId, isAuth, data }) => {
     const fetchData = async () => {
       console.log("fetchio");
       try {
+        //Find properties from "/" search
         if (data) {
-          //   const response = await fetch(
-          //     `http://localhost:2001/properties/info/${isAuth}/${userId}`,
-          //   );
+          //Recreating obj with search data to be sent to the backend
+          const search = {
+            casa: data.tipo.Casa,
+            apartamento: data.tipo.Apartamento,
+            local: data.tipo.Local,
+            lote: data.tipo.Lote,
+            venta: data.uso.Venta,
+            Renta: data.uso.Renta,
+            both: data.uso["Venta y renta"],
+            location: data.place.location,
+          };
 
-          //   if (!response.ok) {
-          //     console.log("Error al obtener datos iniciales");
-          //   }
+          const queryParams = new URLSearchParams(search).toString();
+          // const usoSearch = new URLSearchParams(uso).toString();
+          // const placeSearch = new URLSearchParams(place).toString();
+          const response = await fetch(
+            `http://localhost:2001/properties/homeSearch?${queryParams}`,
+          );
 
-          //   const data = await response.json();
-          //   setProperties(data.data);
-          console.log("ji");
+          if (!response.ok) {
+            console.log("Error al obtener datos iniciales");
+          }
+
+          // const searchData = await response.json();
+
+          console.log("search9999", data);
         } else {
           const response = await fetch(
             `http://localhost:2001/properties/info/${isAuth}/${userId}`,

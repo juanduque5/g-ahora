@@ -24,6 +24,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
     console.log("id", info.id);
     // fill(info);
     navigate(`/PropertyInfo/${info.id}`);
+    window.scrollTo(0, 0);
   };
 
   //Get properties, check if it's on home or properties
@@ -167,17 +168,21 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
                 <div className="m-auto flex h-44  w-11/12 flex-col ">
                   <div className=" flex h-full ">
                     <p className="m-auto ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-xl xl:text-xl">
-                      {info.tipo}
+                      {info.tipo.charAt(0).toUpperCase() + info.tipo.slice(1)}
                     </p>
                   </div>
                   <div className=" flex h-full ">
                     <p className="m-auto  ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-22 xl:text-22">
-                      $ {info.precio}
+                      $ {info.precio.toLocaleString() + " "}{" "}
+                      <span className="font-semibold text-gray-new">
+                        {" "}
+                        {info.currency}
+                      </span>
                     </p>
                   </div>
                   <div className=" flex h-full ">
                     <p className="m-auto ml-0 font-open-sans text-base font-normal text-gray-new md:text-lg lg:text-xl xl:text-xl">
-                      {info.ciudad}
+                      {info.barrio}
                     </p>
                   </div>
                   <div className=" flex h-full flex-row ">

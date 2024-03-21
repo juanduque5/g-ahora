@@ -134,7 +134,7 @@ class App extends Component {
   // };
 
   render() {
-    const { info, properties, isAuth, userId } = this.state;
+    const { properties, isAuth, userId } = this.state;
 
     const first = localStorage.getItem("first");
     const last = localStorage.getItem("last");

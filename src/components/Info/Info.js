@@ -24,12 +24,13 @@ import location from "../../images/location.png";
 
 const Info = ({ options, userId, isAuth }) => {
   const { id } = useParams();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const apiKey = process.env.REACT_APP_API_KEY;
   const mapId = process.env.REACT_APP_MAP_ID;
   const [open, setIsOpen] = useState(false);
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [heartClick, setHeartClick] = useState(false);
   // const [properties, setProperties] = useState([]);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
@@ -42,6 +43,11 @@ const Info = ({ options, userId, isAuth }) => {
   const [coordinates, setCoordinates] = useState({
     coordinates: { lat: 14.6349, lng: -90.5069 },
   });
+  const [showPopup, setShowPopup] = useState(false);
+
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
+  };
 
   const scrollPrev = useCallback(() => {
     emblaApi && emblaApi.scrollPrev();
@@ -99,6 +105,10 @@ const Info = ({ options, userId, isAuth }) => {
         }
         const data = await response.json();
         // console.log("data", data.data);
+        const prevHeartClick = data.data[0][0].Favorite_id ? true : false;
+
+        // Actualiza el estado del corazón con el nuevo valor
+        setHeartClick(prevHeartClick);
         setPropertyData(data.data[0][0]);
         setData(data.data);
         setCoordinates((prevCoordinates) => ({
@@ -120,8 +130,46 @@ const Info = ({ options, userId, isAuth }) => {
     fetchData();
   }, [id]);
 
+  const handleHeartClick = () => {
+    if (isAuth && userId) {
+      setHeartClick(!heartClick);
+      updateFavorites(heartClick, userId, id);
+    } else {
+      navigate("/Login");
+    }
+  };
+
+  const updateFavorites = async (isLiked, userId, propertyId) => {
+    console.log("isLiked", isLiked);
+    try {
+      const response = await fetch(
+        `http://localhost:2001/properties/favorites/${propertyId}/${userId}`, // Suponiendo que este sea el endpoint para marcar favorito
+        {
+          method: isLiked ? "DELETE" : "POST",
+          headers: {
+            "Content-Type": "application/json", // Especificar el tipo de contenido si envías datos en formato JSON
+          },
+        },
+      );
+      if (!response.ok) {
+        console.log(
+          "NOT RESPONSE OK: Error al marcar la propiedad como favorita",
+        );
+      } else {
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch (error) {
+      console.error(
+        "CATCH ERROR: Error al marcar la propiedad como favorita",
+        error,
+      );
+    }
+  };
+
   console.log(data);
-  console.log("PropertyData", propertyData);
+  console.log("PropertyData", propertyData.area);
+  console.log("heart", heartClick);
   // console.log(coordinates.coordinates);
   return (
     <div className="ajusta h-auto">
@@ -211,7 +259,8 @@ const Info = ({ options, userId, isAuth }) => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className={`h-6 w-6 ${propertyData.propiedad_id ? "fill-red-600 text-gray-100" : ""}`}
+                  className={`h-6 w-6 cursor-pointer ${heartClick && isAuth ? "fill-red-600 text-gray-100" : ""}`}
+                  onClick={handleHeartClick}
                 >
                   <path
                     strokeLinecap="round"
@@ -233,7 +282,7 @@ const Info = ({ options, userId, isAuth }) => {
                     para conocer más de esta propiedad.
                   </p>
                 </div>
-                <div className="flex h-1/2 border">
+                <div className="flex h-1/2 ">
                   <div className="m-auto  h-auto w-auto rounded-full border ">
                     <img
                       className="h-28 w-28 rounded-full object-cover"
@@ -289,20 +338,32 @@ const Info = ({ options, userId, isAuth }) => {
                     </p>
                   </div>
                 </div>
-                <div className=" flex  w-30 ">
-                  <div className=" flex w-1/2 cursor-pointer items-center  gap-2 ">
-                    <img
-                      className="h-8 w-8 rounded-full object-cover"
-                      src={call}
-                      alt=""
-                    />
+                <div className="  flex w-full ">
+                  <div className="relative h-full w-1/2 ">
+                    <div className=" flex h-full w-full cursor-pointer gap-2 ">
+                      <img
+                        className="m-auto h-8 w-8 rounded-full object-cover"
+                        src={call}
+                        alt=""
+                        onClick={togglePopup}
+                      />
+                      {showPopup && (
+                        <div className="popup absolute top-full w-full   shadow-xl">
+                          <p className="text-center text-lg text-black">
+                            415-712-8195
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div className=" flex w-1/2 cursor-pointer justify-end ">
-                    <img
-                      className="h-11 w-9 items-center rounded-full object-cover"
-                      src={whatsapp}
-                      alt=""
-                    />
+                  <div className=" flex w-1/2 cursor-pointer  ">
+                    <div className="flex w-full ">
+                      <img
+                        className="m-auto h-11 w-9 rounded-full object-cover"
+                        src={whatsapp}
+                        alt=""
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
