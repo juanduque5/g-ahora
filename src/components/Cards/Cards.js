@@ -16,7 +16,7 @@ import "./Cards.css";
 const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
   console.log("userId", userId);
   const [properties, setProperties] = useState([]);
-
+  const token = localStorage.getItem("token") ? true : false;
   const navigate = useNavigate();
   const location = useLocation();
   // console.log("infoH:", infoH[0].imageURL);
@@ -33,7 +33,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
       console.log("fetchio");
       try {
         const response = await fetch(
-          `http://localhost:2001/properties/info/${isAuth}/${userId}`,
+          `http://localhost:2001/properties/info/${token}/${userId}`,
         );
         if (!response.ok) {
           console.log("Error al obtener datos iniciales");
@@ -50,12 +50,12 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
       }
     };
     fetchData();
-  }, [isAuth, location, userId]);
+  }, [token, location, userId]);
 
   //handle heart favorite clicks
   const handleHeartClick = useCallback(
     (event, index, propertyId) => {
-      if (isAuth && userId) {
+      if (token && userId) {
         event.stopPropagation();
         const updateHeartColors = [...properties];
         console.log(updateHeartColors);
@@ -74,7 +74,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
 
       //(PENDING) crear if/else si esta autenticado y el userId no es null para poder activar el favorito
     },
-    [navigate, isAuth, userId, properties],
+    [navigate, token, userId, properties],
   );
 
   console.log("Properties", properties);

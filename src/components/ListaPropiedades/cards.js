@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 //import { Link } from "react-router-dom";
 //import { useMediaQuery } from "react-responsive";
 // import imageFilter from "../../images/image-filter.png";
@@ -11,17 +11,16 @@ import house from "../../images/house.png";
 import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
 
-const Cards = ({ userId, isAuth, data }) => {
-  console.log("userId", userId);
-  console.log("isAuth", isAuth);
+const Cards = React.memo(({ data }) => {
   console.log("data", data);
+  const token = localStorage.getItem("token") ? true : false;
+  const userId = localStorage.getItem("userId");
+  console.log("token&userId", token, userId);
   const [properties, setProperties] = useState([]);
-  const [searchData, setSearchData] = useState(data);
-
-  console.log("search data", searchData);
+  // const [searchData, setSearchData] = useState(data);
 
   const navigate = useNavigate();
-  const location = useLocation();
+
   // console.log("infoH:", infoH[0].imageURL);
   const redirect = (info) => {
     console.log("id", info.id);
@@ -30,61 +29,61 @@ const Cards = ({ userId, isAuth, data }) => {
   };
 
   //Get properties, check if it's on home or properties
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log("fetchio");
-      try {
-        //Find properties from "/" search
-        if (data) {
-          //Recreating obj with search data to be sent to the backend
+  const fetchData = useCallback(async () => {
+    console.log("fetchio");
+    try {
+      if (data) {
+        if (!token & !userId) {
+          // Recreating obj with search data to be sent to the backend
           const search = {
             casa: data.tipo.Casa,
             apartamento: data.tipo.Apartamento,
             local: data.tipo.Local,
             lote: data.tipo.Lote,
             venta: data.uso.Venta,
-            Renta: data.uso.Renta,
+            renta: data.uso.Renta,
             both: data.uso["Venta y renta"],
             location: data.place.location,
           };
 
           const queryParams = new URLSearchParams(search).toString();
-          // const usoSearch = new URLSearchParams(uso).toString();
-          // const placeSearch = new URLSearchParams(place).toString();
           const response = await fetch(
-            `http://localhost:2001/properties/homeSearch?${queryParams}`,
+            `http://localhost:2001/properties/homeSearch?${queryParams}&token=${token}`,
           );
 
           if (!response.ok) {
             console.log("Error al obtener datos iniciales");
           }
-
-          // const searchData = await response.json();
-
-          console.log("search9999", data);
         } else {
-          const response = await fetch(
-            `http://localhost:2001/properties/info/${isAuth}/${userId}`,
-          );
-          if (!response.ok) {
-            console.log("Error al obtener datos iniciales");
-          }
-
-          const data = await response.json();
-          setProperties(data.data);
-          setSearchData(null);
+          console.log("jaja");
         }
-      } catch (error) {
-        console.error("Error al obtener datos iniciales:", error);
+      } else if (token && userId) {
+        const response = await fetch(
+          `http://localhost:2001/properties/info/${token}/${userId}`,
+        );
+        if (!response.ok) {
+          console.log("Error al obtener datos iniciales");
+        }
+
+        const data = await response.json();
+        setProperties(data.data);
+        // setSearchData(null);
       }
-    };
+    } catch (error) {
+      console.error("Error al obtener datos iniciales:", error);
+    }
+  }, [data, token, userId]);
+
+  // Utilizar useEffect y pasar fetchData como su función y las dependencias
+  useEffect(() => {
     fetchData();
-  }, [isAuth, location, userId, data]);
+  }, [fetchData]);
 
   //handle heart favorite clicks
+  //chnage isAuth for tokens
   const handleHeartClick = useCallback(
     (event, index, propertyId) => {
-      if (isAuth && userId) {
+      if (token && userId) {
         event.stopPropagation();
         const updateHeartColors = [...properties];
         console.log(updateHeartColors);
@@ -103,7 +102,7 @@ const Cards = ({ userId, isAuth, data }) => {
 
       //(PENDING) crear if/else si esta autenticado y el userId no es null para poder activar el favorito
     },
-    [navigate, isAuth, userId, properties],
+    [navigate, token, userId, properties],
   );
 
   console.log("Properties", properties);
@@ -255,5 +254,5 @@ const Cards = ({ userId, isAuth, data }) => {
       </div>
     </div>
   );
-};
+});
 export default Cards;
