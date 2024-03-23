@@ -39,8 +39,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   const mapId = process.env.REACT_APP_MAP_ID;
 
   const [info, setInfo] = useState({
-    ciudad: "Guatemala",
-    barrio: "",
+    departamento: "Guatemala",
+    municipio: "",
     description: "",
     habitaciones: "",
     banos: "",
@@ -108,7 +108,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     const fetchMunicipios = async () => {
       try {
         const response = await fetch(
-          `http://localhost:2001/properties/municipios/${info.ciudad}`,
+          `http://localhost:2001/properties/municipios/${info.departamento}`,
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -123,7 +123,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     };
 
     fetchMunicipios();
-  }, [info.ciudad]);
+  }, [info.departamento]);
 
   //handling all input text, updates info keys
   const handleChange = (e) => {
@@ -143,7 +143,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         [name]: rawValue,
       });
     } else if (
-      name === "barrio" ||
+      name === "municipio" ||
       name === "description" ||
       name === "currency"
     ) {
@@ -173,11 +173,11 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         ...info,
         [name]: rawValue,
       });
-    } else if (name === "ciudad") {
+    } else if (name === "departamento") {
       setInfo({
         ...info,
-        barrio: "",
         [name]: value,
+        municipio: "",
       });
     }
   };
@@ -261,8 +261,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
         formData.append("prueba", "Hola, esto es una prueba");
 
         //Agrega datos específicos
-        formData.append("ciudad", info.ciudad);
-        formData.append("barrio", info.barrio);
+        formData.append("departamento", info.departamento);
+        formData.append("municipio", info.municipio);
         formData.append("description", info.description);
         formData.append("habitaciones", info.habitaciones);
         formData.append("banos", info.banos);
@@ -406,8 +406,8 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                   </div>
                   <div className="flex h-1/2 items-center border">
                     <select
-                      name="ciudad"
-                      value={info.ciudad}
+                      name="departamento"
+                      value={info.departamento}
                       onChange={handleChange}
                       className="h-11 max-h-8 w-95 overflow-y-auto rounded-md border border-gray-400 md:h-3/5 "
                     >
@@ -423,13 +423,16 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                   </div>
                   <div className="flex h-1/2 items-center border">
                     <select
-                      name="barrio"
-                      value={info.barrio}
+                      name="municipio"
+                      value={info.municipio}
                       onChange={handleChange}
                       className="h-11 max-h-8 w-95 overflow-y-auto rounded-md border border-gray-400 md:h-3/5 "
                     >
-                      {municipios.map((municipios, index) => (
-                        <option key={index}>{municipios}</option>
+                      <option value="">Selecciona un municipio:</option>{" "}
+                      {municipios.map((municipio, index) => (
+                        <option key={index} value={municipio}>
+                          {municipio}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -541,7 +544,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="h-4 w-4 fill-red-100"
+                            className="h-4 w-4 fill-red-200"
                           >
                             <path
                               strokeLinecap="round"

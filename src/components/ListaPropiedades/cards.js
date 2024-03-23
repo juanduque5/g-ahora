@@ -54,6 +54,9 @@ const Cards = React.memo(({ data }) => {
           if (!response.ok) {
             console.log("Error al obtener datos iniciales");
           }
+
+          const searchInfo = await response.json();
+          console.log("homeSearch info", searchInfo.data);
         } else {
           console.log("jaja");
         }
