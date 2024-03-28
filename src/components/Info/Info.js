@@ -178,8 +178,8 @@ const Info = ({ options, userId, isAuth }) => {
           <div className="flex flex-col gap-2 lg:w-8/12">
             <div className="mb-3 h-auto w-full ">
               <p className="text-center font-open-sans text-3xl font-bold md:text-left">
-                Casa en {propertyData.uso} <br className="flex md:hidden"></br>(
-                {propertyData.barrio})
+                house in {propertyData.uso} <br className="flex md:hidden"></br>
+                ({propertyData.barrio})
               </p>
             </div>
             <div className="embla relative  flex h-450 w-full ">

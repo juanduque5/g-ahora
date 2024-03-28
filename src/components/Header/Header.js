@@ -15,8 +15,8 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
 
   const handleClick = () => {
     // Navegar a la ruta solo si no estamos en /propiedades
-    if (location.pathname !== "/propiedades") {
-      navigate("/propiedades");
+    if (location.pathname !== "/Propiedades") {
+      navigate("/Propiedades");
     }
   };
   const toggleOpciones = () => {
@@ -173,25 +173,25 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               onClick={handleClick}
             >
               <h1 className="text-center text-base font-semibold ">
-                Propiedades
+                List of Properties
               </h1>
             </div>
             <div className="m-auto hidden w-30  cursor-pointer lg:block">
               <h1 className="text-center text-base font-semibold">
-                <Link to="/Publica"> Publica tu propiedad</Link>
+                <Link to="/Publica"> About us</Link>
               </h1>
             </div>
           </div>
-          <div className="m-auto flex h-3/4 w-1/2 border border-blue-700">
-            <div className="m-auto hidden w-1/2 cursor-pointer border border-green-500  lg:block">
+          <div className="m-auto flex h-3/4 w-1/2 ">
+            <div className="m-auto hidden w-1/2 cursor-pointer  lg:block">
               <p className="ml-16 text-base font-semibold">
-                <Link to="/Vacations">🏖️️ Un lugar para vacacionar</Link>
+                <Link to="/Vacations">🏖️️ Find a place for Vacations</Link>
               </p>
             </div>
-            <div className="m-auto hidden h-90 w-1/2  justify-end border  border-yellow-500  lg:flex ">
-              <div className="hidden w-1/4 cursor-pointer items-center border border-red-600 lg:flex">
+            <div className="m-auto hidden h-90 w-1/2  justify-end  lg:flex ">
+              <div className="hidden w-1/4 cursor-pointer items-center  lg:flex">
                 {isAuth ? (
-                  <p className="blue-new m-auto  border text-base font-bold text-blue-new">
+                  <p className="blue-new m-auto   text-base font-bold text-blue-new">
                     {logged}
                   </p>
                 ) : (
@@ -199,15 +199,15 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                     onClick={accessLogin}
                     className="blue-new m-auto   text-base font-bold"
                   >
-                    Acceder
+                    Log in
                   </p>
                 )}
               </div>
-              <div className="relative my-auto w-auto border md:w-2/5">
-                <div className=" hidden flex-row border border-green-400  text-center lg:flex    ">
+              <div className="relative my-auto w-auto  md:w-2/5">
+                <div className=" hidden flex-row   text-center lg:flex    ">
                   <div
                     onClick={toggleOpciones}
-                    className="flex h-full w-1/2 cursor-pointer items-center border"
+                    className="flex h-full w-1/2 cursor-pointer items-center "
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -257,7 +257,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                     ></img>
                   </div>
 
-                  <div className="flex w-1/2  border">
+                  <div className="flex w-1/2  ">
                     <div className="m-auto flex w-full">
                       <div className="m-auto w-1/2  border-r">
                         <p className="cursor-pointer">EN</p>

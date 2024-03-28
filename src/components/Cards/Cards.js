@@ -182,7 +182,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
                   </div>
                   <div className=" flex h-full ">
                     <p className="m-auto ml-0 font-open-sans text-base font-normal text-gray-new md:text-lg lg:text-xl xl:text-xl">
-                      {info.barrio}
+                      {info.municipio}
                     </p>
                   </div>
                   <div className=" flex h-full flex-row ">

@@ -98,24 +98,22 @@ const Login = ({ setAutoLogout }) => {
           <div className="h-1/2 ">
             <div className="flex h-30 items-end justify-center ">
               <p className="font-open-sans text-2xl font-semibold">
-                Inicia sesion
+                Please log in to your account
               </p>
             </div>
             <div className="h-70 ">
               <div className="m-auto flex h-1/4 w-11/12 items-end ">
                 <p className="font-open-sans">
-                  No tienes cuenta?{" "}
+                  Don't have an account?{" "}
                   <span className="cursor-pointer text-blue-new">
-                    <Link to="/Register"> Crea una aqui</Link>
+                    <Link to="/Register"> Create one</Link>
                   </span>
                 </p>
               </div>
               <div className="m-auto flex  h-75 w-11/12 items-center ">
                 <div className="mt-10  h-3/5 w-full">
                   <div className="flex h-2/5 items-center  ">
-                    <p className="font-open-sans text-sm font-bold">
-                      Correo electronico
-                    </p>
+                    <p className="font-open-sans text-sm font-bold">Email</p>
                   </div>
                   <div className="flex h-3/5 items-center ">
                     <input
@@ -133,7 +131,7 @@ const Login = ({ setAutoLogout }) => {
             <div className="flex h-1/2 justify-center ">
               <div className=" h-3/5 w-11/12 ">
                 <div className="flex h-2/5  items-center">
-                  <p className="font-open-sans text-sm font-bold">Contrasena</p>
+                  <p className="font-open-sans text-sm font-bold">Password</p>
                 </div>
                 <div className="flex h-3/5  ">
                   <input
@@ -199,8 +197,8 @@ const Login = ({ setAutoLogout }) => {
                 onClick={handleLoginClick}
                 className="mt-5 flex h-2/5  w-3/5 cursor-pointer rounded-lg border bg-blue-new"
               >
-                <p className="m-auto font-fira-sans text-white">
-                  Iniciar sesion
+                <p className="m-auto font-fira-sans text-xl text-white">
+                  Log in
                 </p>
               </div>
             </div>

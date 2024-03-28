@@ -198,15 +198,12 @@ const ListaPropiedades = ({ isAuth, userId }) => {
 
   return (
     <div className="ajusta">
-      <div className="mb-8 mt-8 hidden h-auto border border-red-600 lg:block ">
+      <div className="mb-8 mt-8 hidden h-auto  lg:block ">
         <div className=" flex h-14   flex-row gap-11 md:flex  lg:gap-6 xl:gap-6">
           <div className="relative inline-block  w-1/6 cursor-pointer flex-col rounded-md border">
-            <div
-              onClick={openOption}
-              className="flex h-full border border-red-500"
-            >
+            <div onClick={openOption} className="flex h-full ">
               <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
-                Venta o alquiler
+                Sell or Rent
               </p>
               <div className="m-auto">
                 <img className="m-auto" src={down} alt="Hi"></img>
@@ -232,31 +229,31 @@ const ListaPropiedades = ({ isAuth, userId }) => {
           </div>
           <div className="flex w-cinco cursor-pointer rounded-md border">
             <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
-              Banos
+              Bathrooms
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>
           <div className="flex w-cinco cursor-pointer rounded-md border">
             <p className="md m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
-              Cuartos
+              Bedrooms
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>
           <div className="flex w-cinco cursor-pointer rounded-md border">
             <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
-              Precio
+              Price
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>
           <div className=" flex w-10 cursor-pointer rounded-md border">
             <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base ">
-              Condicion
+              Condition
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>
           <div className=" flex w-cinco cursor-pointer rounded-md border">
             <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base ">
-              Ciudad
+              City
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>

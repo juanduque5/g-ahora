@@ -2,8 +2,8 @@ import React from "react";
 
 const socialMedia = ({ wpp, instagram, facebook, linkedin, tiktok }) => {
   return (
-    <div className="flex h-1/5 w-full justify-center border border-black">
-      <div className="mt-2 flex w-auto gap-2 border border-black">
+    <div className="flex h-1/5 w-full justify-center">
+      <div className="mt-2 flex w-auto gap-2 ">
         <Icon imagen={wpp} />
         <Icon imagen={instagram} />
         <Icon imagen={facebook} />

@@ -20,7 +20,7 @@ const PropiedadesYa = () => {
   const ventaoRenta = ["Venta", "Renta", "Venta y renta"];
   const type = ["Casa", "Apartamento", "Lote", "Local"];
   const [filteredWords, setFilteredInformation] = useState([]);
-  const [selectedUso, setSelectedUso] = useState(["Venta y renta"]);
+  const [selectedUso, setSelectedUso] = useState(["Sell and rent"]);
   const [Selected, setSelected] = useState([]);
   const [Selected2, setSelected2] = useState(["Venta y renta"]);
   //if you use null, then you'll encounter an issue
@@ -208,12 +208,9 @@ const PropiedadesYa = () => {
           <div className="flex h-2/5 w-full flex-col ">
             <div className="my-auto flex w-full  select-none">
               <p className="m-auto select-none font-fira-sans text-2xl font-extrabold not-italic text-white sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl 2xl:text-7xl">
-                <span className="select-none text-yellow-new">Encuentra</span> o{" "}
-                <span className="select-none text-yellow-new">
-                  {" "}
-                  promociona{" "}
-                </span>
-                tu propiedad en PropiedadesAhora ✌️
+                <span className="select-none text-yellow-new">Find</span> or{" "}
+                <span className="select-none text-yellow-new">promote</span>{" "}
+                your property on PropiedadesAhora ✌️
               </p>
             </div>
           </div>
@@ -222,14 +219,16 @@ const PropiedadesYa = () => {
               Tu elección segura para el éxito en bienes raíces en Guatemala.
             </p>
             <p className="hidden font-open-sans text-sm font-semibold not-italic  text-white sm:text-base md:block md:text-base lg:text-3xl xl:text-3xl 2xl:text-3xl">
-              Tu elección segura para el éxito en bienes raíces en Guatemala.
-              Únete a nosotros y toma el control de tu futuro inmobiliario.
+              {/* Tu elección segura para el éxito en bienes raíces en Guatemala.
+              Únete a nosotros y toma el control de tu futuro inmobiliario.*/}
+              Your secure choice for success in real estate in Guatemala. Join
+              us and take control of your real estate future.
             </p>
           </div>
           <div className="aqui  flex  w-full   sm:w-full md:h-1/6 lg:h-1/4 xl:h-1/4">
             <div className="m-auto  w-full md:block md:h-20 md:w-full lg:block lg:w-11/12 xl:block xl:w-11/12">
-              <div className="m-auto flex  h-95 w-full flex-col gap-3 rounded-lg border  border-green-700 md:h-20 md:flex-row md:gap-0 ">
-                <div className="flex w-full cursor-pointer flex-col gap-3 border border-yellow-500 md:w-1/2  md:flex-row md:gap-0 md:border-r">
+              <div className="m-auto flex  h-95 w-full flex-col gap-3 rounded-lg  md:h-20 md:flex-row md:gap-0 ">
+                <div className="flex w-full cursor-pointer flex-col gap-3  md:w-1/2  md:flex-row md:gap-0 md:border-r">
                   <div className="h-9 w-full border  bg-white md:h-auto md:w-2/5">
                     <div
                       onClick={openVentaOption}
@@ -271,7 +270,7 @@ const PropiedadesYa = () => {
                         </p>
                       ) : (
                         <p className="text-md ml-5 font-open-sans font-bold md:m-auto md:text-sm lg:text-base xl:text-base">
-                          Tipo de inmueble
+                          Type of property
                         </p>
                       )}
 
@@ -309,7 +308,7 @@ const PropiedadesYa = () => {
                         onChange={locationInfo}
                         className="text-md m-auto h-9 w-full truncate rounded-sm border pl-4 md:w-95 md:p-0"
                         type="text"
-                        placeholder="Ciudad o Areas"
+                        placeholder="City or Localities"
                         value={location}
                       ></input>
                     </div>
@@ -329,7 +328,7 @@ const PropiedadesYa = () => {
                     className="m-auto flex h-9 w-full cursor-pointer rounded-xl bg-blue-new md:mr-2 md:h-16 md:w-30 "
                   >
                     <p className="text-md m-auto text-center font-fira-sans font-bold text-white md:text-sm lg:text-base xl:text-base">
-                      BUSCAR
+                      SEARCH
                     </p>
                   </div>
                 </div>
@@ -369,7 +368,7 @@ const PropiedadesYa = () => {
 
           <div className="flex h-15 w-full justify-center">
             <p className="m-auto font-open-sans text-xl font-semibold text-white">
-              Encuentra lo que buscas
+              Find what you're looking for
             </p>
           </div>
         </div>
@@ -390,3 +389,12 @@ const PropiedadesYa = () => {
   );
 };
 export default PropiedadesYa;
+
+{
+  /* <span className="select-none text-yellow-new">Encuentra</span> o{" "}
+                <span className="select-none text-yellow-new">
+                  {" "}
+                  promociona{" "}
+                </span>
+                tu propiedad en PropiedadesAhora  */
+}

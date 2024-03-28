@@ -17,17 +17,17 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
   const [isModalOpen, setIsModalOPen] = useState(false);
   const [error, setError] = useState(null);
   const [filterOption, setFilterOption] = useState({
-    casa: false,
-    apartamento: false,
+    house: false,
+    apartment: false,
     local: false,
     lote: false,
-    venta: false,
-    renta: false,
+    sell: false,
+    rent: false,
   });
 
   const [Option, setOption] = useState({
-    venta: false,
-    renta: false,
+    sell: false,
+    rent: false,
   });
 
   const { id } = useParams();
@@ -117,18 +117,18 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
         </div>
         <div className="m-auto flex h-auto w-full flex-wrap items-center justify-center gap-4 border md:h-52 md:flex-row">
           <div
-            onClick={() => filterSearch("casa")}
+            onClick={() => filterSearch("house")}
             className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-              filterOption.casa ? "myBorder" : ""
+              filterOption.house ? "myBorder" : ""
             } `}
           >
             <img src={househ} className="m-auto" alt="Hi"></img>
             <p className="m-auto">Casa</p>
           </div>
           <div
-            onClick={() => filterSearch("apartamento")}
+            onClick={() => filterSearch("apartment")}
             className={`flex cursor-pointer flex-col border pb-5 pl-1 pr-1 pt-5 hover:border-blue-new ${
-              filterOption.apartamento ? "myBorder" : ""
+              filterOption.apartment ? "myBorder" : ""
             } `}
           >
             <img src={apartment} className="m-auto" alt="Hi"></img>
@@ -159,18 +159,18 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
           </div>
           <div className="m-auto flex h-52 w-full flex-row items-center justify-center gap-4 border">
             <div
-              onClick={() => filterSearch2("venta")}
+              onClick={() => filterSearch2("sell")}
               className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-                Option.venta ? "myBorder" : ""
+                Option.sell ? "myBorder" : ""
               } `}
             >
               <img src={sell} className="m-auto" alt="Hi"></img>
               <p className="m-auto">Venta</p>
             </div>
             <div
-              onClick={() => filterSearch2("renta")}
+              onClick={() => filterSearch2("rent")}
               className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-                Option.renta ? "myBorder" : ""
+                Option.rent ? "myBorder" : ""
               } `}
             >
               <img src={rent} className="m-auto" alt="Hi"></img>

@@ -22,7 +22,7 @@ export const Header = (props) => {
             <img className="m-auto cursor-pointer" src={share} alt=""></img>{" "}
           </div>
           <div className="flex h-full w-full cursor-pointer border">
-            <p className="m-auto font-bold text-white ">Contactar Agente</p>
+            <p className="m-auto font-bold text-white ">Contact</p>
           </div>
         </div>
       </div>

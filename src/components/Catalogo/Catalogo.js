@@ -111,15 +111,15 @@ const Catalogo = ({ url }) => {
               <img className="m-auto  " src={add} alt=""></img>
             </button> */}
           </div>
-          <div className="flex h-30 w-full flex-col border border-black">
-            <div className="flex h-full border border-red-500">
+          <div className="flex h-30 w-full flex-col ">
+            <div className="flex h-full ">
               <p className="m-auto text-4xl font-semibold text-white">
-                Yesenia Gomez
+                Michael Duke
               </p>
             </div>
-            <div className="flex h-full justify-center border border-red-500">
+            <div className="flex h-full justify-center ">
               <p className=" text-xl font-medium text-white">
-                Asesora inmobilaria
+                Real State Agent
               </p>
             </div>
           </div>
@@ -131,14 +131,11 @@ const Catalogo = ({ url }) => {
             tiktok={tiktok}
           />
         </div>
-        <div className="mt-9 flex h-12 w-full border">
-          <p className="m-auto text-xl font-bold">Propiedades disponibles</p>
+        <div className="mt-9 flex h-12 w-full ">
+          <p className="m-auto border-b text-xl font-bold shadow-lg">Catalog</p>
         </div>
         <div className="mb-6 mt-5 h-12 w-44 cursor-pointer">
-          <div
-            onClick={openOption}
-            className="flex h-full border border-red-500"
-          >
+          <div onClick={openOption} className="flex h-full border">
             <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
               Venta o alquiler
             </p>
@@ -147,7 +144,7 @@ const Catalogo = ({ url }) => {
             </div>
           </div>
           <div
-            className={`relative z-10 w-full border bg-white ${
+            className={`relative z-10 w-full  border bg-white ${
               isOptionOpen ? "block" : "hidden"
             }`}
           >

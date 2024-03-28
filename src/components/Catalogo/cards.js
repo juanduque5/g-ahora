@@ -9,12 +9,12 @@ export const Cards = (props) => {
   //   const infoH = [{}];
 
   return (
-    <div className="border">
+    <div className="">
       <div className="grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
         {lista.map((info, index) => (
           <div
             // onClick={() => redirect(info)}
-            className="h-500  w-full   cursor-pointer flex-col    rounded-lg border border-gray-700   shadow-md md:w-full  "
+            className="h-500  w-full   cursor-pointer flex-col    rounded-lg   shadow-md md:w-full  "
             key={index}
           >
             <div className="relative h-3/5 ">
@@ -92,7 +92,7 @@ export const Cards = (props) => {
           </div>
         ))}
       </div>
-      <div className="m-auto flex h-11 w-24 cursor-pointer rounded-lg bg-blue-new">
+      <div className="m-auto mt-5 flex h-11 w-24 cursor-pointer rounded-lg bg-blue-new">
         <p className="m-auto flex font-open-sans text-base text-white">
           Ver mas
         </p>
