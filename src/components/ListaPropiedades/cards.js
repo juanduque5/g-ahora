@@ -18,7 +18,8 @@ const Cards = React.memo(({ data }) => {
   const [skeleton, setSkeleton] = useState(true);
   console.log("token&userId", token, userId);
   const [properties, setProperties] = useState([]);
-  // const [searchData, setSearchData] = useState(data);
+  const [searchData, setSearchData] = useState(data);
+  console.log("search data", searchData);
 
   const navigate = useNavigate();
 
@@ -33,18 +34,18 @@ const Cards = React.memo(({ data }) => {
   const fetchData = useCallback(async () => {
     console.log("fetchio");
     try {
-      if (data) {
+      if (searchData) {
         if (!token && !userId) {
           // Recreating obj with search data to be sent to the backend
           const search = {
-            casa: data.tipo.Casa,
-            apartamento: data.tipo.Apartamento,
-            local: data.tipo.Local,
-            lote: data.tipo.Lote,
-            venta: data.uso.Venta,
-            renta: data.uso.Renta,
-            both: data.uso["Venta y renta"],
-            location: data.place.location,
+            casa: searchData.tipo.Casa,
+            apartamento: searchData.tipo.Apartamento,
+            local: searchData.tipo.Local,
+            lote: searchData.tipo.Lote,
+            venta: searchData.uso.Venta,
+            renta: searchData.uso.Renta,
+            both: searchData.uso["Venta y renta"],
+            location: searchData.place.location,
           };
 
           const queryParams = new URLSearchParams(search).toString();
@@ -62,7 +63,7 @@ const Cards = React.memo(({ data }) => {
           setTimeout(() => {
             setSkeleton(false);
             console.log("hagl se ha vuelto false después de 2 segundos");
-          }, 1000);
+          }, 3000);
         } else if (token && userId) {
           const search = {
             casa: data.tipo.Casa,
@@ -90,7 +91,7 @@ const Cards = React.memo(({ data }) => {
           setTimeout(() => {
             setSkeleton(false);
             console.log("hagl se ha vuelto false después de 2 segundos");
-          }, 1000);
+          }, 3000);
         }
       } else if (data === null && !token && !userId) {
         const response = await fetch(
@@ -105,7 +106,7 @@ const Cards = React.memo(({ data }) => {
         setTimeout(() => {
           setSkeleton(false);
           console.log("hagl se ha vuelto false después de 2 segundos");
-        }, 1000);
+        }, 3000);
       } else if (data === null && token && userId) {
         const response = await fetch(
           `http://localhost:2001/properties/info/${token}/${userId}`,
@@ -119,12 +120,12 @@ const Cards = React.memo(({ data }) => {
         setTimeout(() => {
           setSkeleton(false);
           console.log("hagl se ha vuelto false después de 2 segundos");
-        }, 1000);
+        }, 3000);
       }
     } catch (error) {
       console.error("Error al obtener datos iniciales:", error);
     }
-  }, [data, token, userId]);
+  }, [searchData, token, userId]);
 
   // Utilizar useEffect y pasar fetchData como su función y las dependencias
   useEffect(() => {

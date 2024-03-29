@@ -15,6 +15,8 @@ const Favoritos = () => {
     setIsOptionOPen(!isOptionOpen);
   };
 
+  console.log('favoritos ID', id)
+
   const redirect = (info) => {
     console.log("id", info.id);
     // fill(info);

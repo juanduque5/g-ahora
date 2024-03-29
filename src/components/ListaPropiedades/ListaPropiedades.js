@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import filter from "../../images/filter.png";
 import down from "../../images/chevron-down.png";
 import SelectCheckBox from "./SelectCheckBox";
+import SelectBathroom from "./selectBathroom";
 import Cards from "./cards";
 import times from "../../images/times.png";
 // import { Select } from "@mui/material";
@@ -23,12 +24,73 @@ const ListaPropiedades = ({ isAuth, userId }) => {
   const [Selected, setSelected] = useState([]);
   const [value, setValue] = useState([0, 10000]);
   const Numeros = [1, 2, 3, 4, 5, 6, "Cualquiera"];
-  const ventaoRenta = ["Venta", "Renta", "alquiler", "cualquiera"];
+  const bathrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const price = [
+    "0 - 50,000",
+    "50,000 - 100,000",
+    "100,000 - 150,000",
+    "200,000 - 250,000",
+    "300,000 - 350,000",
+    "400,000 - 450,000",
+    "500,000+",
+  ];
+  const condition = ["usado", "nuevo"];
+  const ventaoRenta = ["Venta", "Renta"];
   const location = useLocation();
 
   const data = location.state && location.state.filterOption;
-  console.log("data location", data);
+  const [searchData, setSearchData] = useState(data);
+  console.log("data location", searchData);
 
+  const handleSelectedFilter = (key) => {
+    const option = key;
+    if (option === "Venta") {
+      setSearchData({
+        ...searchData,
+        uso: {
+          ...searchData.uso,
+          Renta: false,
+          "Venta y renta": false,
+          [option]: true,
+        },
+      });
+    } else if (option === "Renta") {
+      setSearchData({
+        ...searchData,
+        uso: {
+          ...searchData.uso,
+          Venta: false,
+          "Venta y renta": false,
+          [option]: true,
+        },
+      });
+    } else if (option === "bathrooms") {
+    }
+
+    //  } else if (option === "Venta y renta") {
+    //    setFilterOption({
+    //      ...filterOption,
+    //      uso: {
+    //        ...filterOption.uso,
+    //        Venta: true,
+    //        Renta: true,
+    //        "Venta y renta": true,
+    //      },
+    //    });
+    //    setSelectedUso(option);
+    //  } else {
+    //    setFilterOption({
+    //      ...filterOption,
+    //      tipo: {
+    //        ...filterOption.tipo,
+    //        [option]: !filterOption.tipo[option],
+    //      },
+    //    });
+    //  }
+  };
+
+  //for small devices filt
   const [filterOption, setFilterOption] = useState({
     venta: false,
     renta: false,
@@ -117,7 +179,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
     if (Selected.includes(option)) {
       const newSelected = Selected.filter((items) => items !== option);
       console.log("newSelected", newSelected);
-      if (newSelected[0] === undefined) {
+      if (!newSelected) {
         setSelected([]);
       } else {
         setSelected([...newSelected]);
@@ -199,7 +261,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
   return (
     <div className="ajusta">
       <div className="mb-8 mt-8 hidden h-auto  lg:block ">
-        <div className=" flex h-14   flex-row gap-11 md:flex  lg:gap-6 xl:gap-6">
+        <div className=" flex h-14   flex-row gap-11 md:flex  md:gap-3">
           <div className="relative inline-block  w-1/6 cursor-pointer flex-col rounded-md border">
             <div onClick={openOption} className="flex h-full ">
               <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
@@ -216,8 +278,10 @@ const ListaPropiedades = ({ isAuth, userId }) => {
             >
               <SelectCheckBox
                 opciones={ventaoRenta}
+                handleSearchData={searchData}
                 opcionesSeleccionadas={Selected}
                 handleSelectedChange={handleSelectedChange}
+                handleSelectedFilter={handleSelectedFilter}
               />
             </div>
           </div>
@@ -227,17 +291,36 @@ const ListaPropiedades = ({ isAuth, userId }) => {
             <input className="w-11/12" type="text" id="texto" />
             <img className="m-auto cursor-pointer" src={times} alt="Hi"></img>
           </div>
-          <div className="flex w-cinco cursor-pointer rounded-md border">
-            <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
-              Bathrooms
-            </p>
-            <img className="m-auto" src={down} alt="Hi"></img>
+          <div className=" relative inline-block cursor-pointer rounded-md border md:w-10">
+            <div className="flex h-full">
+              <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
+                Bathrooms
+              </p>
+              <div className="m-auto">
+                <img className="m-auto" src={down} alt="Hi"></img>
+              </div>
+            </div>
+            <div
+              className={`relative top-1 z-10 h-auto bg-white ${
+                isOptionOpen ? "block" : "hidden"
+              }`}
+            >
+              <SelectBathroom
+                opciones={bathrooms}
+                // handleSearchData={searchData}
+                // opcionesSeleccionadas={Selected}
+                // handleSelectedChange={handleSelectedChange}
+                handleSelectedFilter={handleSelectedFilter}
+              />
+            </div>
           </div>
-          <div className="flex w-cinco cursor-pointer rounded-md border">
+          <div className="flex w-10    cursor-pointer rounded-md border">
             <p className="md m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
               Bedrooms
             </p>
-            <img className="m-auto" src={down} alt="Hi"></img>
+            <div className="m-auto">
+              <img className="m-auto" src={down} alt="Hi"></img>
+            </div>
           </div>
           <div className="flex w-cinco cursor-pointer rounded-md border">
             <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
@@ -251,11 +334,10 @@ const ListaPropiedades = ({ isAuth, userId }) => {
             </p>
             <img className="m-auto" src={down} alt="Hi"></img>
           </div>
-          <div className=" flex w-cinco cursor-pointer rounded-md border">
-            <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base ">
-              City
-            </p>
-            <img className="m-auto" src={down} alt="Hi"></img>
+          <div className=" flex w-cinco cursor-pointer rounded-xl border">
+            <button className="w-full rounded-xl bg-blue-new font-open-sans text-base font-bold text-white">
+              Search
+            </button>
           </div>
         </div>
       </div>
