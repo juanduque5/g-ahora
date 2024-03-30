@@ -1,29 +1,29 @@
 import React from "react";
 
-function SelectCheckbox({
+function type({
   opciones,
-  handleSelectedChange2,
   handleSelectedFilter,
   handleSearchData,
+  handleSelectedChange,
 }) {
   return (
     <div className="  rounded-lg shadow-md">
       {opciones.map((option) => (
         <label key={option} className="flex  w-full flex-row gap-3  border-b">
           <input
-            className=" w-5 "
+            className=" w-5 border"
             type="checkbox"
-            checked={handleSearchData.uso[option]}
+            checked={handleSearchData.tipo[option]}
             onChange={() => {
               handleSelectedFilter(option);
-              handleSelectedChange2(option);
+              handleSelectedChange(option);
             }}
           />
-          <p className="flex w-full select-none items-center ">{option}</p>
+          <p className="flex w-full select-none items-center">{option}</p>
         </label>
       ))}
     </div>
   );
 }
 
-export default SelectCheckbox;
+export default type;

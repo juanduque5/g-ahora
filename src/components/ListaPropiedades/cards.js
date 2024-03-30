@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 // import image5 from "../../images/image5.png";
 // import image6 from "../../images/image6.png";
 // import image7 from "../../images/image7.png";
+import { useLocation } from "react-router-dom";
 import car from "../../images/car.png";
 import house from "../../images/house.png";
 import bath from "../../images/bath.png";
@@ -18,7 +19,10 @@ const Cards = React.memo(({ data }) => {
   const [skeleton, setSkeleton] = useState(true);
   console.log("token&userId", token, userId);
   const [properties, setProperties] = useState([]);
-  const [searchData, setSearchData] = useState(data);
+  const location = useLocation();
+
+  const searchData = location.state && location.state.searchData;
+
   console.log("search data", searchData);
 
   const navigate = useNavigate();
@@ -34,64 +38,128 @@ const Cards = React.memo(({ data }) => {
   const fetchData = useCallback(async () => {
     console.log("fetchio");
     try {
-      if (searchData) {
+      if (data || searchData) {
         if (!token && !userId) {
-          // Recreating obj with search data to be sent to the backend
-          const search = {
-            casa: searchData.tipo.Casa,
-            apartamento: searchData.tipo.Apartamento,
-            local: searchData.tipo.Local,
-            lote: searchData.tipo.Lote,
-            venta: searchData.uso.Venta,
-            renta: searchData.uso.Renta,
-            both: searchData.uso["Venta y renta"],
-            location: searchData.place.location,
-          };
+          // Recreating obj with search data to be sent to the
+          let search;
+          if (data) {
+            search = {
+              casa: data.tipo.Casa,
+              apartamento: data.tipo.Apartamento,
+              local: data.tipo.Local,
+              lote: data.tipo.Lote,
+              venta: data.uso.Venta,
+              renta: data.uso.Renta,
+              both: data.uso["Venta y renta"],
+              location: data.place.location,
+            };
+            const queryParams = new URLSearchParams(search).toString();
+            const response = await fetch(
+              `http://localhost:2001/properties/homeSearch?${queryParams}&token=${token}`,
+            );
 
-          const queryParams = new URLSearchParams(search).toString();
-          const response = await fetch(
-            `http://localhost:2001/properties/homeSearch?${queryParams}&token=${token}`,
-          );
+            if (!response.ok) {
+              console.log("Error al obtener datos iniciales");
+            }
 
-          if (!response.ok) {
-            console.log("Error al obtener datos iniciales");
+            const searchInfo = await response.json();
+            console.log("homeSearch info", searchInfo.data);
+            setProperties(searchInfo.data);
+            setTimeout(() => {
+              setSkeleton(false);
+              console.log("hagl se ha vuelto false después de 2 segundos");
+            }, 3000);
+          } else if (searchData) {
+            setSkeleton(true);
+            search = {
+              casa: searchData.tipo.Casa,
+              apartamento: searchData.tipo.Apartamento,
+              local: searchData.tipo.Local,
+              lote: searchData.tipo.Lote,
+              venta: searchData.uso.Venta,
+              renta: searchData.uso.Renta,
+              location: searchData.place.location,
+              bathrooms: searchData.bathrooms,
+              bedrooms: searchData.bedrooms,
+              price: searchData.price,
+            };
+            const queryParams = new URLSearchParams(search).toString();
+            const response = await fetch(
+              `http://localhost:2001/properties/homeSearch?${queryParams}&token=${token}`,
+            );
+
+            if (!response.ok) {
+              console.log("Error al obtener datos iniciales");
+            }
+
+            const searchInfo = await response.json();
+            console.log("homeSearch info", searchInfo.data);
+            setProperties(searchInfo.data);
+            setTimeout(() => {
+              setSkeleton(false);
+              console.log("hagl se ha vuelto false después de 2 segundos");
+            }, 3000);
           }
-
-          const searchInfo = await response.json();
-          console.log("homeSearch info", searchInfo.data);
-          setProperties(searchInfo.data);
-          setTimeout(() => {
-            setSkeleton(false);
-            console.log("hagl se ha vuelto false después de 2 segundos");
-          }, 3000);
         } else if (token && userId) {
-          const search = {
-            casa: data.tipo.Casa,
-            apartamento: data.tipo.Apartamento,
-            local: data.tipo.Local,
-            lote: data.tipo.Lote,
-            venta: data.uso.Venta,
-            renta: data.uso.Renta,
-            both: data.uso["Venta y renta"],
-            location: data.place.location,
-          };
+          let search;
+          if (data) {
+            search = {
+              casa: data.tipo.Casa,
+              apartamento: data.tipo.Apartamento,
+              local: data.tipo.Local,
+              lote: data.tipo.Lote,
+              venta: data.uso.Venta,
+              renta: data.uso.Renta,
+              both: data.uso["Venta y renta"],
+              location: data.place.location,
+            };
+            const queryParams = new URLSearchParams(search).toString();
+            const response = await fetch(
+              `http://localhost:2001/properties/homeSearch?${queryParams}&token=${token}&id=${userId}`,
+            );
 
-          const queryParams = new URLSearchParams(search).toString();
-          const response = await fetch(
-            `http://localhost:2001/properties/homeSearch?${queryParams}&token=${token}&id=${userId}`,
-          );
+            if (!response.ok) {
+              console.log("Error al obtener datos iniciales");
+            }
 
-          if (!response.ok) {
-            console.log("Error al obtener datos iniciales");
+            const searchInfo = await response.json();
+            console.log("homeSearch info", searchInfo.data);
+            setProperties(searchInfo.data);
+            setTimeout(() => {
+              setSkeleton(false);
+              console.log("hagl se ha vuelto false después de 2 segundos");
+            }, 3000);
+          } else if (searchData) {
+            setSkeleton(true);
+            search = {
+              casa: searchData.tipo.Casa,
+              apartamento: searchData.tipo.Apartamento,
+              local: searchData.tipo.Local,
+              lote: searchData.tipo.Lote,
+              venta: searchData.uso.Venta,
+              renta: searchData.uso.Renta,
+              location: searchData.place.location,
+              bathrooms: searchData.bathrooms,
+              bedrooms: searchData.bedrooms,
+              price: searchData.price,
+            };
+            const queryParams = new URLSearchParams(search).toString();
+            const response = await fetch(
+              `http://localhost:2001/properties/homeSearch?${queryParams}&token=${token}&id=${userId}`,
+            );
+
+            if (!response.ok) {
+              console.log("Error al obtener datos iniciales");
+            }
+
+            const searchInfo = await response.json();
+            console.log("homeSearch info", searchInfo.data);
+            setProperties(searchInfo.data);
+            setTimeout(() => {
+              setSkeleton(false);
+              console.log("hagl se ha vuelto false después de 2 segundos");
+            }, 3000);
           }
-
-          const searchInfo = await response.json();
-          console.log("homeSearch info", searchInfo.data);
-          setProperties(searchInfo.data);
-          setTimeout(() => {
-            setSkeleton(false);
-            console.log("hagl se ha vuelto false después de 2 segundos");
-          }, 3000);
         }
       } else if (data === null && !token && !userId) {
         const response = await fetch(
@@ -125,7 +193,7 @@ const Cards = React.memo(({ data }) => {
     } catch (error) {
       console.error("Error al obtener datos iniciales:", error);
     }
-  }, [searchData, token, userId]);
+  }, [data, token, userId, searchData]);
 
   // Utilizar useEffect y pasar fetchData como su función y las dependencias
   useEffect(() => {
