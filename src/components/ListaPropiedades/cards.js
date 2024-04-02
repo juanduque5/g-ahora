@@ -20,12 +20,59 @@ const Cards = React.memo(({ data }) => {
   console.log("token&userId", token, userId);
   const [properties, setProperties] = useState([]);
   const location = useLocation();
-
   const searchData = location.state && location.state.searchData;
-
   console.log("search data", searchData);
-
   const navigate = useNavigate();
+
+  //Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9; // Número de elementos por página
+
+  // Función para manejar el cambio de página
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0);
+  };
+
+  // Calcula el número total de páginas
+  const totalPages = Math.ceil(properties.length / itemsPerPage);
+
+  //
+  // Función para generar los números de página a mostrar
+  const getPageNumbers = () => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    } else if (currentPage <= 3) {
+      return [1, 2, 3, 4, 5, "...", totalPages];
+    } else if (currentPage >= totalPages - 2) {
+      return [
+        1,
+        "...",
+        totalPages - 4,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      ];
+    } else {
+      return [
+        1,
+        "...",
+        currentPage - 1,
+        currentPage,
+        currentPage + 1,
+        "...",
+        totalPages,
+      ];
+    }
+  };
+
+  // Calcula el índice del primer y último elemento de la página actual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  // Filtra los datos para mostrar solo los elementos de la página actual
+  const currentProperties = properties.slice(indexOfFirstItem, indexOfLastItem);
 
   // console.log("infoH:", infoH[0].imageURL);
   const redirect = (info) => {
@@ -68,7 +115,7 @@ const Cards = React.memo(({ data }) => {
             setTimeout(() => {
               setSkeleton(false);
               console.log("hagl se ha vuelto false después de 2 segundos");
-            }, 3000);
+            }, 4000);
           } else if (searchData) {
             setSkeleton(true);
             search = {
@@ -82,6 +129,8 @@ const Cards = React.memo(({ data }) => {
               bathrooms: searchData.bathrooms,
               bedrooms: searchData.bedrooms,
               price: searchData.price,
+              minPrice: searchData.minPrice,
+              maxPrice: searchData.maxPrice,
             };
             const queryParams = new URLSearchParams(search).toString();
             const response = await fetch(
@@ -98,7 +147,7 @@ const Cards = React.memo(({ data }) => {
             setTimeout(() => {
               setSkeleton(false);
               console.log("hagl se ha vuelto false después de 2 segundos");
-            }, 3000);
+            }, 4000);
           }
         } else if (token && userId) {
           let search;
@@ -128,7 +177,7 @@ const Cards = React.memo(({ data }) => {
             setTimeout(() => {
               setSkeleton(false);
               console.log("hagl se ha vuelto false después de 2 segundos");
-            }, 3000);
+            }, 4000);
           } else if (searchData) {
             setSkeleton(true);
             search = {
@@ -142,6 +191,8 @@ const Cards = React.memo(({ data }) => {
               bathrooms: searchData.bathrooms,
               bedrooms: searchData.bedrooms,
               price: searchData.price,
+              minPrice: searchData.minPrice,
+              maxPrice: searchData.maxPrice,
             };
             const queryParams = new URLSearchParams(search).toString();
             const response = await fetch(
@@ -158,7 +209,7 @@ const Cards = React.memo(({ data }) => {
             setTimeout(() => {
               setSkeleton(false);
               console.log("hagl se ha vuelto false después de 2 segundos");
-            }, 3000);
+            }, 4000);
           }
         }
       } else if (data === null && !token && !userId) {
@@ -174,7 +225,7 @@ const Cards = React.memo(({ data }) => {
         setTimeout(() => {
           setSkeleton(false);
           console.log("hagl se ha vuelto false después de 2 segundos");
-        }, 3000);
+        }, 4000);
       } else if (data === null && token && userId) {
         const response = await fetch(
           `http://localhost:2001/properties/info/${token}/${userId}`,
@@ -188,7 +239,7 @@ const Cards = React.memo(({ data }) => {
         setTimeout(() => {
           setSkeleton(false);
           console.log("hagl se ha vuelto false después de 2 segundos");
-        }, 3000);
+        }, 4000);
       }
     } catch (error) {
       console.error("Error al obtener datos iniciales:", error);
@@ -307,7 +358,7 @@ const Cards = React.memo(({ data }) => {
       ) : (
         <div className="m-auto mb-20 flex h-auto w-full flex-col md:w-full">
           <div className="try grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-            {properties.map((info, index) => (
+            {currentProperties.map((info, index) => (
               <div
                 onClick={() => redirect(info)}
                 className="h-500 w-full cursor-pointer flex-col rounded-lg shadow-md md:w-full"
@@ -416,10 +467,19 @@ const Cards = React.memo(({ data }) => {
           </div>
         </div>
       )}
-      <div className="m-auto mt-5 flex h-11 w-24 cursor-pointer rounded-lg bg-blue-new">
-        <p className="m-auto flex font-open-sans text-base text-white">
-          ..More
-        </p>
+      <div className="mt-5 flex justify-center">
+        {getPageNumbers().map((number, index) => (
+          <button
+            key={index}
+            className={`mx-1 rounded-lg bg-blue-500 px-3 py-1 text-white ${
+              number === currentPage ? "bg-blue-700" : ""
+            }`}
+            onClick={() => handlePageChange(number)}
+            disabled={number === "..."}
+          >
+            {number}
+          </button>
+        ))}
       </div>
     </div>
   );

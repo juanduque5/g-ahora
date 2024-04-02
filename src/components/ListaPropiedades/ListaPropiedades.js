@@ -41,12 +41,11 @@ const ListaPropiedades = ({ isAuth, userId }) => {
   const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   const price = [
-    "0 - 50,000",
-    "50,000 - 100,000",
-    "100,000 - 150,000",
-    "200,000 - 250,000",
-    "300,000 - 350,000",
-    "400,000 - 450,000",
+    "0 - 100,000",
+    "100,000 - 200,000",
+    "200,000 - 300,000",
+    "300,000 - 400,000",
+    "400,000 - 500,000",
     "500,000+",
   ];
   const type = ["Casa", "Apartamento", "Lote", "Local"];
@@ -72,6 +71,8 @@ const ListaPropiedades = ({ isAuth, userId }) => {
     bathrooms: null,
     bedrooms: null,
     price: "",
+    minPrice: "",
+    maxPrice: "",
   });
   console.log("data location", searchData);
 
@@ -110,6 +111,16 @@ const ListaPropiedades = ({ isAuth, userId }) => {
       setSearchData({
         ...searchData,
         [option]: key,
+      });
+    } else if (option === "min") {
+      setSearchData({
+        ...searchData,
+        minPrice: key,
+      });
+    } else if (option === "max") {
+      setSearchData({
+        ...searchData,
+        maxPrice: key,
       });
     } else {
       setSearchData({
@@ -368,19 +379,25 @@ const ListaPropiedades = ({ isAuth, userId }) => {
 
   return (
     <div className="ajusta">
-      <div className="mb-8 mt-8 hidden h-auto  lg:block ">
-        <div className=" flex h-14   flex-row gap-11 md:flex  md:gap-3">
-          <div className="relative inline-block  w-1/6 cursor-pointer flex-col rounded-md border">
-            <div onClick={openOption} className="flex h-full ">
-              <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
-                {Selected2.length > 0 ? Selected2 : "Rent or Sell"}
-              </p>
+      <div className="mb-2 mt-8  h-auto md:bg-white lg:block">
+        <div className=" flex h-auto flex-col   gap-3  md:flex md:h-14 md:flex-row  md:gap-3">
+          <div className="relative order-1 inline-block w-full cursor-pointer flex-col rounded-md border md:order-1 md:w-1/6">
+            <div
+              onClick={openOption}
+              className="m-auto flex h-9 w-90 md:h-full "
+            >
+              <div className="m-auto w-90">
+                <p className=" font-open-sans text-base font-bold lg:text-sm xl:text-base">
+                  {Selected2.length > 0 ? Selected2 : "Rent or Sell"}
+                </p>
+              </div>
+
               <div className="m-auto">
                 <img className="m-auto" src={down} alt="Hi"></img>
               </div>
             </div>
             <div
-              className={`relative z-10 h-auto border bg-white ${
+              className={`absolute z-50 mt-1 w-full bg-white md:relative ${
                 isOptionOpen ? "block" : "hidden"
               }`}
             >
@@ -393,7 +410,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
               />
             </div>
           </div>
-          <div className=" relative inline-block cursor-pointer rounded-md border md:w-32.5">
+          <div className=" relative order-6 inline-block  h-9 cursor-pointer rounded-md border  md:order-2 md:h-full md:w-32.5">
             <div className="flex h-full">
               <input
                 className="text-md w-full truncate"
@@ -404,7 +421,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
               />
             </div>
             <div
-              className={`absolute z-10 m-auto mt-1 max-h-48 w-82 cursor-pointer overflow-y-auto bg-white shadow-xl  md:relative md:w-auto ${
+              className={`absolute z-10 m-auto mt-1 max-h-48   w-full cursor-pointer overflow-y-auto bg-white  shadow-xl  md:relative md:w-auto ${
                 filteredWords.length ? "block" : "hidden"
               }`}
             >
@@ -419,23 +436,25 @@ const ListaPropiedades = ({ isAuth, userId }) => {
             <input className="w-11/12" type="text" id="texto" />
             <img className="m-auto cursor-pointer" src={times} alt="Hi"></img>
           </div> */}
-          <div className=" relative inline-block cursor-pointer rounded-md border md:w-10">
-            <div onClick={openOption5} className="flex h-full">
-              {Selected.length > 0 ? (
-                <p className="m-auto truncate  font-open-sans text-base font-bold lg:text-sm xl:text-base">
-                  {Selected.join(", ")}
-                </p>
-              ) : (
-                <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
-                  Type
-                </p>
-              )}
-              <div className="m-auto">
+          <div className="relative order-2 inline-block h-9 w-full cursor-pointer rounded-md border md:h-full md:w-10">
+            <div onClick={openOption5} className=" m-auto flex h-full w-90 ">
+              <div className="m-auto w-90">
+                {Selected.length > 0 ? (
+                  <p className=" truncate  font-open-sans text-base font-bold lg:text-sm xl:text-base">
+                    {Selected.join(", ")}
+                  </p>
+                ) : (
+                  <p className="m-auto  font-open-sans text-base font-bold md:m-auto lg:text-sm xl:text-base">
+                    Type
+                  </p>
+                )}
+              </div>
+              <div className="m-auto ">
                 <img className="m-auto" src={down} alt="Hi"></img>
               </div>
             </div>
             <div
-              className={`relative top-1 z-10 h-auto bg-white ${
+              className={`absolute z-40 mt-1 h-auto w-full bg-white md:relative ${
                 isOptionOpen5 ? "block" : "hidden"
               }`}
             >
@@ -447,19 +466,22 @@ const ListaPropiedades = ({ isAuth, userId }) => {
               />
             </div>
           </div>
-          <div className=" relative inline-block cursor-pointer rounded-md border md:w-10">
-            <div onClick={openOption2} className="flex h-full">
-              <p className="m-auto truncate font-open-sans text-base font-bold lg:text-sm xl:text-base">
-                {searchData.bathrooms
-                  ? "Bathrooms: " + searchData.bathrooms
-                  : "Bathrooms"}
-              </p>
+          <div className="relative order-3 inline-block h-9 cursor-pointer rounded-md border  md:h-full md:w-10">
+            <div onClick={openOption2} className="m-auto flex h-full w-90">
+              <div className="m-auto w-90">
+                <p className="m-auto truncate font-open-sans text-base font-bold lg:text-sm xl:text-base">
+                  {searchData.bathrooms
+                    ? "Bathrooms: " + searchData.bathrooms
+                    : "Bathrooms"}
+                </p>
+              </div>
+
               <div className="m-auto">
                 <img className="m-auto" src={down} alt="Hi"></img>
               </div>
             </div>
             <div
-              className={`relative top-1 z-10 h-auto bg-white ${
+              className={`absolute z-30 mt-1 h-auto w-full bg-white md:relative ${
                 isOptionOpen2 ? "block" : "hidden"
               }`}
             >
@@ -470,19 +492,22 @@ const ListaPropiedades = ({ isAuth, userId }) => {
             </div>
           </div>
 
-          <div className=" relative inline-block cursor-pointer rounded-md border md:w-10">
-            <div onClick={openOption3} className="flex h-full">
-              <p className="m-auto truncate font-open-sans text-base font-bold lg:text-sm xl:text-base">
-                {searchData.bedrooms
-                  ? "Bedrooms: " + searchData.bedrooms
-                  : "Bedrooms"}
-              </p>
+          <div className="relative order-4 inline-block h-9 cursor-pointer rounded-md border  md:h-full md:w-10">
+            <div onClick={openOption3} className="m-auto flex h-full w-90">
+              <div className="m-auto w-90">
+                <p className="m-auto truncate font-open-sans text-base font-bold lg:text-sm xl:text-base">
+                  {searchData.bedrooms
+                    ? "Bedrooms: " + searchData.bedrooms
+                    : "Bedrooms"}
+                </p>
+              </div>
+
               <div className="m-auto">
                 <img className="m-auto" src={down} alt="Hi"></img>
               </div>
             </div>
             <div
-              className={`relative top-1 z-10 h-auto bg-white ${
+              className={`absolute z-20 mt-1 h-auto w-full bg-white md:relative ${
                 isOptionOpen3 ? "block" : "hidden"
               }`}
             >
@@ -492,27 +517,31 @@ const ListaPropiedades = ({ isAuth, userId }) => {
               />
             </div>
           </div>
-          <div className=" relative inline-block cursor-pointer rounded-md border md:w-10">
-            <div onClick={openOption4} className="flex h-full">
-              <p className="m-auto truncate font-open-sans text-base font-bold lg:text-sm xl:text-base">
-                {searchData.price ? "$ " + searchData.price : "Price"}
-              </p>
+          <div className=" relative order-5  inline-block h-9 cursor-pointer rounded-md border md:h-full md:w-10">
+            <div onClick={openOption4} className="m-auto flex h-full w-90">
+              <div className="m-auto w-90">
+                <p className="m-auto truncate font-open-sans text-base font-bold lg:text-sm xl:text-base">
+                  {searchData.price ? "$ " + searchData.price : "Price"}
+                </p>
+              </div>
+
               <div className="m-auto">
                 <img className="m-auto" src={down} alt="Hi"></img>
               </div>
             </div>
             <div
-              className={`relative top-1 z-10 h-auto bg-white ${
+              className={`absolute z-10 mt-1 h-auto w-full bg-white md:relative ${
                 isOptionOpen4 ? "block" : "hidden"
               }`}
             >
               <Price
                 opciones={price}
+                handleSearchData={searchData}
                 handleSelectedFilter={handleSelectedFilter}
               />
             </div>
           </div>
-          <div className=" flex w-cinco cursor-pointer rounded-xl border ">
+          <div className=" order-6 flex h-9 w-full cursor-pointer rounded-xl border md:h-full md:w-cinco ">
             <button
               onClick={handleSearch}
               className="w-full rounded-xl bg-blue-new font-open-sans text-base font-bold text-white"
@@ -521,9 +550,10 @@ const ListaPropiedades = ({ isAuth, userId }) => {
             </button>
           </div>
         </div>
+        {/* Filter */}
       </div>
 
-      <div className="mb-8 mt-6 flex h-auto  justify-end  lg:hidden">
+      {/* <div className="mb-5 flex h-auto  justify-end  lg:hidden">
         <div
           onClick={openModal}
           className="w- flex  h-10 cursor-pointer rounded-md border  shadow-sm hover:border-black md:h-14 md:w-28"
@@ -533,7 +563,8 @@ const ListaPropiedades = ({ isAuth, userId }) => {
             Filtro
           </p>
         </div>
-      </div>
+      </div> */}
+
       <div>
         <Modal
           open={isModalOpen}
@@ -552,7 +583,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
           text
         </Modal>
       </div>
-      <div>
+      <div className="mt-8">
         <Cards
           data={data}
           searchData={searchData}

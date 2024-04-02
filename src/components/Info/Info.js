@@ -452,7 +452,9 @@ const Info = ({ options, userId, isAuth }) => {
                   <div className="w-full ">
                     <p className="text-base text-new md:text-lg">
                       Ubicación:{" "}
-                      <span className="text-black">{propertyData.barrio}</span>
+                      <span className="text-black">
+                        {propertyData.direccion}
+                      </span>
                     </p>
                   </div>
                 </div>

@@ -7,7 +7,7 @@ function SelectCheckbox({
   handleSearchData,
 }) {
   return (
-    <div className="  rounded-lg shadow-md">
+    <div className="m-auto w-full  rounded-lg shadow-md">
       {opciones.map((option) => (
         <label key={option} className="flex  w-full flex-row gap-3  border-b">
           <input

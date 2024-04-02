@@ -27,6 +27,56 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
     window.scrollTo(0, 0);
   };
 
+  //
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9; // Número de elementos por página
+
+  // Función para manejar el cambio de página
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0);
+  };
+
+  // Calcula el número total de páginas
+  const totalPages = Math.ceil(properties.length / itemsPerPage);
+
+  //
+  // Función para generar los números de página a mostrar
+  const getPageNumbers = () => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    } else if (currentPage <= 3) {
+      return [1, 2, 3, 4, 5, "...", totalPages];
+    } else if (currentPage >= totalPages - 2) {
+      return [
+        1,
+        "...",
+        totalPages - 4,
+        totalPages - 3,
+        totalPages - 2,
+        totalPages - 1,
+        totalPages,
+      ];
+    } else {
+      return [
+        1,
+        "...",
+        currentPage - 1,
+        currentPage,
+        currentPage + 1,
+        "...",
+        totalPages,
+      ];
+    }
+  };
+
+  // Calcula el índice del primer y último elemento de la página actual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  // Filtra los datos para mostrar solo los elementos de la página actual
+  const currentProperties = properties.slice(indexOfFirstItem, indexOfLastItem);
+
   //Get properties, check if it's on home or properties
   useEffect(() => {
     const fetchData = async () => {
@@ -128,7 +178,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
         )}
 
         <div className="try grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-          {properties.map((info, index) => (
+          {currentProperties.map((info, index) => (
             <div
               onClick={() => redirect(info)}
               className="h-500  w-full   cursor-pointer flex-col    rounded-lg border border-gray-700   shadow-md md:w-full  "
@@ -232,10 +282,19 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
             </div>
           ))}
         </div>
-        <div className="m-auto flex h-11 w-24 cursor-pointer rounded-lg bg-blue-new">
-          <p className="m-auto flex font-open-sans text-base text-white">
-            Ver mas
-          </p>
+        <div className="mt-5 flex justify-center">
+          {getPageNumbers().map((number, index) => (
+            <button
+              key={index}
+              className={`mx-1 rounded-lg bg-blue-500 px-3 py-1 text-white ${
+                number === currentPage ? "bg-blue-700" : ""
+              }`}
+              onClick={() => handlePageChange(number)}
+              disabled={number === "..."}
+            >
+              {number}
+            </button>
+          ))}
         </div>
       </div>
     </div>
