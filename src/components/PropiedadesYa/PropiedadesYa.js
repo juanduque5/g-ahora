@@ -306,7 +306,7 @@ const PropiedadesYa = () => {
                     <img className="m-auto" src={down} alt="Hi"></img> */}
                       <input
                         onChange={locationInfo}
-                        className="text-md m-auto h-9 w-full truncate rounded-sm border pl-4 md:w-95 md:p-0"
+                        className="text-md m-auto h-9 w-full truncate rounded-sm border border-blue-300 pl-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-300 md:w-95 md:p-0"
                         type="text"
                         placeholder="City or Localities"
                         value={location}

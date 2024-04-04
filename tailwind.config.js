@@ -54,6 +54,7 @@ module.exports = {
         1000: "1000px",
         75: "75%",
         13: "13%",
+        18: "74px",
       },
       colors: {
         "blue-new": "#1D80F5",

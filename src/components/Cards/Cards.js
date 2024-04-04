@@ -282,7 +282,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
             </div>
           ))}
         </div>
-        <div className="mt-5 flex justify-center">
+        <div className="mt-5 flex justify-center mb-5">
           {getPageNumbers().map((number, index) => (
             <button
               key={index}

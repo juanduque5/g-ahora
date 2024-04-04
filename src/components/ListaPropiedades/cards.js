@@ -467,7 +467,7 @@ const Cards = React.memo(({ data }) => {
           </div>
         </div>
       )}
-      <div className="mt-5 flex justify-center">
+      <div className="mb-5 mt-5 flex justify-center">
         {getPageNumbers().map((number, index) => (
           <button
             key={index}

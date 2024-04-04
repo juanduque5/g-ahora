@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 import "./Header.css";
+import logo from "../../images/PROPIEADES_AHORAWEB-02.png";
 import down from "../../images/chevron-down.png";
 
 const Header = ({ logged, isAuth, logoutHandler }) => {
@@ -11,6 +12,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
   const navigate = useNavigate();
   const [menu, setMenu] = useState(false);
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
+  const [languageOptions, setLanguageOptions] = useState(false);
   const location = useLocation();
 
   const handleClick = () => {
@@ -21,6 +23,12 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
   };
   const toggleOpciones = () => {
     setMostrarOpciones(!mostrarOpciones);
+    setLanguageOptions(false);
+  };
+
+  const toggleLanguage = () => {
+    setLanguageOptions(!languageOptions);
+    setMostrarOpciones(false);
   };
 
   const openMobileMenu = () => {
@@ -82,9 +90,9 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
       <div className="header-shadow   flex h-20 w-full ">
         <div className="ajusta m-auto flex h-full w-full flex-row  ">
           <div className="m-auto flex h-3/4 w-9/12  sm:w-1/2 md:w-1/2 md:border-r  lg:w-1/2 lg:border-r xl:w-1/2 xl:border-r">
-            <div className="m-auto ml-0 w-auto cursor-pointer  sm:m-auto sm:ml-0 sm:w-auto md:w-auto lg:w-2/5 xl:w-2/5">
+            <div className="h-auto  cursor-pointer sm:m-auto sm:ml-0 sm:w-auto md:w-auto lg:w-2/5 xl:w-2/5">
               <Link to="/">
-                <svg
+                {/* <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="180"
                   height="23"
@@ -165,7 +173,12 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                     d="M13 13C13 11.8954 13.8954 11 15 11H17V15H13V13ZM13 16V18C13 19.1046 13.8954 20 15 20H17V16H13ZM18 16V20H20C21.1046 20 22 19.1046 22 18V16H18ZM22 15V13C22 11.8954 21.1046 11 20 11H18V15H22Z"
                     fill="#1D80F5"
                   />
-                </svg>
+                </svg> */}
+                <img
+                  className="h-18 relative bottom-3 right-20   w-auto md:w-full"
+                  src={logo}
+                  alt=""
+                ></img>
               </Link>
             </div>
             <div
@@ -178,7 +191,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
             </div>
             <div className="m-auto hidden w-30  cursor-pointer lg:block">
               <h1 className="text-center text-base font-semibold">
-                <Link to="/Publica"> About us</Link>
+                <Link to="/Publica"> Pricing</Link>
               </h1>
             </div>
           </div>
@@ -189,8 +202,8 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               </p>
             </div>
             <div className="m-auto hidden h-90 w-1/2  justify-end  lg:flex ">
-              <div className="hidden w-1/4 cursor-pointer items-center  lg:flex">
-                {isAuth ? (
+              <div className="hidden w-1/2 cursor-pointer items-center  lg:flex">
+                {/* {isAuth ? (
                   <p className="blue-new m-auto   text-base font-bold text-blue-new">
                     {logged}
                   </p>
@@ -201,7 +214,10 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                   >
                     Log in
                   </p>
-                )}
+                )} */}
+                <p className="m-auto text-base font-bold text-blue-new underline">
+                  Publicar propiedad
+                </p>
               </div>
               <div className="relative my-auto w-auto  md:w-2/5">
                 <div className=" hidden flex-row   text-center lg:flex    ">
@@ -258,53 +274,104 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                   </div>
 
                   <div className="flex w-1/2  ">
-                    <div className="m-auto flex w-full">
+                    {/* <div className="m-auto flex w-full">
                       <div className="m-auto w-1/2  border-r">
                         <p className="cursor-pointer">EN</p>
                       </div>
                       <div className="m-auto w-1/2 ">
                         <p className="cursor-pointer">ES</p>
                       </div>
+                    </div> */}
+                    <div
+                      onClick={toggleLanguage}
+                      className="m-auto cursor-pointer"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-6 w-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m6.115 5.19.319 1.913A6 6 0 0 0 8.11 10.36L9.75 12l-.387.775c-.217.433-.132.956.21 1.298l1.348 1.348c.21.21.329.497.329.795v1.089c0 .426.24.815.622 1.006l.153.076c.433.217.956.132 1.298-.21l.723-.723a8.7 8.7 0 0 0 2.288-4.042 1.087 1.087 0 0 0-.358-1.099l-1.33-1.108c-.251-.21-.582-.299-.905-.245l-1.17.195a1.125 1.125 0 0 1-.98-.314l-.295-.295a1.125 1.125 0 0 1 0-1.591l.13-.132a1.125 1.125 0 0 1 1.3-.21l.603.302a.809.809 0 0 0 1.086-1.086L14.25 7.5l1.256-.837a4.5 4.5 0 0 0 1.528-1.732l.146-.292M6.115 5.19A9 9 0 1 0 17.18 4.64M6.115 5.19A8.965 8.965 0 0 1 12 3c1.929 0 3.716.607 5.18 1.64"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      className={`absolute right-0 top-full z-20 hidden w-1/2 bg-white ${
+                        languageOptions ? "lg:block" : "hidden"
+                      }`}
+                    >
+                      <div className="flex flex-col rounded-lg shadow-xl">
+                        <div className="cursor-pointer  border-b text-blue-new hover:bg-blue-dark hover:text-white">
+                          <p>EN</p>
+                        </div>
+                        <div className=" cursor-pointer text-blue-new hover:bg-blue-dark hover:text-white">
+                          <p>ES</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   <div
-                    className={`absolute left-0 top-full hidden w-full ${
-                      isAuth && mostrarOpciones ? "lg:block" : "hidden"
+                    className={`absolute left-0 top-full z-20 hidden w-full bg-white ${
+                      mostrarOpciones ? "lg:block" : "hidden"
                     }`}
                   >
-                    <div className=" rounded-md border bg-white shadow-2xl">
-                      <div
-                        onClick={() => handleAuth("account")}
-                        className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
-                      >
-                        <p className="m-auto">Account</p>
+                    {isAuth ? (
+                      <div className=" rounded-md border bg-white shadow-2xl">
+                        <div className="flex cursor-pointer border-b border-slate-200 bg-slate-200 font-semibold text-black-new">
+                          <p className="m-auto">{logged}</p>
+                        </div>
+                        <div
+                          onClick={() => handleAuth("account")}
+                          className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                        >
+                          <p className="m-auto">Account</p>
+                        </div>
+                        <div
+                          onClick={() => handleAuth("propiedades")}
+                          className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                        >
+                          <p className="m-auto">Propiedades</p>
+                        </div>
+                        <div
+                          onClick={() => handleAuth("catalogo")}
+                          className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                        >
+                          <p className="m-auto">Catalogo</p>
+                        </div>
+                        <div
+                          onClick={() => handleAuth("favoritos")}
+                          className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                        >
+                          <p className="m-auto">Favoritos</p>
+                        </div>
+                        <div
+                          onClick={logoutHandler}
+                          className="flex cursor-pointer rounded-sm rounded-b-md border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
+                        >
+                          <p className="m-auto">Log out</p>
+                        </div>
                       </div>
-                      <div
-                        onClick={() => handleAuth("propiedades")}
-                        className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
-                      >
-                        <p className="m-auto">Propiedades</p>
+                    ) : (
+                      <div className=" rounded-md border bg-white shadow-2xl">
+                        <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
+                          <p className="m-auto">
+                            <Link to="/Login">Login</Link>
+                          </p>
+                        </div>
+                        <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
+                          <p className="m-auto">
+                            <Link to="/Register">Register</Link>
+                          </p>
+                        </div>
                       </div>
-                      <div
-                        onClick={() => handleAuth("catalogo")}
-                        className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
-                      >
-                        <p className="m-auto">Catalogo</p>
-                      </div>
-                      <div
-                        onClick={() => handleAuth("favoritos")}
-                        className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
-                      >
-                        <p className="m-auto">Favoritos</p>
-                      </div>
-                      <div
-                        onClick={logoutHandler}
-                        className="flex cursor-pointer rounded-sm rounded-b-md border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
-                      >
-                        <p className="m-auto">Log out</p>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
@@ -341,37 +408,97 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
           menu ? "menu-open" : "menu-closed"
         }`}
       >
-        <div
-          className={`m-auto flex w-11/12  select-none flex-col gap-1 rounded-md border bg-gray-50   pb-3 shadow-lg transition`}
-        >
-          <div className="w-full cursor-pointer ">
-            <p className="flex h-9 items-center justify-center border font-fira-sans font-bold   text-new3">
-              <Link to="/Propiedades"> Propiedades </Link>
-            </p>
+        {isAuth ? (
+          <div
+            className={`m-auto flex w-11/12  select-none flex-col gap-1 rounded-md border bg-gray-50   pb-3 shadow-lg transition`}
+          >
+            <div className=" w-full   border bg-slate-200">
+              <p className="m-auto flex h-9 w-full items-center justify-center font-fira-sans font-bold text-black-new">
+                {logged}
+              </p>
+            </div>
+            <div
+              onClick={() => handleAuth("account")}
+              className="w-full cursor-pointer "
+            >
+              <p className="flex h-9 items-center justify-center border font-fira-sans font-bold   text-new3">
+                Account
+              </p>
+            </div>
+            <div
+              onClick={() => handleAuth("propiedades")}
+              className="w-full cursor-pointer "
+            >
+              <p className="flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
+                Propiedades
+              </p>
+            </div>
+            <div
+              onClick={() => handleAuth("catalogo")}
+              className="w-full cursor-pointer "
+            >
+              <p className="m-auto flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
+                Catalogo
+              </p>
+            </div>
+            <div
+              onClick={() => handleAuth("favoritos")}
+              className="w-full cursor-pointer "
+            >
+              <p className="m-auto flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
+                Favoritos
+              </p>
+            </div>
+            <div
+              // onClick={() => handleAuth("favoritos")}
+              className="w-full cursor-pointer border bg-blue-new"
+            >
+              <p className="m-auto  flex h-9 w-full items-center justify-center font-fira-sans font-bold  text-white">
+                Publicar
+              </p>
+            </div>
+            <div
+              onClick={logoutHandler}
+              className=" w-full  cursor-pointer border bg-blue-dark"
+            >
+              <p className="m-auto flex h-9 w-full items-center justify-center font-fira-sans font-bold text-white">
+                Log out
+              </p>
+            </div>
           </div>
-          <div className="w-full cursor-pointer ">
-            <p className="flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
-              <Link to="/Publica"> Publica tu propiedad</Link>
-            </p>
+        ) : (
+          <div
+            className={`m-auto flex w-11/12  select-none flex-col gap-1 rounded-md border bg-gray-50   pb-3 shadow-lg transition`}
+          >
+            <div className="w-full cursor-pointer ">
+              <p className="flex h-9 items-center justify-center border font-fira-sans font-bold   text-new3">
+                <Link to="/Propiedades"> Propiedades </Link>
+              </p>
+            </div>
+            <div className="w-full cursor-pointer ">
+              <p className="flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
+                <Link to="/Publica"> Publica tu propiedad</Link>
+              </p>
+            </div>
+            <div className="w-full cursor-pointer ">
+              <p className="m-auto flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
+                <Link to="/Vacations">
+                  🏖️️ Encuentra un lugar para vacacionar
+                </Link>
+              </p>
+            </div>
+            <div className="w-full cursor-pointer border bg-blue-new">
+              <p className="m-auto  flex h-9 w-full items-center justify-center font-fira-sans font-bold  text-white">
+                <Link to="/Login">Login</Link>
+              </p>
+            </div>
+            <div className=" w-full  cursor-pointer border bg-blue-dark">
+              <p className="m-auto flex h-9 w-full items-center justify-center font-fira-sans font-bold text-white">
+                Register
+              </p>
+            </div>
           </div>
-          <div className="w-full cursor-pointer ">
-            <p className="m-auto flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
-              <Link to="/Vacations">
-                🏖️️ Encuentra un lugar para vacacionar
-              </Link>
-            </p>
-          </div>
-          <div className="w-full cursor-pointer border bg-blue-new">
-            <p className="m-auto  flex h-9 w-full items-center justify-center font-fira-sans font-bold  text-white">
-              <Link to="/Login">Login</Link>
-            </p>
-          </div>
-          <div className=" w-full  cursor-pointer border bg-blue-dark">
-            <p className="m-auto flex h-9 w-full items-center justify-center font-fira-sans font-bold text-white">
-              Register
-            </p>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

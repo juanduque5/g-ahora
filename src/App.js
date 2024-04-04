@@ -191,21 +191,17 @@ class App extends Component {
           <Route
             path="/Propiedades"
             element={
-              <>
+              <div className="flex min-h-screen flex-col">
                 <Header
                   logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
-                <ListaPropiedades userId={userId} isAuth={isAuth} />
-                {/* <Cards
-                  title={false}
-                  infoH={properties}
-                  userId={userId}
-                  isAuth={isAuth}
-                /> */}
+                <div className="flex-grow">
+                  <ListaPropiedades userId={userId} isAuth={isAuth} />
+                </div>
                 <Footer />
-              </>
+              </div>
             }
           />
           <Route

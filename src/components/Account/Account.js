@@ -215,7 +215,9 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
       <div className="mt-12">
         <div className="flex h-auto w-full justify-between ">
           <div className="flex">
-            <p className=" m-auto font-semibold">Mis Propiedades</p>
+            <p className=" m-auto font-semibold">
+              Mis Propiedades: {lista.length > 0 ? lista.length : 0}
+            </p>
           </div>
           <div>
             <button
