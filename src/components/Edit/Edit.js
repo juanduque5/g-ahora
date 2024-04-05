@@ -28,6 +28,12 @@ function Edit() {
   const [open, setIsOpen] = useState(false);
   const [departamentos, setDepartamentos] = useState([]);
   const [municipios, setMunicipios] = useState([]);
+  const [propertyData, setPropertyData] = useState([]);
+  const [data, setData] = useState([]);
+  // const location = useLocation();
+  // const dataLista = location.state && location.state.lista;
+  console.log("data edit", propertyData, "id", id);
+  console.log("files", files);
 
   const apiKey = process.env.REACT_APP_API_KEY;
   const mapId = process.env.REACT_APP_MAP_ID;
@@ -49,6 +55,64 @@ function Edit() {
     lat: 14.6349,
     lng: -90.5069,
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:2001/properties/infoById/${id}`,
+        );
+        if (!response.ok) {
+          console.log(
+            "NOT RESPONSE OK: Error al obtener datos de la propiedad",
+          );
+        }
+        const data = await response.json();
+
+        const propertyData = data.data[0][0];
+
+        // Función de actualización de estado
+        const updateInfoState = () => {
+          setInfo((prevInfo) => ({
+            ...prevInfo,
+            municipio: propertyData.municipio,
+            description: propertyData.description,
+            habitaciones: propertyData.habitaciones,
+            banos: propertyData.banos,
+            estacionamientos: propertyData.estacionamientos,
+            area: propertyData.area,
+            direccion: propertyData.direccion,
+            precio: propertyData.precio,
+            coordinates: {
+              lat: parseFloat(propertyData.latitud),
+              lng: parseFloat(propertyData.longitud),
+            },
+            // Actualiza otras propiedades según sea necesario
+          }));
+          setFiles(data.data);
+        };
+
+        // Llamar a la función de actualización de estado
+        updateInfoState();
+      } catch (error) {
+        console.error(
+          "CATCH ERROR: Error al obtener datos de la propiedad",
+          error,
+        );
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  // setCoordinates((prevCoordinates) => ({
+  //   ...prevCoordinates,
+  //   coordinates: {
+  //     lat: parseFloat(data.data[0][0].latitud),
+  //     lng: parseFloat(data.data[0][0].longitud),
+  //   },
+  // }));
+  // Guardar la información en el estado local o hacer lo que sea necesario
 
   const navigate = useNavigate();
 
@@ -519,13 +583,17 @@ function Edit() {
                   </div>
                   <div className="h-95 max-h-72  overflow-y-auto border">
                     {files.map((files, index) => (
-                      <div className="flex gap-2 border" key={index}>
-                        <div>
-                          <p>{files.name}</p>
+                      <div className="flex gap-2 " key={index}>
+                        <div className="w-70">
+                          <img
+                            className="h-full w-full"
+                            src={files.imageUrl}
+                            alt=""
+                          ></img>
                         </div>
                         <div
                           onClick={() => deleteImage(files.name)}
-                          className="ml-auto mr-1 flex items-center"
+                          className="flex w-30 items-center justify-center "
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -533,7 +601,7 @@ function Edit() {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="h-4 w-4 fill-red-200"
+                            className="h-5 w-5 rounded-md  fill-red-200 shadow-lg"
                           >
                             <path
                               strokeLinecap="round"
@@ -719,7 +787,7 @@ function Edit() {
             onClick={() => uploadInfo(info)}
             className="m-auto w-28 rounded-lg border bg-blue-new p-4 "
           >
-            <p className="text-lg font-semibold text-white">Crear</p>
+            <p className="text-lg font-semibold text-white">Actualizar</p>
           </button>
         </div>
       </div>

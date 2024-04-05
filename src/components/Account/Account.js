@@ -60,8 +60,8 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
   }, [id]);
 
   //redirect to edit page
-  const redirect = () => {
-    navigate(`/Edit/${id}`);
+  const redirect = (info) => {
+    navigate(`/Edit/${info.id}`);
   };
 
   console.log("isAuth", isAuth);
