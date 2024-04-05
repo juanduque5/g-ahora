@@ -453,7 +453,7 @@ const Info = ({ options, userId, isAuth }) => {
                     <p className="text-base text-new md:text-lg">
                       Ubicación:{" "}
                       <span className="text-black">
-                        {propertyData.direccion  }
+                        {propertyData.direccion}
                       </span>
                     </p>
                   </div>
@@ -478,7 +478,7 @@ const Info = ({ options, userId, isAuth }) => {
           </p>
         </div>
 
-        <div className="mt-12 w-full border xl:w-full">
+        <div className="mb-8 mt-12 w-full border xl:w-full">
           <div>
             <APIProvider apiKey={apiKey}>
               <div style={{ height: "400px", width: "100%", margin: "auto" }}>

@@ -21,6 +21,7 @@ import Profile from "./components/Profile/Profile";
 import Catalogo from "./components/Catalogo/Catalogo";
 import Landing from "./components/Landing/Landing";
 import Favoritos from "./components/Favoritos/Favoritos";
+import Edit from "./components/Edit/Edit";
 
 // import image5 from "./images/image5.png";
 // import image6 from "./images/image6.png";
@@ -303,6 +304,23 @@ class App extends Component {
                   logoutHandler={this.logoutHandler}
                 />
                 <Account
+                  logged={first}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
+              </>
+            }
+          />
+          <Route
+            path="/Edit/:id"
+            element={
+              <>
+                <Header
+                  logged={first}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
+                <Edit
                   logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}

@@ -36,10 +36,10 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
     console.log(menu);
   };
 
-  const accessLogin = () => {
-    navigate("/Login");
-    window.location.reload();
-  };
+  // const accessLogin = () => {
+  //   navigate("/Login");
+  //   window.location.reload();
+  // };
 
   const handleAuth = (value) => {
     const token = localStorage.getItem("token");
@@ -175,7 +175,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                   />
                 </svg> */}
                 <img
-                  className="h-18 relative bottom-3 right-20   w-auto md:w-full"
+                  className="relative bottom-3 right-20 h-18   w-auto md:w-full"
                   src={logo}
                   alt=""
                 ></img>

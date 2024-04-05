@@ -1,22 +1,16 @@
 import { React, useState, useEffect } from "react";
-// import {
-//   MapContainer,
-//   TileLayer,
-//   Marker,
-//   Popup,
-//   ZoomControl,
-// } from "react-leaflet";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-// import { Loader } from "@googlemaps/js-api-loader";
 import {
   APIProvider,
   Map,
   AdvancedMarker,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
+import "./Edit.css";
 
 import Modal from "./modal";
-const Detalles = ({ logged, isAuth, logoutHandler }) => {
+
+function Edit() {
   const geoKey = process.env.REACT_APP_GEO_KEY;
   console.log("here", geoKey);
   const { state } = useLocation();
@@ -368,19 +362,12 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
       console.log(error);
     }
   };
-
-  // console.log("isAuth", isAuth);
-  // console.log(autoComplete);
-  // console.log("coordinates", coordinates.lat, coordinates.lng);
-  // console.log("info", info.coordinates.lat);
-  // console.log("info.address", info.direccion);
-
   return (
     <div className="ajusta flex flex-col">
       <div className="mb-12 mt-12">
         <div className="flex h-auto w-full justify-between ">
           <div className="flex">
-            <p className=" m-auto font-semibold">Nueva propiedad</p>
+            <p className=" m-auto font-semibold">Actualizar datos: </p>
           </div>
           <div>
             <button
@@ -744,38 +731,6 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
       />
     </div>
   );
-};
-export default Detalles;
-// const handleUpload = () => {
-//   const formData = new FormData();
-//   files.forEach((file, index) => {
-//     formData.append(`imagen${index}`, file);
-//   });
+}
 
-//   const properData0 = {
-//     method: "POST",
-//     headers: {
-//       // No uses "application/json" para FormData, utiliza "multipart/form-data"
-//       "Content-Type": "multipart/form-data",
-//     },
-//     body: formData, // No necesitas JSON.stringify para FormData
-//   };
-
-//   fetch("http://localhost:2001/properties/properties", properData0)
-//     .then((response) => {
-//       if (!response.ok) {
-//         return response.json().then((errorData) => {
-//           console.log(errorData);
-//         });
-//       }
-
-//       return response.json();
-//     })
-//     .then((data) => {
-
-//       console.log("Property data:", data);
-//     })
-//     .catch((error) => {
-//       console.log("ERROR", error);
-//     });
-// };
+export default Edit;

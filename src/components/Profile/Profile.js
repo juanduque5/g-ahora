@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 // import car from "../../images/car.png";
 // import house from "../../images/house.png";
 // import bath from "../../images/bath.png";
+import Modal from "./modal";
 import account from "../../images/account.png";
 import "./Profile.css";
 
@@ -17,13 +18,29 @@ const Profile = ({ first, last, email, url }) => {
   const [email2, setEmail2] = useState(email);
   const [first2, setFirst2] = useState(first);
   const [last2, setLast2] = useState(last);
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorFirst, setErrorFirst] = useState("");
+  const [errorLast, setErrorLast] = useState("");
+
+  const [IsValidEmail, setIsValidEmail] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [image, setImageLink] = useState(url.length > 50 ? url : null);
+  const [image, setImageLink] = useState(
+    url === "https://juanma-user-s3.s3.us-west-1.amazonaws.com/" || url === null
+      ? account
+      : url,
+  );
+
+  //Close Modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   // const [files, setFiles] = useState([]);
   const fileInputRef = useRef(null);
   const { id } = useParams();
 
   console.log("id profile", id);
+  console.log("URL", url);
 
   const handleEdit = () => {
     setEdit(true);
@@ -34,14 +51,27 @@ const Profile = ({ first, last, email, url }) => {
 
   const handleEmail = (e) => {
     setEmail2(e.target.value);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar un correo electrónico
+    const isValidElement = emailRegex.test(e.target.value);
+    setIsValidEmail(isValidElement);
   };
-
   const handleFirst = (e) => {
     setFirst2(e.target.value);
   };
 
   const handleLast = (e) => {
     setLast2(e.target.value);
+  };
+
+  const verifyInput = () => {
+    if (!email2 || !IsValidEmail || !first2 || !last2) {
+      setErrorEmail(!email2 || !IsValidEmail ? "Email" : "");
+      setErrorFirst(!first2 ? "Nombre" : "");
+      setErrorLast(!last2 ? "Apellido" : "");
+      setIsModalOpen(true);
+    } else {
+      handleSave();
+    }
   };
 
   const handleSave = () => {
@@ -65,11 +95,9 @@ const Profile = ({ first, last, email, url }) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
             // setError(errorData.message);
-            console.log(errorData.message);
-            console.log(errorData);
-            // console.log(error);
-            // openModal();
-            throw new Error(`Error: ${errorData.message}`);
+            // console.log("Error profile updating", errorData.message);
+
+            return;
           });
         }
         return response.json();
@@ -91,7 +119,7 @@ const Profile = ({ first, last, email, url }) => {
   const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
 
-    if (selectedFile) {
+    if (selectedFile && selectedFile.type.startsWith("image/")) {
       try {
         // Crea un objeto FormData
         const formData = new FormData();
@@ -177,10 +205,10 @@ const Profile = ({ first, last, email, url }) => {
               <div className="mx-auto mt-8 grid max-w-2xl">
                 <div className="flex flex-col items-center space-y-5 sm:flex-row sm:space-y-0">
                   <img
-                    className="h-40 w-40 rounded-full  p-1 ring-2 ring-indigo-300 dark:ring-indigo-500"
-                    src={image ? image : account}
+                    className="h-40 w-40 rounded-full border object-cover "
+                    src={image}
                     alt=""
-                  ></img>
+                  />
 
                   <div className="flex flex-col space-y-5 sm:ml-8">
                     <div>
@@ -276,12 +304,12 @@ const Profile = ({ first, last, email, url }) => {
                       Edit
                     </button>
                     <button
-                      onClick={handleSave}
+                      onClick={verifyInput}
                       disabled={edit ? false : true}
                       type="submit"
                       className={`w-full rounded-lg ${
                         edit ? "cursor-pointer" : "cursor-not-allowed"
-                      }  bg-blue-dark px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-300 sm:w-auto`}
+                      }  bg-blue-dark px-5 py-2.5 text-center text-sm font-medium text-white  focus:outline-none focus:ring-4 focus:ring-indigo-300 sm:w-auto`}
                     >
                       Save
                     </button>
@@ -292,6 +320,13 @@ const Profile = ({ first, last, email, url }) => {
           </div>
         </main>
       </div>
+      <Modal
+        open={isModalOpen}
+        close={closeModal}
+        errorEmail={errorEmail}
+        errorFirst={errorFirst}
+        errorLast={errorLast}
+      />
     </div>
   );
 };
