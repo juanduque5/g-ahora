@@ -320,11 +320,7 @@ class App extends Component {
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
-                <Edit
-                  logged={first}
-                  isAuth={this.state.isAuth}
-                  logoutHandler={this.logoutHandler}
-                />
+                <Edit logged={first} userId={userId} />
               </>
             }
           />

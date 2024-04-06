@@ -215,15 +215,15 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                     Log in
                   </p>
                 )} */}
-                <p className="m-auto text-base font-bold text-blue-new underline">
+                <p className="m-auto  text-base font-bold text-blue-new underline">
                   Publicar propiedad
                 </p>
               </div>
               <div className="relative my-auto w-auto  md:w-2/5">
-                <div className=" hidden flex-row   text-center lg:flex    ">
+                <div className=" hidden flex-row   text-center   lg:flex ">
                   <div
                     onClick={toggleOpciones}
-                    className="flex h-full w-1/2 cursor-pointer items-center "
+                    className="flex h-full w-full cursor-pointer items-center  "
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -231,7 +231,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                       // height="auto"
                       viewBox="0 0 46 46"
                       fill="none"
-                      className="m-auto hidden h-full w-9 lg:flex"
+                      className="relative left-1 m-auto hidden h-full w-9 lg:flex xl:left-3"
                     >
                       <circle
                         cx="23"
@@ -284,7 +284,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                     </div> */}
                     <div
                       onClick={toggleLanguage}
-                      className="m-auto cursor-pointer"
+                      className=" m-auto cursor-pointer"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -292,7 +292,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="h-6 w-6"
+                        className="relative left-3 h-6 w-6"
                       >
                         <path
                           strokeLinecap="round"
@@ -302,7 +302,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                       </svg>
                     </div>
                     <div
-                      className={`absolute right-0 top-full z-20 hidden w-1/2 bg-white ${
+                      className={`absolute  top-full z-20 hidden w-1/2 bg-white ${
                         languageOptions ? "lg:block" : "hidden"
                       }`}
                     >

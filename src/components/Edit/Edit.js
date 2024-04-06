@@ -10,9 +10,10 @@ import "./Edit.css";
 
 import Modal from "./modal";
 
-function Edit() {
-  const geoKey = process.env.REACT_APP_GEO_KEY;
-  console.log("here", geoKey);
+function Edit({ userId, logged }) {
+  const apiKey = process.env.REACT_APP_API_KEY;
+  const mapId = process.env.REACT_APP_MAP_ID;
+  const navigate = useNavigate();
   const { state } = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isListOpen, setIsListOPen] = useState(false);
@@ -28,18 +29,22 @@ function Edit() {
   const [open, setIsOpen] = useState(false);
   const [departamentos, setDepartamentos] = useState([]);
   const [municipios, setMunicipios] = useState([]);
-  const [propertyData, setPropertyData] = useState([]);
-  const [data, setData] = useState([]);
+  // const [propertyData, setPropertyData] = useState([]);
+  // const [data, setData] = useState([]);
+  const [deleteImages, setDeleteImages] = useState([]);
   // const location = useLocation();
   // const dataLista = location.state && location.state.lista;
-  console.log("data edit", propertyData, "id", id);
-  console.log("files", files);
+  // console.log("data edit", propertyData, "id", id);
 
-  const apiKey = process.env.REACT_APP_API_KEY;
-  const mapId = process.env.REACT_APP_MAP_ID;
+  useEffect(() => {
+    if (!logged) {
+      navigate("/");
+    }
+    return () => {};
+  }, [logged, navigate]);
 
   const [info, setInfo] = useState({
-    departamento: "Guatemala",
+    departamento: "",
     municipio: "",
     description: "",
     habitaciones: "",
@@ -70,11 +75,13 @@ function Edit() {
         const data = await response.json();
 
         const propertyData = data.data[0][0];
+        console.log("kokokok", propertyData);
 
         // Función de actualización de estado
         const updateInfoState = () => {
           setInfo((prevInfo) => ({
             ...prevInfo,
+            departamento: propertyData.departamento,
             municipio: propertyData.municipio,
             description: propertyData.description,
             habitaciones: propertyData.habitaciones,
@@ -89,7 +96,9 @@ function Edit() {
             },
             // Actualiza otras propiedades según sea necesario
           }));
-          setFiles(data.data);
+          const array = data.data.map((items) => items.imageUrl);
+          setFiles(array);
+          setDeleteImages(array);
         };
 
         // Llamar a la función de actualización de estado
@@ -104,33 +113,6 @@ function Edit() {
 
     fetchData();
   }, [id]);
-
-  // setCoordinates((prevCoordinates) => ({
-  //   ...prevCoordinates,
-  //   coordinates: {
-  //     lat: parseFloat(data.data[0][0].latitud),
-  //     lng: parseFloat(data.data[0][0].longitud),
-  //   },
-  // }));
-  // Guardar la información en el estado local o hacer lo que sea necesario
-
-  const navigate = useNavigate();
-
-  ////////////////////
-
-  // Solo se ejecuta una vez al montar el componente
-
-  // useEffect(() => {
-  //   if (!logged) {
-  //     navigate("/");
-  //   }
-  //   return () => {};
-  // }, [logged, navigate]); // Dependencias que activarán el efecto
-
-  const accessAccount = () => {
-    navigate("/");
-    window.location.reload();
-  };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -243,16 +225,23 @@ function Edit() {
 
   //Delete image from files array
   const deleteImage = (value) => {
-    const arrayObjects = files.filter(
-      (file) => file.name !== value && file.lastModified !== value.lastModified,
-    );
+    console.log("value image", value);
+    const arrayObjects = files.filter((file) => {
+      if (typeof value === "string") {
+        return file !== value;
+      } else {
+        return (
+          file.name !== value.name && file.lastModified !== value.lastModified
+        );
+      }
+    });
 
-    setFiles([...arrayObjects]);
+    setFiles(arrayObjects);
   };
 
   //Selecting all the files(pictures) and updating its constants
   const handleFileChange = (e) => {
-    const limit = 5;
+    const limit = 7;
     const length = files.length;
     const setLimit = limit - length;
     const selectedFiles = Array.from(e.target.files).slice(0, setLimit);
@@ -262,27 +251,33 @@ function Edit() {
     const imageFiles = selectedFiles.filter((file) =>
       file.type.startsWith("image/"),
     );
-    // Verificar duplicados
+
+    // Check for duplicates
     const areDuplicates = imageFiles.some((selectedFile) =>
       files.some((file) => file.name === selectedFile.name),
     );
 
-    // Si hay duplicados, filtrar archivos únicos
+    // If there are duplicates, filter unique files
     let uniqueFiles = [];
     if (areDuplicates) {
-      // Filtrar los archivos únicos
+      // Filter unique files
       uniqueFiles = imageFiles.filter((selectedFile) =>
         files.every((file) => file.name !== selectedFile.name),
       );
     } else {
-      // Si no hay duplicados, todos los archivos en imageFiles son únicos
+      // If no duplicates, all files in imageFiles are unique
       uniqueFiles = imageFiles;
     }
 
-    // Insertar archivos únicos en el estado
-    setFiles((prevFiles) => [...prevFiles, ...uniqueFiles]);
+    uniqueFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setFiles((prevFiles) => [file, ...prevFiles]);
+      };
+      reader.readAsDataURL(file);
+    });
 
-    e.target.value = ""; // Limpiar el valor del input file para permitir selecciones adicionales
+    e.target.value = ""; // Clear input value to allow additional selections
   };
 
   console.log("files:", files);
@@ -291,19 +286,20 @@ function Edit() {
 
   //Sending all information required to the backend
   const uploadInfo = async (info) => {
+    console.log("here upload 1");
     const errorKeys = [];
     try {
       //Check if any key in the obj is empty and/or files length is incorrect
       for (const key in info) {
         if (info.hasOwnProperty(key)) {
-          if (info[key].length === 0 && files.length < 5) {
+          if (info[key].length === 0 && files.length < 7) {
             // console.log("numfiles si", numFiles);
             errorKeys.push(key);
             setError2("You need at least 5 photos");
           } else if (info[key].length === 0) {
             errorKeys.push(key);
             setError2("");
-          } else if (files.length < 5) {
+          } else if (files.length < 7) {
             setError("");
             setError2("You need at least 5 photos");
             setIsModalOpen(true);
@@ -315,7 +311,12 @@ function Edit() {
         setIsModalOpen(true);
       }
 
+      //Images that need to be delete it
+      let deleteImg = deleteImages.filter((items) => !files.includes(items));
+      console.log("here upload 2", errorKeys.length);
+
       if (errorKeys.length === 0 && isModalOpen === false) {
+        console.log("here upload 3");
         const formData = new FormData();
         formData.append("prueba", "Hola, esto es una prueba");
 
@@ -329,6 +330,7 @@ function Edit() {
         formData.append("area", info.area);
         formData.append("estado", info.estado);
         formData.append("tipo", selectedOption);
+        formData.append("userId", userId);
         formData.append("id", id);
         formData.append("uso", selectedOption2);
         formData.append("direccion", info.direccion);
@@ -337,6 +339,9 @@ function Edit() {
         // formData.append("coordinates", info.coordinates);
         formData.append("lat", info.lat);
         formData.append("lng", info.lng);
+        deleteImg.forEach((item) => {
+          formData.append("delete", item);
+        });
 
         //Verifica si files contiene archivos válidos
         if (files.some((file) => file instanceof File)) {
@@ -346,22 +351,19 @@ function Edit() {
             formData.append("imagen", file);
           });
 
-          console.log("Claves del FormData:", [...formData.keys()]);
-          console.log("id:", formData.get("id"));
-          console.log("Ciudad:", formData.get("ciudad"));
-          console.log("Barrio:", formData.get("barrio"));
-          console.log("Imagen 0:", formData.get("imagen"));
+          // console.log("Claves del FormData:", [...formData.keys()]);
+          console.log("id within fetch:", formData.get("id"));
+          // console.log("Ciudad:", formData.get("ciudad"));
+          // console.log("Barrio:", formData.get("barrio"));
+          // console.log("Imagen 0:", formData.get("imagen"));
+        }
 
-          const response = await fetch(
-            "http://localhost:2001/properties/properties",
-            {
-              method: "POST",
-              body: formData,
-            },
-          );
-          if (!response.ok) {
-            console.log("error");
-          }
+        const response = await fetch("http://localhost:2001/properties/edit", {
+          method: "PUT",
+          body: formData,
+        });
+        if (!response.ok) {
+          console.log("error");
         }
 
         //Resto del código...
@@ -435,7 +437,7 @@ function Edit() {
           </div>
           <div>
             <button
-              onClick={accessAccount}
+              onClick={() => navigate(-1)}
               className="rounded-md border border-blue-new p-3"
             >
               <p className="font-semibold text-blue-new">Cancelar</p>
@@ -570,7 +572,7 @@ function Edit() {
                     className="m-auto w-1/2 "
                     type="file"
                     onChange={handleFileChange}
-                    disabled={files.length >= 5 ? true : false}
+                    disabled={files.length >= 7 ? true : false}
                     multiple
                   />
                 </div>
@@ -584,15 +586,19 @@ function Edit() {
                   <div className="h-95 max-h-72  overflow-y-auto border">
                     {files.map((files, index) => (
                       <div className="flex gap-2 " key={index}>
-                        <div className="w-70">
+                        <div className="h-40 w-70">
                           <img
                             className="h-full w-full"
-                            src={files.imageUrl}
+                            src={
+                              typeof files === "string"
+                                ? files
+                                : URL.createObjectURL(files)
+                            }
                             alt=""
                           ></img>
                         </div>
                         <div
-                          onClick={() => deleteImage(files.name)}
+                          onClick={() => deleteImage(files)}
                           className="flex w-30 items-center justify-center "
                         >
                           <svg

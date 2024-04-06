@@ -64,6 +64,28 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
     navigate(`/Edit/${info.id}`);
   };
 
+  // const deleteProperty = async (info) => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:2001/properties/deletePropertyById/${id}`,
+  //       {
+  //         method: "DELETE", // Método HTTP DELETE
+  //         headers: {
+  //           "Content-Type": "application/json", // Tipo de contenido JSON
+  //         },
+  //         body: JSON.stringify(info), // Convertir la información a JSON y enviar en el cuerpo de la solicitud
+  //       },
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error("Error al eliminar propiedad");
+  //     }
+  //     console.log("Propiedad eliminada exitosamente");
+  //     // Realizar acciones adicionales después de eliminar la propiedad, si es necesario
+  //   } catch (error) {
+  //     console.error("Error al eliminar propiedad:", error);
+  //   }
+  // };
+
   console.log("isAuth", isAuth);
   console.log("lista", lista);
 
@@ -100,15 +122,16 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
             </button>
           </div>
         </div>
-        <div className=" mt-12 flex h-auto flex-col gap-1  border border-red-600">
+        <div className=" mt-12 flex h-auto flex-col gap-1 ">
           {lista.map((info, index) => (
             <div
               key={index}
-              className="flex h-24 flex-row  gap-6 border shadow-md"
+              className="flex h-auto flex-row  gap-6 border shadow-md"
             >
-              <div className=" w-20 border border-red-300">
+              <div className="w-30 ">
                 <img
-                  className="m-auto h-full w-full rounded-t-lg"
+                  loading="lazy"
+                  className="m-auto h-28 w-full rounded-t-lg"
                   src={info.imageURL}
                   alt="Hi"
                 ></img>
@@ -124,10 +147,36 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                   {info.precio.toLocaleString()}
                 </div>
               </div>
-              <div className="flex  flex-row gap-3">
+              <div className="mr-2 flex w-auto  flex-row ">
                 <button
                   onClick={() => redirect(info)}
-                  className="m-auto flex rounded-lg border p-2 shadow-md"
+                  className="m-auto flex gap-3 rounded-lg border p-3 shadow-md"
+                >
+                  <div>
+                    <p className="font-mono text-lg font-semibold  text-slate-900">
+                      Editar
+                    </p>
+                  </div>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="h-6 w-6 fill-gray-200"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                      />
+                    </svg>
+                  </div>
+                </button>
+                {/* <button
+                  onClick={() => deleteProperty(info)}
+                  className="m-auto rounded-lg  border p-2 shadow-md"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -135,23 +184,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="h-6 w-6 fill-gray-200"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                    />
-                  </svg>
-                </button>
-                <button className="m-auto rounded-lg  border p-2 shadow-md">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="h-6 w-6 fill-red-100 "
+                    className="h-6 w-6 fill-red-200 "
                   >
                     <path
                       strokeLinecap="round"
@@ -159,7 +192,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                       d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
                     />
                   </svg>
-                </button>
+                </button> */}
               </div>
             </div>
           ))}

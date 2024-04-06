@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 
 import "./modal.css"; // Importa tus estilos CSS
 
-export default function Modal({ open, close, error }) {
+export default function Modal({ open, close, error, error2 }) {
   if (!open) return null;
 
   return ReactDOM.createPortal(
@@ -14,21 +14,33 @@ export default function Modal({ open, close, error }) {
           <p className="m-auto"> X</p>
         </button>
 
-        <div className="flex h-2/3 justify-center border">
-          <div className="m-auto">
-            <p className="text-lg font-medium text-blue-new">{error}</p>
-          </div>
+        <div className="flex h-2/3 flex-col justify-center border">
+          {error.length > 0 && (
+            <div>
+              <div className="">
+                <p className="text-lg font-semibold text-blue-new">
+                  Completa la siguiente informacion:
+                </p>
+              </div>
+              <div className="h-auto  w-auto text-wrap">
+                <p className="text-md  ">{error.join(", ")}</p>
+              </div>
+            </div>
+          )}
+
+          {error2 && (
+            <div>
+              <div>
+                <p className="text-lg font-semibold text-blue-new">Imagenes:</p>
+              </div>
+              <div className="text-wrap">
+                <p className="text-md">{error2}</p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>,
     document.getElementById("portal"),
   );
 }
-
-//     overflow-y: hidden;
-// }
-
-//   if (modal) {
-//     document.body.classList.add("active-modal");
-//   } else {
-//     document.body.classList.remove("active-modal");
