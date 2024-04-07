@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header/Header";
 import PropiedadesYa from "./components/PropiedadesYa/PropiedadesYa";
@@ -242,7 +244,10 @@ class App extends Component {
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
-                <Vacations />
+
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Vacations />
+                </LocalizationProvider>
                 <Cards title={true} infoH={newArr} vacation={true} />
                 <Footer />
               </>
