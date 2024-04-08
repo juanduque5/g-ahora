@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Header from "./components/Header/Header";
 import PropiedadesYa from "./components/PropiedadesYa/PropiedadesYa";
 import Cards from "./components/Cards/Cards";
@@ -143,6 +143,20 @@ class App extends Component {
     const last = localStorage.getItem("last");
     const email = localStorage.getItem("email");
     const url = localStorage.getItem("url");
+
+    const whatsappValue = localStorage.getItem("whatsapp");
+
+    // Obtener el valor de Instagram del almacenamiento local
+    const instagramValue = localStorage.getItem("instagram");
+
+    // Obtener el valor de Facebook del almacenamiento local
+    const facebookValue = localStorage.getItem("facebook");
+
+    // Obtener el valor de TikTok del almacenamiento local
+    const tiktokValue = localStorage.getItem("tiktok");
+
+    // Obtener el valor de LinkedIn del almacenamiento local
+    const linkedinValue = localStorage.getItem("linkedin");
 
     const OPTIONS = {};
 
@@ -295,7 +309,18 @@ class App extends Component {
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
                 />
-                <Profile first={first} last={last} email={email} url={url} />
+                <Profile
+                  first={first}
+                  last={last}
+                  email={email}
+                  url={url}
+                  whatsappv={whatsappValue}
+                  facebookv={facebookValue}
+                  instagramv={instagramValue}
+                  tiktokv={tiktokValue}
+                  linkedinv={linkedinValue}
+                  isAuth={this.state.isAuth}
+                />
               </>
             }
           />
@@ -332,9 +357,11 @@ class App extends Component {
           <Route
             path="/Catalogo/:id"
             element={
-              <>
-                <Catalogo url={url} />
-              </>
+              isAuth ? (
+                <Catalogo url={url} isAuth={this.state.isAuth} />
+              ) : (
+                <Navigate to="/" replace />
+              )
             }
           />
           <Route

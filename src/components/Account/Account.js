@@ -4,15 +4,15 @@ import { useNavigate, useParams } from "react-router-dom";
 // import { Link } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
 import "./Account.css";
-import deletee from "../../images/deletee.png";
-// import down from "../../images/chevron-down.png";
-import plus from "../../images/plus.png";
-import edit from "../../images/edit.png";
+// import deletee from "../../images/deletee.png";
+// // import down from "../../images/chevron-down.png";
+// import plus from "../../images/plus.png";
+// import edit from "../../images/edit.png";
 
-const Header = ({ logged, isAuth, logoutHandler }) => {
+const Account = ({ logged, isAuth, logoutHandler }) => {
   const [lista, setLista] = useState([]);
   const { id } = useParams();
-
+  console.log("jaja", isAuth);
   console.log("id daddy", id);
 
   const navigate = useNavigate();
@@ -23,11 +23,11 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
 
   //if logged if false, return to home page
   useEffect(() => {
-    if (!logged) {
+    if (isAuth === false) {
       navigate("/");
     }
     return () => {};
-  }, [logged, navigate]); // Dependencias que activarán el efecto
+  }, [isAuth, navigate]); // Dependencias que activarán el efecto
 
   useEffect(() => {
     // Lógica para llamar al backend y obtener la información basada en el ID
@@ -230,4 +230,4 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
     </div>
   );
 };
-export default Header;
+export default Account;

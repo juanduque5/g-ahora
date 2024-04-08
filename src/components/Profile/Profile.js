@@ -1,5 +1,5 @@
-import { React, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { React, useState, useRef, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 //import { Link } from "react-router-dom";
 //import { useMediaQuery } from "react-responsive";
@@ -14,14 +14,30 @@ import Modal from "./modal";
 import account from "../../images/account.png";
 import "./Profile.css";
 
-const Profile = ({ first, last, email, url }) => {
+const Profile = ({
+  first,
+  last,
+  email,
+  url,
+  whatsappv,
+  instagramv,
+  facebookv,
+  tiktokv,
+  linkedinv,
+}) => {
   const [email2, setEmail2] = useState(email);
   const [first2, setFirst2] = useState(first);
   const [last2, setLast2] = useState(last);
   const [errorEmail, setErrorEmail] = useState("");
   const [errorFirst, setErrorFirst] = useState("");
   const [errorLast, setErrorLast] = useState("");
-
+  const [whatsapp, setWhatsapp] = useState(whatsappv);
+  const [instagram, setInstagram] = useState(instagramv);
+  const [facebook, setFacebook] = useState(facebookv);
+  const [tiktok, setTiktok] = useState(tiktokv);
+  const [linkedin, setLinkedin] = useState(linkedinv);
+  // const [info, setInfo] = useState(null);
+  const navigate = useNavigate();
   const [IsValidEmail, setIsValidEmail] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -30,6 +46,15 @@ const Profile = ({ first, last, email, url }) => {
       ? account
       : url,
   );
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    }
+    return () => {};
+  }, [token, navigate]);
 
   //Close Modal
   const closeModal = () => {
@@ -44,9 +69,14 @@ const Profile = ({ first, last, email, url }) => {
 
   const handleEdit = () => {
     setEdit(true);
-    setEmail2("");
-    setFirst2("");
-    setLast2("");
+    // setEmail2("");
+    // setFirst2("");
+    // setLast2("");
+    // setWhatsapp("");
+    // setInstagram("");
+    // setFacebook("");
+    // setTiktok("");
+    // setLinkedin("");
   };
 
   const handleEmail = (e) => {
@@ -79,7 +109,11 @@ const Profile = ({ first, last, email, url }) => {
       email: email2,
       first: first2,
       last: last2,
-      // password: password,
+      whatsapp: whatsapp,
+      facebook: facebook,
+      instagram: instagram,
+      linkedin: linkedin,
+      tiktok: tiktok,
     };
 
     const requestOptions = {
@@ -104,10 +138,20 @@ const Profile = ({ first, last, email, url }) => {
       })
       .then((data) => {
         console.log(data.newProfile);
+        console.log(data);
 
         localStorage.setItem("first", data.newProfile.first);
         localStorage.setItem("last", data.newProfile.last);
         localStorage.setItem("email", data.newProfile.email);
+        localStorage.setItem("whatsapp", data.socialmedia.whatsapp);
+
+        localStorage.setItem("instagram", data.socialmedia.instagram);
+
+        localStorage.setItem("facebook", data.socialmedia.facebook);
+
+        localStorage.setItem("tiktok", data.socialmedia.tiktok);
+
+        localStorage.setItem("linkedin", data.socialmedia.linkedin);
         setEdit(false);
         window.location.reload();
       })
@@ -180,19 +224,9 @@ const Profile = ({ first, last, email, url }) => {
         <aside className="hidden py-4 md:block md:w-1/3 lg:w-1/4">
           <div className="sticky top-12 flex flex-col gap-2 border-r border-indigo-100 p-4 text-sm">
             <h2 className="mb-4 pl-3 text-2xl font-semibold">Settings</h2>
-
-            <a
-              href="/"
-              className="flex items-center rounded-full border bg-white px-3  py-2.5 font-bold text-indigo-900"
-            >
+            <p className="flex items-center rounded-full border bg-white px-3  py-2.5 font-bold text-indigo-900">
               Pubic Profile
-            </a>
-            <a
-              href="/"
-              className="flex items-center px-3 py-2.5 font-semibold  hover:rounded-full hover:border hover:text-indigo-900"
-            >
-              Account Settings
-            </a>
+            </p>
           </div>
         </aside>
         <main className="min-h-screen w-full py-1 md:w-2/3 lg:w-3/4">
@@ -295,7 +329,98 @@ const Profile = ({ first, last, email, url }) => {
                     ></input>
                   </div>
 
-                  <div className="flex justify-end gap-2">
+                  <div className="w-full">
+                    <label
+                      htmlFor="whatsapp"
+                      className="mb-2 block text-sm font-medium text-indigo-900 dark:text-white"
+                    >
+                      WhatsApp Link
+                    </label>
+                    <input
+                      onChange={(e) => setWhatsapp(e.target.value)}
+                      type="text"
+                      id="whatsapp"
+                      placeholder="Enter your WhatsApp link"
+                      className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
+                      value={whatsapp}
+                      disabled={!edit}
+                    ></input>
+                  </div>
+
+                  <div className="w-full">
+                    <label
+                      htmlFor="instagram"
+                      className="mb-2 block text-sm font-medium text-indigo-900 dark:text-white"
+                    >
+                      Instagram Link
+                    </label>
+                    <input
+                      onChange={(e) => setInstagram(e.target.value)}
+                      type="text"
+                      id="instagram"
+                      placeholder="Enter your Instagram link"
+                      className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
+                      value={instagram}
+                      disabled={!edit}
+                    ></input>
+                  </div>
+
+                  <div className="w-full">
+                    <label
+                      htmlFor="facebook"
+                      className="mb-2 block text-sm font-medium text-indigo-900 dark:text-white"
+                    >
+                      Facebook Link
+                    </label>
+                    <input
+                      onChange={(e) => setFacebook(e.target.value)}
+                      type="text"
+                      id="facebook"
+                      placeholder="Enter your Facebook link"
+                      className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
+                      value={facebook}
+                      disabled={!edit}
+                    ></input>
+                  </div>
+
+                  {/* Input para TikTok */}
+                  <div className="w-full">
+                    <label
+                      htmlFor="tiktok"
+                      className="mb-2 block text-sm font-medium text-indigo-900 dark:text-white"
+                    >
+                      TikTok Link
+                    </label>
+                    <input
+                      onChange={(e) => setTiktok(e.target.value)}
+                      type="text"
+                      id="tiktok"
+                      placeholder="Enter your TikTok link"
+                      className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
+                      value={tiktok}
+                      disabled={!edit}
+                    ></input>
+                  </div>
+
+                  <div className="w-full">
+                    <label
+                      htmlFor="linkedin"
+                      className="mb-2 block text-sm font-medium text-indigo-900 dark:text-white"
+                    >
+                      LinkedIn Link
+                    </label>
+                    <input
+                      onChange={(e) => setLinkedin(e.target.value)}
+                      type="text"
+                      id="linkedin"
+                      placeholder="Enter your LinkedIn link"
+                      className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
+                      value={linkedin}
+                      disabled={!edit}
+                    ></input>
+                  </div>
+
+                  <div className="mt-5 flex justify-end gap-2">
                     <button
                       onClick={handleEdit}
                       type="submit"

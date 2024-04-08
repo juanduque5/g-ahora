@@ -67,6 +67,45 @@ const Login = ({ setAutoLogout }) => {
         localStorage.setItem("last", data.last);
         localStorage.setItem("email", data.email);
         localStorage.setItem("url", data.imageURL);
+
+        const whatsappValue =
+          data.dataProfile && data.dataProfile.whatsapp !== undefined
+            ? data.dataProfile.whatsapp
+            : "";
+        // Establecer el valor de WhatsApp en el almacenamiento local
+        localStorage.setItem("whatsapp", whatsappValue);
+
+        // Obtener el valor de Instagram de data.dataProfile
+        const instagramValue =
+          data.dataProfile && data.dataProfile.instagram !== undefined
+            ? data.dataProfile.instagram
+            : "";
+        // Establecer el valor de Instagram en el almacenamiento local
+        localStorage.setItem("instagram", instagramValue);
+
+        // Obtener el valor de Facebook de data.dataProfile
+        const facebookValue =
+          data.dataProfile && data.dataProfile.facebook !== undefined
+            ? data.dataProfile.facebook
+            : "";
+        // Establecer el valor de Facebook en el almacenamiento local
+        localStorage.setItem("facebook", facebookValue);
+
+        // Obtener el valor de TikTok de data.dataProfile
+        const tiktokValue =
+          data.dataProfile && data.dataProfile.tiktok !== undefined
+            ? data.dataProfile.tiktok
+            : "";
+        // Establecer el valor de TikTok en el almacenamiento local
+        localStorage.setItem("tiktok", tiktokValue);
+
+        // Obtener el valor de LinkedIn de data.dataProfile
+        const linkedinValue =
+          data.dataProfile && data.dataProfile.linkedin !== undefined
+            ? data.dataProfile.linkedin
+            : "";
+        // Establecer el valor de LinkedIn en el almacenamiento local
+        localStorage.setItem("linkedin", linkedinValue);
         const remainingMilliseconds = 60 * 60 * 1000;
 
         //two minutes

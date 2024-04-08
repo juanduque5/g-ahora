@@ -7,7 +7,7 @@ function numberGuests({ opciones, handleSelectedFilter }) {
         <div key={option} className=" w-auto">
           <div
             onClick={() => handleSelectedFilter("guests", option)}
-            className="flex w-full flex-col border-b hover:bg-blue-new hover:text-white"
+            className="flex w-full flex-col border-b hover:bg-blue-500 hover:text-white"
           >
             <p className="m-auto "> {option}</p>
           </div>

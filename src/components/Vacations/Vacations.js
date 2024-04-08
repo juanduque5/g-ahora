@@ -137,22 +137,22 @@ const Vacations = () => {
               Search by location, price, or property type:
             </p>
           </div>
-          <div className="aqui  flex h-auto w-full   sm:w-full md:h-1/6 lg:h-1/4 xl:h-1/4">
-            <div className="m-auto hidden h-20  border md:block md:w-full lg:block lg:w-11/12 xl:block xl:w-11/12">
-              <div className="m-auto flex  h-20 w-full rounded-lg bg-white ">
-                <div className="flex w-1/2 cursor-pointer flex-row border-r">
+          <div className="aqui  flex  w-full    sm:w-full md:h-1/6 lg:h-1/4 xl:h-1/4">
+            <div className="m-auto h-auto  md:h-20  md:w-full lg:block lg:w-11/12  xl:w-11/12">
+              <div className="m-auto flex h-auto w-full flex-col gap-5 rounded-lg  md:h-20 md:flex-row md:gap-0 md:bg-white ">
+                <div className="flex w-full cursor-pointer flex-col  md:w-2/5 md:flex-row">
                   <div className="  h-full w-full border-r">
                     <div className="flex h-full w-full items-center md:m-auto ">
                       <input
                         onChange={locationInfo}
-                        className="text-md m-auto h-9 w-full truncate rounded-sm border border-blue-300  focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-300 md:w-95 md:p-0"
+                        className="text-md m-auto h-11 w-full truncate rounded-sm border border-blue-300  focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-300 md:w-95 md:p-0"
                         type="text"
                         placeholder="City or Localities"
                         value={location}
                       ></input>
                     </div>
                     <div
-                      className={`absolute z-10 m-auto mt-1 max-h-48 w-82 cursor-pointer overflow-y-auto bg-white shadow-xl  md:relative md:w-95 ${
+                      className={`absolute z-20 m-auto mt-1 max-h-48 w-82 cursor-pointer overflow-y-auto bg-white shadow-xl  md:relative md:w-95 ${
                         filteredWords.length ? "block" : "hidden"
                       }`}
                     >
@@ -162,14 +162,36 @@ const Vacations = () => {
                       />
                     </div>
                   </div>
-                  <div className=" m-auto flex h-full w-1/2 cursor-pointer truncate ">
+                </div>
+                <div className="flex h-20 w-full gap-2 bg-white md:w-1/2">
+                  <div className=" m-auto flex h-full w-full  cursor-pointer truncate  bg-white ">
                     <DatePicker
                       label="Entrada"
-                      value={checkInDate}
+                      value={
+                        checkInDate < checkOutDate ? checkInDate : checkInDate
+                      }
                       onChange={handleCheckInDateChange}
                       minDate={today}
                       sx={{
-                        "& .MuiInputLabel-root": { color: "black" },
+                        "& .MuiInputLabel-root": { color: "gray" },
+                        margin: "auto",
+                        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                          {
+                            border: "1px solid black",
+                          },
+                        background: "white", // Setting background color to white
+                      }}
+                    />
+                  </div>
+                  <div className=" flex h-full w-full cursor-pointer truncate border-r bg-white">
+                    <DatePicker
+                      label="Salida"
+                      disabled={checkInDate ? false : true}
+                      value={checkOutDate > checkInDate ? checkOutDate : null}
+                      onChange={handleCheckOutDateChange}
+                      minDate={checkInDate ? checkInDate : today}
+                      sx={{
+                        "& .MuiInputLabel-root": { color: "gray" },
                         margin: "auto",
                         "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
                           {
@@ -179,27 +201,11 @@ const Vacations = () => {
                     />
                   </div>
                 </div>
-                <div className="flex w-1/2 cursor-pointer flex-row ">
-                  <div className=" flex h-full w-1/2 cursor-pointer truncate border-r">
-                    <DatePicker
-                      label="Salida"
-                      value={checkOutDate}
-                      onChange={handleCheckOutDateChange}
-                      minDate={today}
-                      sx={{
-                        "& .MuiInputLabel-root": { color: "black" },
-                        margin: "auto",
-                        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
-                          {
-                            border: "1px solid black",
-                          },
-                      }}
-                    />
-                  </div>
-                  <div className="relative  inline-block  w-1/2 cursor-pointer ">
+                <div className="flex w-full cursor-pointer flex-col gap-5 md:w-2/5 md:flex-row md:gap-0 ">
+                  <div className="relative  inline-block h-11 w-full cursor-pointer bg-white md:h-full md:w-1/2">
                     <div
                       onClick={guestsOpen}
-                      className="m-auto flex h-full w-90"
+                      className="m-auto flex h-full w-90 "
                     >
                       <div className="m-auto  w-90">
                         <p className="m-auto truncate font-open-sans text-base font-bold lg:text-sm xl:text-base">
@@ -214,7 +220,7 @@ const Vacations = () => {
                       </div>
                     </div>
                     <div
-                      className={`absolute z-20 mt-1 h-auto w-full bg-white md:relative ${
+                      className={`absolute z-10 mt-1 h-auto w-full bg-white md:relative ${
                         isGuests ? "block" : "hidden"
                       }`}
                     >
@@ -226,7 +232,7 @@ const Vacations = () => {
                   </div>
                   <div
                     onClick={searchProperties}
-                    className="m-auto mr-2 flex h-16 w-1/2 cursor-pointer truncate rounded-xl bg-yellow-new"
+                    className="flex h-11 w-full cursor-pointer truncate rounded-xl bg-yellow-new md:m-auto md:h-90 md:w-1/2"
                   >
                     <p className="m-auto truncate text-center font-fira-sans text-sm font-bold text-white md:text-sm lg:text-base xl:text-base">
                       BUSCAR PROPIEDADES
@@ -235,7 +241,7 @@ const Vacations = () => {
                 </div>
               </div>
             </div>
-            <div className=" flex h-56 w-full flex-col  md:hidden">
+            {/* <div className=" flex h-56 w-full flex-col  md:hidden">
               <div className="flex h-full justify-center  ">
                 <div className="m-auto flex h-5/6 w-full cursor-pointer border-2 bg-white hover:border-blue-new">
                   <p className="m-auto text-center font-open-sans text-base font-bold">
@@ -264,7 +270,7 @@ const Vacations = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex h-15 w-full justify-center">

@@ -25,7 +25,7 @@ import account from "../../images/account.png";
 
 import "./Catalogo.css";
 
-const Catalogo = ({ url }) => {
+const Catalogo = ({ url, isAuth }) => {
   const ventaoRenta = ["Venta", "Renta"];
   const [isOptionOpen, setIsOptionOPen] = useState(false);
   const [Selected, setSelected] = useState([]);
