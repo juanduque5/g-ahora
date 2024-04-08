@@ -42,7 +42,9 @@ const Profile = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const [image, setImageLink] = useState(
-    url === "https://juanma-user-s3.s3.us-west-1.amazonaws.com/" || url === null
+    url === "https://juanma-user-s3.s3.us-west-1.amazonaws.com/null" ||
+      url === "https://juanma-user-s3.s3.us-west-1.amazonaws.com/" ||
+      url === null
       ? account
       : url,
   );
