@@ -13,6 +13,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Modal from "./modal";
 import account from "../../images/account.png";
 import "./Profile.css";
+// import numberGuests from "../Vacations/numberGuests";
 
 const Profile = ({
   first,
@@ -24,21 +25,28 @@ const Profile = ({
   facebookv,
   tiktokv,
   linkedinv,
+  wnumber,
+  phone,
 }) => {
   const [email2, setEmail2] = useState(email);
+  const oldEmail = email;
   const [first2, setFirst2] = useState(first);
   const [last2, setLast2] = useState(last);
   const [errorEmail, setErrorEmail] = useState("");
   const [errorFirst, setErrorFirst] = useState("");
   const [errorLast, setErrorLast] = useState("");
+
   const [whatsapp, setWhatsapp] = useState(whatsappv);
   const [instagram, setInstagram] = useState(instagramv);
   const [facebook, setFacebook] = useState(facebookv);
   const [tiktok, setTiktok] = useState(tiktokv);
   const [linkedin, setLinkedin] = useState(linkedinv);
+  const [phoneN, setPhoneN] = useState(phone);
+  const [whatsappNumber, setWhatsappNumber] = useState(wnumber);
+  const [change, setChange] = useState(false);
   // const [info, setInfo] = useState(null);
   const navigate = useNavigate();
-  const [IsValidEmail, setIsValidEmail] = useState("");
+  const [IsValidEmail, setIsValidEmail] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const [image, setImageLink] = useState(
@@ -48,7 +56,7 @@ const Profile = ({
       ? account
       : url,
   );
-
+  console.log(instagram, facebook, tiktok);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -81,11 +89,19 @@ const Profile = ({
     // setLinkedin("");
   };
 
-  const handleEmail = (e) => {
-    setEmail2(e.target.value);
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar un correo electrónico
-    const isValidElement = emailRegex.test(e.target.value);
-    setIsValidEmail(isValidElement);
+  const handleEmail = (event) => {
+    const emailValue = event.target.value ? event.target.value : email2;
+    setEmail2(emailValue);
+    const emailRegex = /\S+@\S+\.\S+/; // Expresión regular para validar un correo electrónico
+    const isValidElement = emailRegex.test(emailValue);
+
+    if (!isValidElement) {
+      setIsValidEmail(false);
+      console.log("Correo electrónico no válido");
+    } else {
+      setIsValidEmail(true);
+      console.log(" válido");
+    }
   };
   const handleFirst = (e) => {
     setFirst2(e.target.value);
@@ -95,11 +111,36 @@ const Profile = ({
     setLast2(e.target.value);
   };
 
+  const handlePhone = (e) => {
+    const phoneNumber = e.target.value;
+    const phoneWithoutSpecialChars = phoneNumber.replace(/[^\d]/g, ""); // Eliminar todo lo que no sea dígito
+    setPhoneN(phoneWithoutSpecialChars);
+  };
+  const handleWhatsapp = (e) => {
+    const phoneNumber = e.target.value;
+    const phoneWithoutSpecialChars = phoneNumber.replace(/[^\d]/g, ""); // Eliminar todo lo que no sea dígito
+    setWhatsappNumber(phoneWithoutSpecialChars);
+  };
+
+  const handleChange = () => {
+    if (change === true) {
+      setWhatsappNumber("");
+      setChange(!change);
+    } else {
+      setWhatsappNumber(phoneN);
+      setChange(!change);
+    }
+  };
+
   const verifyInput = () => {
     if (!email2 || !IsValidEmail || !first2 || !last2) {
-      setErrorEmail(!email2 || !IsValidEmail ? "Email" : "");
+      console.log("1");
+      setErrorEmail(!IsValidEmail || !email2 ? "Email" : "");
+      console.log("2");
       setErrorFirst(!first2 ? "Nombre" : "");
+      console.log("3");
       setErrorLast(!last2 ? "Apellido" : "");
+      console.log("4");
       setIsModalOpen(true);
     } else {
       handleSave();
@@ -116,6 +157,9 @@ const Profile = ({
       instagram: instagram,
       linkedin: linkedin,
       tiktok: tiktok,
+      oldEmail: oldEmail,
+      phone: phoneN,
+      whatsappNumber: whatsappNumber,
     };
 
     const requestOptions = {
@@ -130,7 +174,7 @@ const Profile = ({
       .then((response) => {
         if (!response.ok) {
           return response.json().then((errorData) => {
-            // setError(errorData.message);
+            setErrorEmail(errorData.message);
             // console.log("Error profile updating", errorData.message);
 
             return;
@@ -154,6 +198,8 @@ const Profile = ({
         localStorage.setItem("tiktok", data.socialmedia.tiktok);
 
         localStorage.setItem("linkedin", data.socialmedia.linkedin);
+        localStorage.setItem("wnumber", data.socialmedia.wnumber);
+        localStorage.setItem("phone", data.socialmedia.phone);
         setEdit(false);
         window.location.reload();
       })
@@ -281,6 +327,7 @@ const Profile = ({
                       >
                         Your first name
                       </label>
+                      <p>First name:</p>
                       <input
                         onChange={handleFirst}
                         type="text"
@@ -300,6 +347,7 @@ const Profile = ({
                       >
                         Your last name
                       </label>
+                      <p>Last name:</p>
                       <input
                         onChange={handleLast}
                         type="text"
@@ -320,6 +368,7 @@ const Profile = ({
                     >
                       Your email
                     </label>
+                    <p>Email:</p>
                     <input
                       onChange={handleEmail}
                       type="email"
@@ -331,6 +380,59 @@ const Profile = ({
                     ></input>
                   </div>
 
+                  <div className="mb-2 flex w-full flex-col items-center space-x-0 space-y-2 sm:mb-6 sm:flex-row sm:space-x-4 sm:space-y-0">
+                    <div className="w-full">
+                      <label
+                        htmlFor="first_name"
+                        className="mb-2 block text-sm font-medium text-indigo-900 dark:text-white"
+                      >
+                        Phone Number
+                      </label>
+                      <p>Phone Number:</p>
+                      <input
+                        onChange={handlePhone}
+                        type="text"
+                        id="first_name"
+                        className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500 "
+                        placeholder="#"
+                        value={phoneN ? phoneN : ""}
+                        disabled={!edit}
+                        required
+                      ></input>
+                    </div>
+
+                    <div className="w-full">
+                      <label
+                        htmlFor="last_name"
+                        className="mb-2 block text-sm font-medium text-indigo-900 dark:text-white"
+                      >
+                        Whatsapp Number
+                      </label>
+                      <p>Whatsapp number:</p>
+                      <input
+                        onChange={handleWhatsapp}
+                        type="text"
+                        id="last_name"
+                        className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500 "
+                        placeholder="#"
+                        value={whatsappNumber ? whatsappNumber : ""}
+                        disabled={!edit}
+                        required
+                      ></input>
+                      <div className="absolute ">
+                        <input
+                          onChange={handleChange}
+                          type="checkbox"
+                          id="miCheckbox"
+                          name="miCheckbox"
+                          className=" mr-2"
+                          checked={change}
+                        ></input>
+                        <label htmlFor="miCheckbox">Phone number</label>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="w-full">
                     <label
                       htmlFor="whatsapp"
@@ -338,11 +440,12 @@ const Profile = ({
                     >
                       WhatsApp Link
                     </label>
+                    <p>WhatsApp:</p>
                     <input
                       onChange={(e) => setWhatsapp(e.target.value)}
                       type="text"
                       id="whatsapp"
-                      placeholder="Enter your WhatsApp link"
+                      placeholder="https://wa.me/502whatsappNumber"
                       className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
                       value={whatsapp}
                       disabled={!edit}
@@ -356,11 +459,12 @@ const Profile = ({
                     >
                       Instagram Link
                     </label>
+                    <p>Instagram:</p>
                     <input
                       onChange={(e) => setInstagram(e.target.value)}
                       type="text"
                       id="instagram"
-                      placeholder="Enter your Instagram link"
+                      placeholder="https://www.instagram.com/tuusuario/"
                       className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
                       value={instagram}
                       disabled={!edit}
@@ -374,11 +478,12 @@ const Profile = ({
                     >
                       Facebook Link
                     </label>
+                    <p>Facebook:</p>
                     <input
                       onChange={(e) => setFacebook(e.target.value)}
                       type="text"
                       id="facebook"
-                      placeholder="Enter your Facebook link"
+                      placeholder="https://www.facebook.com/tupaginadeejemplo"
                       className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
                       value={facebook}
                       disabled={!edit}
@@ -393,11 +498,12 @@ const Profile = ({
                     >
                       TikTok Link
                     </label>
+                    <p>Tiktok:</p>
                     <input
                       onChange={(e) => setTiktok(e.target.value)}
                       type="text"
                       id="tiktok"
-                      placeholder="Enter your TikTok link"
+                      placeholder="https://www.tiktok.com/@tucuentaejemplo"
                       className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
                       value={tiktok}
                       disabled={!edit}
@@ -411,11 +517,12 @@ const Profile = ({
                     >
                       LinkedIn Link
                     </label>
+                    <p>LinkedIn:</p>
                     <input
                       onChange={(e) => setLinkedin(e.target.value)}
                       type="text"
                       id="linkedin"
-                      placeholder="Enter your LinkedIn link"
+                      placeholder="https://www.linkedin.com/in/username"
                       className="block w-full rounded-lg border border-indigo-300 bg-indigo-50 p-2.5 text-sm text-indigo-900 focus:border-indigo-500 focus:ring-indigo-500"
                       value={linkedin}
                       disabled={!edit}

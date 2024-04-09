@@ -76,7 +76,7 @@ const Cards = React.memo(({ data }) => {
 
   // console.log("infoH:", infoH[0].imageURL);
   const redirect = (info) => {
-    console.log("id", info.id);
+    // console.log("id", info);
     // fill(info);
     navigate(`/PropertyInfo/${info.id}`);
   };
@@ -456,7 +456,7 @@ const Cards = React.memo(({ data }) => {
                           alt="Hi"
                         ></img>
                         <p className="m-auto ml-0 text-base md:text-sm lg:text-lg xl:text-xl">
-                          {info.area.toLocaleString()}m²
+                          {info.area}m²
                         </p>
                       </div>
                     </div>

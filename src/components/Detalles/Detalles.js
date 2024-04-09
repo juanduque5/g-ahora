@@ -222,7 +222,13 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
     }
 
     // Insertar archivos únicos en el estado
-    setFiles((prevFiles) => [...prevFiles, ...uniqueFiles]);
+    uniqueFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setFiles((prevFiles) => [file, ...prevFiles]);
+      };
+      reader.readAsDataURL(file);
+    });
 
     e.target.value = ""; // Limpiar el valor del input file para permitir selecciones adicionales
   };
@@ -533,12 +539,20 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                   <div className="h-95 max-h-72  overflow-y-auto border">
                     {files.map((files, index) => (
                       <div className="flex gap-2 border" key={index}>
-                        <div>
-                          <p>{files.name}</p>
+                        <div className="h-40 w-70">
+                          <img
+                            className="h-full w-full"
+                            src={
+                              typeof files === "string"
+                                ? files
+                                : URL.createObjectURL(files)
+                            }
+                            alt=""
+                          ></img>
                         </div>
                         <div
                           onClick={() => deleteImage(files.name)}
-                          className="ml-auto mr-1 flex items-center"
+                          className="flex w-30 items-center justify-center "
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

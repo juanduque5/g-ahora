@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header/Header";
 import PropiedadesYa from "./components/PropiedadesYa/PropiedadesYa";
 import Cards from "./components/Cards/Cards";
@@ -143,6 +143,8 @@ class App extends Component {
     const last = localStorage.getItem("last");
     const email = localStorage.getItem("email");
     const url = localStorage.getItem("url");
+    const wnumber = localStorage.getItem("wnumber");
+    const phone = localStorage.getItem("phone");
 
     const whatsappValue = localStorage.getItem("whatsapp");
 
@@ -319,6 +321,8 @@ class App extends Component {
                   instagramv={instagramValue}
                   tiktokv={tiktokValue}
                   linkedinv={linkedinValue}
+                  wnumber={wnumber}
+                  phone={phone}
                   isAuth={this.state.isAuth}
                 />
               </>
@@ -356,13 +360,7 @@ class App extends Component {
           />
           <Route
             path="/Catalogo/:id"
-            element={
-              isAuth ? (
-                <Catalogo url={url} isAuth={this.state.isAuth} />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
+            element={<Catalogo url={url} isAuth={this.state.isAuth} />}
           />
           <Route
             path="/Favoritos/:id"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useEmblaCarousel from "embla-carousel-react";
 import { Thumb } from "./thumb";
@@ -28,6 +28,10 @@ const Info = ({ options, userId, isAuth }) => {
   const apiKey = process.env.REACT_APP_API_KEY;
   const mapId = process.env.REACT_APP_MAP_ID;
   const [open, setIsOpen] = useState(false);
+  const [number, setNumber] = useState(false);
+  const [wpp, setWpp] = useState(false);
+  const [copied, setCopied] = useState(false); // Estado para indicar si se ha copiado el enlace
+  const linkRef = useRef(null); // Referencia al elemento de texto
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [heartClick, setHeartClick] = useState(false);
@@ -104,11 +108,15 @@ const Info = ({ options, userId, isAuth }) => {
           );
         }
         const data = await response.json();
-        // console.log("data", data.data);
+        console.log("data", data.data);
+        console.log("social", data.social[0].whatsapp);
+
         const prevHeartClick = data.data[0][0].Favorite_id ? true : false;
 
         // Actualiza el estado del corazón con el nuevo valor
         setHeartClick(prevHeartClick);
+        setWpp(data.social[0].whatsapp);
+        setNumber(data.social[0].phone);
         setPropertyData(data.data[0][0]);
         setData(data.data);
         setCoordinates((prevCoordinates) => ({
@@ -167,6 +175,26 @@ const Info = ({ options, userId, isAuth }) => {
     }
   };
 
+  const copyToClipboard = () => {
+    const url = window.location.href;
+
+    // Intenta copiar al portapapeles usando la API moderna
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
+        // Si la copia es exitosa, actualiza el estado para indicar que se ha copiado
+        setCopied(true);
+
+        setTimeout(() => {
+          setCopied(false);
+        }, 800);
+      })
+      .catch((error) => {
+        // Si hay un error al copiar, manejarlo aquí
+        console.error("Error al copiar al portapapeles:", error);
+      });
+  };
+
   console.log(data);
   console.log("PropertyData", propertyData.area);
   console.log("heart", heartClick);
@@ -178,8 +206,8 @@ const Info = ({ options, userId, isAuth }) => {
           <div className="flex flex-col gap-2 lg:w-8/12">
             <div className="mb-3 h-auto w-full ">
               <p className="text-center font-open-sans text-3xl font-bold md:text-left">
-                house in {propertyData.uso} <br className="flex md:hidden"></br>
-                ({propertyData.barrio})
+                {propertyData.tipo + ""} in {propertyData.uso}{" "}
+                <br className="flex md:hidden"></br>({propertyData.municipio})
               </p>
             </div>
             <div className="embla relative  flex h-450 w-full ">
@@ -242,15 +270,22 @@ const Info = ({ options, userId, isAuth }) => {
               </div>
             </div>
             <div className="flex h-14 w-full flex-row gap-5 ">
-              <div className="flex w-1/2 items-center justify-center gap-3 rounded-xl border">
+              <div className="flex  w-1/2 items-center justify-center gap-3 rounded-xl border">
                 <img
                   className="cursor-pointer"
                   src={share}
                   alt="Your alt text"
+                  onClick={copyToClipboard}
                 />
-                <p className="cursor-pointer font-fira-sans text-sm font-bold ">
+                <p
+                  ref={linkRef}
+                  className="cursor-pointer font-fira-sans text-sm font-bold "
+                >
                   LINK
                 </p>
+                <div className={`${copied ? "block" : "hidden"}`}>
+                  <p className="text-md font-semibold text-slate-400">Copied</p>
+                </div>
               </div>
               <div className="flex w-1/2 items-center justify-center  gap-3 rounded-xl border">
                 <svg
@@ -350,19 +385,21 @@ const Info = ({ options, userId, isAuth }) => {
                       {showPopup && (
                         <div className="popup absolute top-full w-full   shadow-xl">
                           <p className="text-center text-lg text-black">
-                            415-712-8195
+                            {number}
                           </p>
                         </div>
                       )}
                     </div>
                   </div>
                   <div className=" flex w-1/2 cursor-pointer  ">
-                    <div className="flex w-full ">
-                      <img
-                        className="m-auto h-11 w-9 rounded-full object-cover"
-                        src={whatsapp}
-                        alt=""
-                      />
+                    <div className="flex w-full">
+                      <a className="m-auto" href={wpp}>
+                        <img
+                          className="h-11 w-9 rounded-full object-cover"
+                          src={whatsapp}
+                          alt=""
+                        />
+                      </a>
                     </div>
                   </div>
                 </div>

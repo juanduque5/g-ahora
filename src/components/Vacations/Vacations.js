@@ -202,7 +202,7 @@ const Vacations = () => {
                   </div>
                 </div>
                 <div className="flex w-full cursor-pointer flex-col gap-5 md:w-2/5 md:flex-row md:gap-0 ">
-                  <div className="relative  inline-block h-11 w-full cursor-pointer bg-white md:h-full md:w-1/2">
+                  <div className="relative  inline-block h-11 w-full cursor-pointer bg-white md:h-full md:w-55">
                     <div
                       onClick={guestsOpen}
                       className="m-auto flex h-full w-90 "
@@ -232,10 +232,10 @@ const Vacations = () => {
                   </div>
                   <div
                     onClick={searchProperties}
-                    className="flex h-11 w-full cursor-pointer truncate rounded-xl bg-yellow-new md:m-auto md:h-90 md:w-1/2"
+                    className=" flex h-11 w-full cursor-pointer truncate rounded-xl bg-yellow-new md:m-auto md:h-90 md:w-2/5"
                   >
-                    <p className="m-auto truncate text-center font-fira-sans text-sm font-bold text-white md:text-sm lg:text-base xl:text-base">
-                      BUSCAR PROPIEDADES
+                    <p className="m-auto truncate text-center font-fira-sans text-sm  font-semibold text-white md:text-sm lg:text-base xl:text-xl">
+                      SEARCH
                     </p>
                   </div>
                 </div>

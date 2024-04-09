@@ -122,7 +122,10 @@ const Account = ({ logged, isAuth, logoutHandler }) => {
             </button>
           </div>
         </div>
-        <div className=" mt-12 flex h-auto flex-col gap-1 ">
+        <div
+          className=" mt-12 flex h-auto max-h-dvh
+         flex-col gap-1 overflow-y-auto "
+        >
           {lista.map((info, index) => (
             <div
               key={index}
@@ -144,7 +147,7 @@ const Account = ({ logged, isAuth, logoutHandler }) => {
                   {info.municipio}
                 </div>
                 <div className="flex h-full font-semibold">
-                  {info.precio.toLocaleString()}
+                  $ {info.precio.toLocaleString()}
                 </div>
               </div>
               <div className="mr-2 flex w-auto  flex-row ">

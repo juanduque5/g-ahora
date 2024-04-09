@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 import "./Register.css";
 
-import visible from "../../images/visible.png";
 import { Link } from "react-router-dom";
 // import Modal from "react-modal";
 import Modal from "./modal";
@@ -12,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOPen] = useState(false);
   const [message, setMessage] = useState(null);
   const [isValidEmail, setIsValidEmail] = useState(false);
@@ -41,7 +40,6 @@ const Login = () => {
     if (errorMessage) {
       setMessage(errorMessage);
       setIsModalOPen(true);
-      setError(true); // Set error to true
     } else {
       const postData = {
         email: email,
@@ -80,7 +78,6 @@ const Login = () => {
         .catch((error) => {
           console.error("Error :", error);
 
-          setError("Error al registrar. Por favor, inténtalo de nuevo.");
           openModal();
         });
     }
@@ -105,7 +102,7 @@ const Login = () => {
     setEmail(emailValue);
 
     // Expresión regular para validar un correo electrónico
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /\S+@\S+\.\S+/;
 
     // Validar el correo electrónico
     const isValidEmail = emailRegex.test(emailValue);
@@ -160,11 +157,11 @@ const Login = () => {
           </div>
 
           <div className="h-4/6  ">
-            <div className="m-auto flex h-1/4 w-11/12 flex-col  border">
+            <div className="m-auto flex h-1/4 w-11/12 flex-col  ">
               <div className="flex h-2/5 items-center  ">
                 <p className="font-open-sans text-sm font-bold">Nombre</p>
               </div>
-              <div className="flex h-3/5 items-center gap-2 border">
+              <div className="flex h-3/5 items-center gap-2 ">
                 <input
                   className="h-5/6 w-full rounded-lg border"
                   type="text"
@@ -213,7 +210,7 @@ const Login = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="relative right-8  h-6 w-6"
+                    className="absolute right-8  h-6 w-6"
                     onClick={togglePasswordVisibility}
                   >
                     <path
@@ -234,7 +231,7 @@ const Login = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="relative right-8 h-6 w-6"
+                    className="absolute right-8 h-6 w-6"
                     onClick={togglePasswordVisibility}
                   >
                     <path
@@ -268,7 +265,7 @@ const Login = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="relative right-8  h-6 w-6"
+                    className="absolute right-8  h-6 w-6"
                     onClick={togglePasswordVisibility2}
                   >
                     <path
@@ -289,7 +286,7 @@ const Login = () => {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="relative right-8  h-6 w-6"
+                    className="absolute right-8  h-6 w-6"
                     onClick={togglePasswordVisibility2}
                   >
                     <path

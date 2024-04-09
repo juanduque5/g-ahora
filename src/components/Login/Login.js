@@ -1,8 +1,7 @@
 import { React, useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
-
-import Modal from "react-modal";
+import Modal from "./modal";
 
 const Login = ({ setAutoLogout }) => {
   const [password, setPassword] = useState("");
@@ -11,17 +10,32 @@ const Login = ({ setAutoLogout }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [isModalOpen, setIsModalOPen] = useState(false);
+  const [isValidEmail, setIsValidEmail] = useState(false);
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  const handleEmail = (event) => {
+    const emailValue = event.target.value;
+    setEmail(emailValue);
+    const emailRegex = /\S+@\S+\.\S+/;
+
+    // Validar el correo electrónico
+    const isValidEmail = emailRegex.test(emailValue);
+
+    // Si el correo electrónico no es válido, puedes manejar el error aquí
+    if (!isValidEmail) {
+      setIsValidEmail(true);
+      console.log("Correo electrónico no válido");
+    } else {
+      setIsValidEmail(false);
+      console.log(" válido");
+    }
   };
 
-  const handleEmail = (event) => {
-    setEmail(event.target.value);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const openModal = () => {
@@ -32,102 +46,140 @@ const Login = ({ setAutoLogout }) => {
   };
 
   const handleLoginClick = () => {
-    const postData = {
-      email: email,
-      password: password,
-    };
+    let errorMessage = "";
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    };
+    // Check for empty input fields
+    if (!email || !password) {
+      errorMessage = "Please fill in every input field";
+    }
+    // Check password length
+    else if (isValidEmail) {
+      errorMessage = "Email format is incorrect";
+    }
+    // Check password length
+    else if (password.length < 8) {
+      errorMessage = "Passwords must be at least 8 characters";
+    }
 
-    fetch("http://localhost:2001/auth/login", requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((errorData) => {
-            setError(errorData.message);
-            console.log(errorData.message);
-            console.log(error);
-            openModal();
-            throw new Error(`Error: ${errorData.message}`);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // name(data.name);
-        console.log("DATAAA:", data);
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.id);
-        localStorage.setItem("first", data.first);
-        localStorage.setItem("last", data.last);
-        localStorage.setItem("email", data.email);
-        localStorage.setItem("url", data.imageURL);
+    if (errorMessage) {
+      setError(errorMessage);
+      setIsModalOPen(true);
+    } else {
+      const postData = {
+        email: email,
+        password: password,
+      };
 
-        const whatsappValue =
-          data.dataProfile && data.dataProfile.whatsapp !== undefined
-            ? data.dataProfile.whatsapp
-            : "";
-        // Establecer el valor de WhatsApp en el almacenamiento local
-        localStorage.setItem("whatsapp", whatsappValue);
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept-Language": "es", // Indica que se prefieren los mensajes en español
+        },
+        body: JSON.stringify(postData),
+      };
 
-        // Obtener el valor de Instagram de data.dataProfile
-        const instagramValue =
-          data.dataProfile && data.dataProfile.instagram !== undefined
-            ? data.dataProfile.instagram
-            : "";
-        // Establecer el valor de Instagram en el almacenamiento local
-        localStorage.setItem("instagram", instagramValue);
+      fetch("http://localhost:2001/auth/login", requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((errorData) => {
+              setError(errorData.message);
+              console.log(errorData.message);
+              openModal();
+            });
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // name(data.name);
+          console.log("DATAAA:", data);
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userId", data.id);
+          localStorage.setItem("first", data.first);
+          localStorage.setItem("last", data.last);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("url", data.imageURL);
 
-        // Obtener el valor de Facebook de data.dataProfile
-        const facebookValue =
-          data.dataProfile && data.dataProfile.facebook !== undefined
-            ? data.dataProfile.facebook
-            : "";
-        // Establecer el valor de Facebook en el almacenamiento local
-        localStorage.setItem("facebook", facebookValue);
+          const wnumber =
+            data.profile && data.profile[0].wnumber !== null
+              ? data.profile[0].wnumber
+              : "";
 
-        // Obtener el valor de TikTok de data.dataProfile
-        const tiktokValue =
-          data.dataProfile && data.dataProfile.tiktok !== undefined
-            ? data.dataProfile.tiktok
-            : "";
-        // Establecer el valor de TikTok en el almacenamiento local
-        localStorage.setItem("tiktok", tiktokValue);
+          localStorage.setItem("wnumber", wnumber);
 
-        // Obtener el valor de LinkedIn de data.dataProfile
-        const linkedinValue =
-          data.dataProfile && data.dataProfile.linkedin !== undefined
-            ? data.dataProfile.linkedin
-            : "";
-        // Establecer el valor de LinkedIn en el almacenamiento local
-        localStorage.setItem("linkedin", linkedinValue);
-        const remainingMilliseconds = 60 * 60 * 1000;
+          const phone =
+            data.profile && data.profile[0].phone !== null
+              ? data.profile[0].phone
+              : "";
 
-        //two minutes
-        // const remainingMilliseconds = 2 * 60 * 1000;
-        const expiryDate = new Date(
-          new Date().getTime() + remainingMilliseconds,
-        );
-        console.log("EXPI", expiryDate);
-        console.log("remainingMilliseconds", remainingMilliseconds);
+          localStorage.setItem("phone", phone);
 
-        localStorage.setItem("expiryDate", expiryDate.toISOString());
+          const whatsappValue =
+            data.profile && data.profile[0].whatsapp !== null
+              ? data.profile[0].whatsapp
+              : "";
 
-        setAutoLogout(remainingMilliseconds);
-        navigate("/"); // Reemplaza 'NombreDeLaPantalla' con el nombre de tu pantalla
-        // console.log("DATAAA:", data);
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error.message);
-        setError(error.message);
-        openModal();
-      });
+          // Establecer el valor de WhatsApp en el almacenamiento local
+          localStorage.setItem("whatsapp", whatsappValue);
+
+          // Obtener el valor de Instagram de data.dataProfile
+          const instagramValue =
+            data.profile && data.profile[0].instagram !== null
+              ? data.profile[0].instagram
+              : "";
+
+          // console.log("instagram", instagramValue);
+          // Establecer el valor de Instagram en el almacenamiento local
+          localStorage.setItem("instagram", instagramValue);
+
+          // Obtener el valor de Facebook de data.dataProfile
+          const facebookValue =
+            data.profile && data.profile[0].facebook !== null
+              ? data.profile[0].facebook
+              : "";
+
+          // console.log("facebook", facebookValue);
+          // Establecer el valor de Facebook en el almacenamiento local
+          localStorage.setItem("facebook", facebookValue);
+
+          // // Obtener el valor de TikTok de data.dataProfile
+          const tiktokValue =
+            data.profile && data.profile[0].tiktok !== null
+              ? data.profile[0].tiktok
+              : "";
+
+          // console.log("facebook", tiktokValue);
+          // Establecer el valor de TikTok en el almacenamiento local
+          localStorage.setItem("tiktok", tiktokValue);
+
+          // Obtener el valor de LinkedIn de data.dataProfile
+          const linkedinValue =
+            data.profile && data.profile[0].linkedin !== null
+              ? data.profile[0].linkedin
+              : "";
+          // Establecer el valor de LinkedIn en el almacenamiento local
+          localStorage.setItem("linkedin", linkedinValue);
+          const remainingMilliseconds = 60 * 60 * 1000;
+
+          //two minutes
+          // const remainingMilliseconds = 2 * 60 * 1000;
+          const expiryDate = new Date(
+            new Date().getTime() + remainingMilliseconds,
+          );
+          console.log("EXPI", expiryDate);
+          console.log("remainingMilliseconds", remainingMilliseconds);
+
+          localStorage.setItem("expiryDate", expiryDate.toISOString());
+
+          setAutoLogout(remainingMilliseconds);
+          navigate("/"); // Reemplaza 'NombreDeLaPantalla' con el nombre de tu pantalla
+          // console.log("DATAAA:", data);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error.message);
+        });
+    }
   };
 
   return (
@@ -166,13 +218,13 @@ const Login = ({ setAutoLogout }) => {
               </div>
             </div>
           </div>
-          <div className="h-1/2 ">
-            <div className="flex h-1/2 justify-center ">
-              <div className=" h-3/5 w-11/12 ">
-                <div className="flex h-2/5  items-center">
+          <div className="h-1/2 w-full ">
+            <div className="flex h-1/2 justify-center">
+              <div className=" h-3/5 w-11/12">
+                <div className="flex h-2/5  items-center ">
                   <p className="font-open-sans text-sm font-bold">Password</p>
                 </div>
-                <div className="flex h-3/5  ">
+                <div className="flex h-3/5 w-full items-center  ">
                   <input
                     className="h-full w-full rounded-lg border"
                     placeholder="Password"
@@ -188,7 +240,7 @@ const Login = ({ setAutoLogout }) => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="relative right-8 top-6 h-6 w-6"
+                      className="absolute right-8  h-6 w-6"
                       onClick={togglePasswordVisibility}
                     >
                       <path
@@ -209,7 +261,7 @@ const Login = ({ setAutoLogout }) => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="relative right-8 top-6 h-6 w-6"
+                      className="absolute right-8  h-6 w-6"
                       onClick={togglePasswordVisibility}
                     >
                       <path
@@ -244,26 +296,7 @@ const Login = ({ setAutoLogout }) => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onAfterClose={closeModal}>
-        <div className="flex flex-col gap-1">
-          <div className="  border-b-slate-400">
-            <p className="font-semibold">An Error Occurred</p>
-          </div>
-          {error && (
-            <div className="mt-2 h-28">
-              <ul>
-                <li className="ml-1">- {error}</li>
-              </ul>
-            </div>
-          )}
-
-          <div className="relative top-5 flex justify-end ">
-            <button className="flex h-9 w-1/4 justify-center rounded-md bg-red-500">
-              <p className="m-auto font-open-sans text-white ">Exit</p>
-            </button>
-          </div>
-        </div>
-      </Modal>
+      <Modal isOpen={isModalOpen} close={closeModal} error={error} />
     </div>
   );
 };
