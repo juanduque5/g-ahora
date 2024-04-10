@@ -14,12 +14,13 @@ import account from "../../images/account.png";
 
 import "./Catalogo.css";
 
-const Catalogo = ({ url, isAuth }) => {
+const Catalogo = ({ url }) => {
   // const ventaoRenta = ["Venta", "Renta"];
   // const [isOptionOpen, setIsOptionOPen] = useState(false);
   // const [Selected, setSelected] = useState([]);
   // const [image, setImageLink] = useState(url.length > 50 ? url : null);
   const [lista, setLista] = useState([]);
+  const [user, setUser] = useState("");
 
   const [socialLinks, setSocialLinks] = useState({
     whatsapp: "",
@@ -83,6 +84,7 @@ const Catalogo = ({ url, isAuth }) => {
         const data = await response.json();
         console.log("data", data.propertiesById);
         setLista(data.propertiesById);
+        setUser(data.user);
 
         const socialData = data.social[0]; // Suponiendo que data.social es un array con un solo objeto
         if (socialData) {
@@ -140,12 +142,12 @@ const Catalogo = ({ url, isAuth }) => {
           <div className="flex h-30 w-full flex-col ">
             <div className="flex h-full ">
               <p className="m-auto text-4xl font-semibold text-white">
-                Michael Duke
+                {user.first ? user.first : ""} {user.last ? user.last : ""}
               </p>
             </div>
             <div className="flex h-full justify-center ">
               <p className=" text-xl font-medium text-white">
-                Real State Agent
+                Encuentranos en:{" "}
               </p>
             </div>
           </div>

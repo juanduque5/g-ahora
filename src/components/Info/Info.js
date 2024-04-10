@@ -38,6 +38,7 @@ const Info = ({ options, userId, isAuth }) => {
   // const [properties, setProperties] = useState([]);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     containScroll: "keepSnaps",
     dragFree: true,
@@ -195,15 +196,17 @@ const Info = ({ options, userId, isAuth }) => {
       });
   };
 
+  //Scroll down
+
   console.log(data);
   console.log("PropertyData", propertyData.area);
   console.log("heart", heartClick);
   // console.log(coordinates.coordinates);
   return (
-    <div className="ajusta h-auto">
-      <div className="mb-8 mt-8  h-auto ">
+    <div className="ajusta flex h-auto  ">
+      <div className="mb-8 mt-8 flex h-auto  flex-col  lg:w-8/12">
         <div className="flex  h-95 flex-row  gap-14  ">
-          <div className="flex flex-col gap-2 lg:w-8/12">
+          <div className="flex flex-col gap-2 lg:w-full">
             <div className="mb-3 h-auto w-full ">
               <p className="text-center font-open-sans text-3xl font-bold md:text-left">
                 {propertyData.tipo + ""} in {propertyData.uso}{" "}
@@ -235,8 +238,8 @@ const Info = ({ options, userId, isAuth }) => {
               </div>
             </div>
 
-            <div className=" m-auto flex h-auto w-full  flex-row ">
-              <div className="embla-thumbs  ">
+            <div className=" m-auto flex h-auto w-full  flex-row border">
+              <div className="embla-thumbs  w-full ">
                 <div className="embla-thumbs__viewport" ref={emblaThumbsRef}>
                   <div className="embla-thumbs__container">
                     {data.map((info, index) => (
@@ -253,172 +256,19 @@ const Info = ({ options, userId, isAuth }) => {
               </div>
             </div>
           </div>
-          <div className="hidden w-1/4 gap-4   lg:flex lg:flex-col">
-            <div className=" flex h-auto w-full flex-row">
-              <div className="flex w-2/5 items-center ">
-                <p className="f text-2xl font-bold text-blue-new">
-                  {propertyData.currency}
-                </p>
-              </div>
-              <div className="flex w-3/5 justify-end ">
-                <p className="text-lg font-bold sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
-                  $
-                  {propertyData.precio !== undefined
-                    ? propertyData.precio.toLocaleString() + " "
-                    : ""}
-                </p>
-              </div>
-            </div>
-            <div className="flex h-14 w-full flex-row gap-5 ">
-              <div className="flex  w-1/2 items-center justify-center gap-3 rounded-xl border">
-                <img
-                  className="cursor-pointer"
-                  src={share}
-                  alt="Your alt text"
-                  onClick={copyToClipboard}
-                />
-                <p
-                  ref={linkRef}
-                  className="cursor-pointer font-fira-sans text-sm font-bold "
-                >
-                  LINK
-                </p>
-                <div className={`${copied ? "block" : "hidden"}`}>
-                  <p className="text-md font-semibold text-slate-400">Copied</p>
-                </div>
-              </div>
-              <div className="flex w-1/2 items-center justify-center  gap-3 rounded-xl border">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className={`h-6 w-6 cursor-pointer ${heartClick && isAuth ? "fill-red-600 text-gray-100" : ""}`}
-                  onClick={handleHeartClick}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                  />
-                </svg>
-
-                <p className="cursor-pointer font-fira-sans text-sm font-bold">
-                  ME GUSTA
-                </p>
-              </div>
-            </div>
-            <div className="flex h-full w-full flex-col rounded-xl border ">
-              <div className="h-1/2 ">
-                <div className="flex h-1/4 ">
-                  <p className="m-auto text-center font-open-sans font-medium">
-                    Habla con un <span className="text-blue-new">agente </span>{" "}
-                    para conocer más de esta propiedad.
-                  </p>
-                </div>
-                <div className="flex h-1/2 ">
-                  <div className="m-auto  h-auto w-auto rounded-full border ">
-                    <img
-                      className="h-28 w-28 rounded-full object-cover"
-                      src={mujer}
-                      alt=""
-                    />
-                  </div>
-                </div>
-                <div className="h-1/4 ">
-                  <div className="flex h-1/2 items-center justify-center  ">
-                    <img
-                      src={green}
-                      alt=""
-                      className="relative right-2 h-4 w-4 text-center"
-                    />
-                    <p className="font-open-sans text-xl font-bold text-blue-new">
-                      Yessenia Méndez
-                    </p>
-                  </div>
-                  <div className=" flex h-1/2">
-                    <p className="m-auto text-center font-open-sans text-sm font-normal text-new">
-                      Miembro desde 2022
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="flex h-1/2 flex-col items-center  gap-2 ">
-                <div className="flex h-90 w-11/12 flex-col gap-3 ">
-                  <div className=" mt-2 h-full w-full rounded-xl border">
-                    <input
-                      className="h-full w-full rounded-xl"
-                      type="text"
-                      placeholder="Nombre completo"
-                    ></input>
-                  </div>
-                  <div className=" h-full w-full rounded-xl border">
-                    <input
-                      className="h-full w-full rounded-xl"
-                      type="text"
-                      placeholder="Correo electronico"
-                    ></input>
-                  </div>
-                  <div className="h-full w-full rounded-xl border">
-                    <input
-                      className="h-full w-full rounded-xl"
-                      type="text"
-                      placeholder="Numero telefonico"
-                    ></input>
-                  </div>
-                  <div className=" mb-1 flex h-full w-full cursor-pointer rounded-xl bg-blue-new">
-                    <p className="m-auto font-fira-sans text-white">
-                      CONTACTAR AGENTE
-                    </p>
-                  </div>
-                </div>
-                <div className="  flex w-full ">
-                  <div className="relative h-full w-1/2 ">
-                    <div className=" flex h-full w-full cursor-pointer gap-2 ">
-                      <img
-                        className="m-auto h-8 w-8 rounded-full object-cover"
-                        src={call}
-                        alt=""
-                        onClick={togglePopup}
-                      />
-                      {showPopup && (
-                        <div className="popup absolute top-full w-full   shadow-xl">
-                          <p className="text-center text-lg text-black">
-                            {number}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className=" flex w-1/2 cursor-pointer  ">
-                    <div className="flex w-full">
-                      <a className="m-auto" href={wpp}>
-                        <img
-                          className="h-11 w-9 rounded-full object-cover"
-                          src={whatsapp}
-                          alt=""
-                        />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
 
-      <div className="mb-10 flex h-auto w-full gap-14">
-        <div className="flex h-1/2   w-full flex-col  xl:w-8/12">
-          <div className=" h-auto w-full">
-            <div className="mb-6 flex h-auto w-full">
-              <p className="font-open-sans  text-2xl font-bold  md:text-4xl">
-                Especificaciones
-              </p>
+        <div className="mb-10 mt-5 h-auto w-full ">
+          <div className="h-auto w-full">
+            <div className="flex h-full w-full items-center ">
+              <div className=" mb-5 flex h-full w-full ">
+                <p className="font-open-sans  text-2xl font-bold  md:text-4xl">
+                  Especificaciones
+                </p>
+              </div>
             </div>
-            <div className="m-auto  flex h-auto w-full flex-col">
-              <div className="m-auto flex h-12 w-full flex-row ">
+            <div className="  flex h-auto w-full flex-col ">
+              <div className=" flex h-12 w-full flex-row ">
                 <div className="flex h-12 w-1/2 flex-row items-center  justify-center ">
                   <div className="flex w-9  ">
                     <img src={bed} alt="" className=" h-6 w-6 md:h-7" />
@@ -498,51 +348,209 @@ const Info = ({ options, userId, isAuth }) => {
               </div>
             </div>
           </div>
+
+          <div className="hidden w-30  lg:flex"></div>
         </div>
 
-        <div className="hidden w-30  lg:flex"></div>
-      </div>
+        <div className="  flex h-auto w-full flex-col  xl:w-full">
+          <div className="mb-6 h-auto w-full">
+            <p className="font-open-sans text-2xl  font-bold md:text-4xl">
+              Descripcion
+            </p>
+          </div>
+          <div className="m-auto   flex h-full w-full md:m-0 xl:w-full ">
+            <p className="mt-2 font-open-sans text-base text-new2 md:text-xl">
+              {propertyData.description}
+            </p>
+          </div>
 
-      <div className="  flex h-auto w-full flex-col  xl:w-8/12">
-        <div className="mb-6 h-auto w-full">
-          <p className="font-open-sans text-2xl  font-bold md:text-4xl">
-            Descripcion
-          </p>
-        </div>
-        <div className="m-auto   flex h-full w-full md:m-0 xl:w-full ">
-          <p className="mt-2 font-open-sans text-base text-new2 md:text-xl">
-            {propertyData.description}
-          </p>
-        </div>
-
-        <div className="mb-8 mt-12 w-full border xl:w-full">
-          <div>
-            <APIProvider apiKey={apiKey}>
-              <div style={{ height: "400px", width: "100%", margin: "auto" }}>
-                <Map
-                  defaultZoom={13} // Aquí cambiamos zoom a defaultZoom
-                  center={coordinates.coordinates}
-                  mapId={mapId}
-                  de
-                >
-                  <AdvancedMarker
-                    onClick={() => setIsOpen(true)}
-                    position={coordinates.coordinates}
-                    defalt
-                  ></AdvancedMarker>
-                  {open && (
-                    <InfoWindow
-                      position={coordinates}
-                      onCloseClick={() => setIsOpen(false)}
-                    >
-                      {propertyData.direccion}
-                    </InfoWindow>
-                  )}
-                </Map>
-              </div>
-            </APIProvider>
+          <div className="mb-8 mt-12 w-full border xl:w-full">
+            <div>
+              <APIProvider apiKey={apiKey}>
+                <div style={{ height: "400px", width: "100%", margin: "auto" }}>
+                  <Map
+                    defaultZoom={13} // Aquí cambiamos zoom a defaultZoom
+                    center={coordinates.coordinates}
+                    mapId={mapId}
+                    de
+                  >
+                    <AdvancedMarker
+                      onClick={() => setIsOpen(true)}
+                      position={coordinates.coordinates}
+                      defalt
+                    ></AdvancedMarker>
+                    {open && (
+                      <InfoWindow
+                        position={coordinates}
+                        onCloseClick={() => setIsOpen(false)}
+                      >
+                        {propertyData.direccion}
+                      </InfoWindow>
+                    )}
+                  </Map>
+                </div>
+              </APIProvider>
+            </div>
           </div>
         </div>
+      </div>
+      <div className="mt-8 h-auto w-1/3 ">
+        <aside className=" sticky top-0 m-auto hidden h-auto w-90 gap-4  lg:flex lg:flex-col">
+          <div className=" flex h-auto w-full flex-row">
+            <div className="flex w-2/5 items-center ">
+              <p className="f text-2xl font-bold text-blue-new">
+                {propertyData.currency}
+              </p>
+            </div>
+            <div className="flex w-3/5 justify-end ">
+              <p className="text-lg font-bold sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
+                $
+                {propertyData.precio !== undefined
+                  ? propertyData.precio.toLocaleString() + " "
+                  : ""}
+              </p>
+            </div>
+          </div>
+          <div className="flex h-14 w-full flex-row gap-5 ">
+            <div className="flex  w-1/2 items-center justify-center gap-3 rounded-xl border">
+              <img
+                className="cursor-pointer"
+                src={share}
+                alt="Your alt text"
+                onClick={copyToClipboard}
+              />
+              <p
+                ref={linkRef}
+                className="cursor-pointer font-fira-sans text-sm font-bold "
+              >
+                LINK
+              </p>
+              <div className={`${copied ? "block" : "hidden"}`}>
+                <p className="text-md font-semibold text-slate-400">Copied</p>
+              </div>
+            </div>
+            <div className="flex w-1/2 items-center justify-center  gap-3 rounded-xl border">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className={`h-6 w-6 cursor-pointer ${heartClick && isAuth ? "fill-red-600 text-gray-100" : ""}`}
+                onClick={handleHeartClick}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                />
+              </svg>
+
+              <p className="cursor-pointer font-fira-sans text-sm font-bold">
+                ME GUSTA
+              </p>
+            </div>
+          </div>
+
+          <div className="h-550 w-full flex-col items-start rounded-xl  shadow-md">
+            <div className=" h-full w-full flex-col rounded-xl  shadow-md">
+              <div className="flex h-1/2 flex-col ">
+                <div className="flex h-full ">
+                  <p className="m-auto text-center font-open-sans font-medium">
+                    Habla con un <span className="text-blue-new">agente </span>{" "}
+                    para conocer más de esta propiedad.
+                  </p>
+                </div>
+                <div className="flex h-full ">
+                  <div className="m-auto  h-auto w-auto rounded-full border ">
+                    <img
+                      className="h-28 w-28 rounded-full object-cover"
+                      src={mujer}
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div className="h-full">
+                  <div className="flex h-1/2 items-center justify-center  ">
+                    <img
+                      src={green}
+                      alt=""
+                      className="relative right-2 h-4 w-4 text-center"
+                    />
+                    <p className="font-open-sans text-xl font-bold text-blue-new">
+                      Yessenia Méndez
+                    </p>
+                  </div>
+                  <div className=" flex h-1/2">
+                    <p className="m-auto text-center font-open-sans text-sm font-normal text-new">
+                      Miembro desde 2022
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex h-1/2 flex-col items-center  gap-2 ">
+                <div className="flex h-90 w-11/12 flex-col gap-3 ">
+                  <div className=" mt-2 h-full w-full rounded-xl border">
+                    <input
+                      className="h-full w-full rounded-xl"
+                      type="text"
+                      placeholder="Nombre completo"
+                    ></input>
+                  </div>
+                  <div className=" h-full w-full rounded-xl border">
+                    <input
+                      className="h-full w-full rounded-xl"
+                      type="text"
+                      placeholder="Correo electronico"
+                    ></input>
+                  </div>
+                  <div className="h-full w-full rounded-xl border">
+                    <input
+                      className="h-full w-full rounded-xl"
+                      type="text"
+                      placeholder="Numero telefonico"
+                    ></input>
+                  </div>
+                  <div className=" mb-1 flex h-full w-full cursor-pointer rounded-xl bg-blue-new">
+                    <p className="m-auto font-fira-sans text-white">
+                      CONTACTAR AGENTE
+                    </p>
+                  </div>
+                </div>
+                <div className="  flex w-full ">
+                  <div className="relative h-full w-1/2 ">
+                    <div className=" flex h-full w-full cursor-pointer gap-2 ">
+                      <img
+                        className="m-auto h-8 w-8 rounded-full object-cover"
+                        src={call}
+                        alt=""
+                        onClick={togglePopup}
+                      />
+                      {showPopup && (
+                        <div className="popup absolute top-full w-full   shadow-xl">
+                          <p className="text-center text-lg text-black">
+                            {number}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className=" flex w-1/2 cursor-pointer  ">
+                    <div className="flex w-full">
+                      <a className="m-auto" href={wpp}>
+                        <img
+                          className="h-11 w-9 rounded-full object-cover"
+                          src={whatsapp}
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
     </div>
   );

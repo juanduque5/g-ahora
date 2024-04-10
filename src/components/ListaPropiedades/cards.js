@@ -21,7 +21,7 @@ const Cards = React.memo(({ data }) => {
   const [properties, setProperties] = useState([]);
   const location = useLocation();
   const searchData = location.state && location.state.searchData;
-  console.log("search data", searchData);
+  // console.log("search data", searchData);
   const navigate = useNavigate();
 
   //Pagination

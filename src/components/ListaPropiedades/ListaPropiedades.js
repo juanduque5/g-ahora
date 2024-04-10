@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 // import { useMediaQuery } from "react-responsive";
 import { useLocation, useNavigate } from "react-router-dom";
 // import search from "../../images/search.png";
-import filter from "../../images/filter.png";
+// import filter from "../../images/filter.png";
 import down from "../../images/chevron-down.png";
 import SelectCheckBox from "./SelectCheckBox";
 import SelectBathroom from "./selectBathroom";
@@ -19,13 +19,13 @@ import Cards from "./cards";
 // import times from "../../images/times.png";
 // import { Select } from "@mui/material";
 
-import Modal from "./modal";
+// import Modal from "./modal";
 
 const ListaPropiedades = ({ isAuth, userId }) => {
   //Setting Modal functionality
   const Navigate = useNavigate();
   // const [searchDataButton, setSearchDataButton] = useState(false);
-  const [isModalOpen, setIsModalOPen] = useState(false);
+  // const [isModalOpen, setIsModalOPen] = useState(false);
   const [isOptionOpen, setIsOptionOPen] = useState(false);
   const [isOptionOpen2, setIsOptionOPen2] = useState(false);
   const [isOptionOpen3, setIsOptionOPen3] = useState(false);
@@ -34,9 +34,10 @@ const ListaPropiedades = ({ isAuth, userId }) => {
   const [filteredWords, setFilteredInformation] = useState([]);
   const [place, setPlace] = useState("");
   const [Selected, setSelected] = useState([]);
+
   const [Selected2, setSelected2] = useState([]);
-  const [value, setValue] = useState([0, 10000]);
-  const Numeros = [1, 2, 3, 4, 5, 6, "Cualquiera"];
+  // const [value, setValue] = useState([0, 10000]);
+  // const Numeros = [1, 2, 3, 4, 5, 6, "Cualquiera"];
   const bathrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const bedrooms = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -48,32 +49,42 @@ const ListaPropiedades = ({ isAuth, userId }) => {
     "400,000 - 500,000",
     "500,000+",
   ];
+
   const type = ["Casa", "Apartamento", "Lote", "Local"];
   const ventaoRenta = ["Venta", "Renta"];
   const location = useLocation();
 
   const data = location.state && location.state.filterOption;
-  const [searchData, setSearchData] = useState({
-    tipo: {
-      Casa: false,
-      Apartamento: false,
-      Local: false,
-      Lote: false,
-    },
-    uso: {
-      Venta: false,
-      Renta: false,
-      "Venta y renta": true,
-    },
-    place: {
-      location: "",
-    },
-    bathrooms: null,
-    bedrooms: null,
-    price: "",
-    minPrice: "",
-    maxPrice: "",
+  const [searchData, setSearchData] = useState(() => {
+    const storedData = JSON.parse(localStorage.getItem("searchData"));
+    return (
+      storedData || {
+        tipo: {
+          Casa: false,
+          Apartamento: false,
+          Local: false,
+          Lote: false,
+        },
+        uso: {
+          Venta: false,
+          Renta: false,
+        },
+        place: {
+          location: "",
+        },
+        bathrooms: null,
+        bedrooms: null,
+        price: "",
+        minPrice: "",
+        maxPrice: "",
+      }
+    );
   });
+
+  // Guardar datos en localStorage cada vez que searchData cambie
+  useEffect(() => {
+    localStorage.setItem("searchData", JSON.stringify(searchData));
+  }, [searchData]);
   console.log("data location", searchData);
 
   const handleSelectedFilter = (option, key) => {
@@ -86,8 +97,11 @@ const ListaPropiedades = ({ isAuth, userId }) => {
           "Venta y renta": false,
           [option]: true,
         },
+        minPrice: "",
+        maxPrice: "",
       });
     } else if (option === "Renta") {
+      localStorage.setItem("optionType", option);
       setSearchData({
         ...searchData,
         uso: {
@@ -96,6 +110,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
           "Venta y renta": false,
           [option]: true,
         },
+        price: "",
       });
     } else if (option === "bathrooms") {
       setSearchData({
@@ -113,15 +128,19 @@ const ListaPropiedades = ({ isAuth, userId }) => {
         [option]: key,
       });
     } else if (option === "min") {
-      setSearchData({
-        ...searchData,
-        minPrice: key,
-      });
+      if (!isNaN(key)) {
+        setSearchData({
+          ...searchData,
+          minPrice: key,
+        });
+      }
     } else if (option === "max") {
-      setSearchData({
-        ...searchData,
-        maxPrice: key,
-      });
+      if (!isNaN(key)) {
+        setSearchData({
+          ...searchData,
+          maxPrice: key,
+        });
+      }
     } else {
       setSearchData({
         ...searchData,
@@ -181,89 +200,89 @@ const ListaPropiedades = ({ isAuth, userId }) => {
   }, [place]);
 
   //for small devices filt
-  const [filterOption, setFilterOption] = useState({
-    venta: false,
-    renta: false,
-    nuevo: false,
-    usado: false,
-    casa: false,
-    apartamento: false,
-    local: false,
-    lote: false,
-    cuartos: "Cualquiera",
-    banos: "Cualquiera",
-    precioMin: value[0],
-    precioMax: value[1],
-  });
+  // const [filterOption, setFilterOption] = useState({
+  //   venta: false,
+  //   renta: false,
+  //   nuevo: false,
+  //   usado: false,
+  //   casa: false,
+  //   apartamento: false,
+  //   local: false,
+  //   lote: false,
+  //   cuartos: "Cualquiera",
+  //   banos: "Cualquiera",
+  //   precioMin: value[0],
+  //   precioMax: value[1],
+  // });
 
-  const rangeSelector = (event, newValue) => {
-    const precioMin = "precioMin";
-    const precioMax = "precioMax";
-    setValue(newValue);
-    console.log(newValue);
-    setFilterOption({
-      ...filterOption,
+  // const rangeSelector = (event, newValue) => {
+  //   const precioMin = "precioMin";
+  //   const precioMax = "precioMax";
+  //   setValue(newValue);
+  //   console.log(newValue);
+  //   setFilterOption({
+  //     ...filterOption,
 
-      [precioMin]: newValue[0],
-      [precioMax]: newValue[1],
-    });
-  };
+  //     [precioMin]: newValue[0],
+  //     [precioMax]: newValue[1],
+  //   });
+  // };
 
-  const handleInputMin = (event) => {
-    const precioMin = "precioMin";
-    const newValue = parseFloat(event.target.value.replace(/,/g, ""));
-    if (!isNaN(newValue)) {
-      setValue([newValue, value[1]]); // Updates slider
-    } else {
-      setValue([null, value[1]]); // Use null
-    }
+  // const handleInputMin = (event) => {
+  //   const precioMin = "precioMin";
+  //   const newValue = parseFloat(event.target.value.replace(/,/g, ""));
+  //   if (!isNaN(newValue)) {
+  //     setValue([newValue, value[1]]); // Updates slider
+  //   } else {
+  //     setValue([null, value[1]]); // Use null
+  //   }
 
-    setFilterOption({
-      ...filterOption,
+  //   setFilterOption({
+  //     ...filterOption,
 
-      [precioMin]: newValue,
-    });
-  };
+  //     [precioMin]: newValue,
+  //   });
+  // };
 
-  const handleInputMax = (event) => {
-    const precioMax = "precioMax";
-    const newValue = parseFloat(event.target.value.replace(/,/g, ""));
-    console.log("new", newValue);
-    if (!isNaN(newValue)) {
-      setValue([value[0], newValue]); // Updates slider
-    } else {
-      setValue([value[0], null]); // Use Null
-    }
+  // const handleInputMax = (event) => {
+  //   const precioMax = "precioMax";
+  //   const newValue = parseFloat(event.target.value.replace(/,/g, ""));
+  //   console.log("new", newValue);
+  //   if (!isNaN(newValue)) {
+  //     setValue([value[0], newValue]); // Updates slider
+  //   } else {
+  //     setValue([value[0], null]); // Use Null
+  //   }
 
-    setFilterOption({
-      ...filterOption,
+  //   setFilterOption({
+  //     ...filterOption,
 
-      [precioMax]: newValue,
-    });
-  };
+  //     [precioMax]: newValue,
+  //   });
+  // };
 
-  const filterSearch = (option, type) => {
-    const values = Object.keys(filterOption);
-    console.log(type);
-    for (const value of values) {
-      //if value equals type, then sets cuartos or banos to a new value
-      if (value === type) {
-        console.log("true");
-        return setFilterOption({
-          ...filterOption,
+  // const filterSearch = (option, type) => {
+  //   const values = Object.keys(filterOption);
+  //   console.log(type);
+  //   for (const value of values) {
+  //     //if value equals type, then sets cuartos or banos to a new value
+  //     if (value === type) {
+  //       console.log("true");
+  //       return setFilterOption({
+  //         ...filterOption,
 
-          [type]: option,
-        });
-        //Gets (check options) options such as venta, renta... and change is boolean
-      } else {
-        setFilterOption({
-          ...filterOption,
+  //         [type]: option,
+  //       });
+  //       //Gets (check options) options such as venta, renta... and change is boolean
+  //     } else {
+  //       setFilterOption({
+  //         ...filterOption,
 
-          [option]: !filterOption[option],
-        });
-      }
-    }
-  };
+  //         [option]: !filterOption[option],
+  //       });
+  //     }
+  //   }
+  // };
 
   //handle change
   const handleSelectedChange = (option) => {
@@ -281,14 +300,13 @@ const ListaPropiedades = ({ isAuth, userId }) => {
   };
 
   //handle changed 2
+
+  // const openModal = () => {
+  //   setIsModalOPen(true);
+  // };
+
   const handleSelectedChange2 = (option) => {
-    setSelected2([option]);
-  };
-
-  console.log("selected", Selected);
-
-  const openModal = () => {
-    setIsModalOPen(true);
+    setSelected2([option]); // Actualiza el estado Selected2
   };
 
   //Open venta or renta option
@@ -320,57 +338,57 @@ const ListaPropiedades = ({ isAuth, userId }) => {
 
   // console.log("afuera", isOptionOpen);
 
-  const closeModal = () => {
-    setIsModalOPen(false);
-    //Resets filter object if modals closed
-    setFilterOption({
-      venta: false,
-      renta: false,
-      nuevo: false,
-      usado: false,
-      casa: false,
-      apartamento: false,
-      local: false,
-      lote: false,
-      cuartos: "Cualquiera",
-      banos: "Cualquiera",
-      precioMin: 0,
-      precioMax: 10000,
-    });
-    setValue([0, 10000]);
-  };
+  // const closeModal = () => {
+  //   setIsModalOPen(false);
+  //   //Resets filter object if modals closed
+  //   setFilterOption({
+  //     venta: false,
+  //     renta: false,
+  //     nuevo: false,
+  //     usado: false,
+  //     casa: false,
+  //     apartamento: false,
+  //     local: false,
+  //     lote: false,
+  //     cuartos: "Cualquiera",
+  //     banos: "Cualquiera",
+  //     precioMin: 0,
+  //     precioMax: 10000,
+  //   });
+  //   setValue([0, 10000]);
+  // };
 
-  const closed = () => {
-    setFilterOption({
-      venta: false,
-      renta: false,
-      nuevo: false,
-      usado: false,
-      casa: false,
-      apartamento: false,
-      local: false,
-      lote: false,
-      cuartos: "Cualquiera",
-      banos: "Cualquiera",
-      precioMin: 0,
-      precioMax: 10000,
-    });
-    setValue([0, 10000]);
-  };
+  // const closed = () => {
+  //   setFilterOption({
+  //     venta: false,
+  //     renta: false,
+  //     nuevo: false,
+  //     usado: false,
+  //     casa: false,
+  //     apartamento: false,
+  //     local: false,
+  //     lote: false,
+  //     cuartos: "Cualquiera",
+  //     banos: "Cualquiera",
+  //     precioMin: 0,
+  //     precioMax: 10000,
+  //   });
+  //   setValue([0, 10000]);
+  // };
 
-  const colorMap = {
-    Cualquiera: true,
-  };
+  // const colorMap = {
+  //   Cualquiera: true,
+  // };
 
-  const nums = {
-    1: true,
-    2: true,
-    3: true,
-    4: true,
-    5: true,
-    6: true,
-    7: true,
-  };
+  // const nums = {
+  //   1: true,
+  //   2: true,
+  //   3: true,
+  //   4: true,
+  //   5: true,
+  //   6: true,
+  //   7: true,
+  // };
 
   //handle list of properties search
   const handleSearch = () => {
@@ -388,7 +406,11 @@ const ListaPropiedades = ({ isAuth, userId }) => {
             >
               <div className="m-auto w-90">
                 <p className=" font-open-sans text-base font-bold lg:text-sm xl:text-base">
-                  {Selected2.length > 0 ? Selected2 : "Rent or Sell"}
+                  {searchData.uso.Renta
+                    ? "Renta"
+                    : searchData.uso.Venta
+                      ? "Venta"
+                      : "Rent or Sell"}
                 </p>
               </div>
 
@@ -405,6 +427,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
                 opciones={ventaoRenta}
                 handleSearchData={searchData}
                 opcionesSeleccionadas={Selected}
+                Selected2={Selected2}
                 handleSelectedChange2={handleSelectedChange2}
                 handleSelectedFilter={handleSelectedFilter}
               />
@@ -521,7 +544,14 @@ const ListaPropiedades = ({ isAuth, userId }) => {
             <div onClick={openOption4} className="m-auto flex h-full w-90">
               <div className="m-auto w-90">
                 <p className="m-auto truncate font-open-sans text-base font-bold lg:text-sm xl:text-base">
-                  {searchData.price ? "$ " + searchData.price : "Price"}
+                  {searchData.price
+                    ? "$ " + searchData.price
+                    : searchData.minPrice || searchData.maxPrice
+                      ? "$ " +
+                        Number(searchData.minPrice).toLocaleString() +
+                        " - " +
+                        Number(searchData.maxPrice).toLocaleString()
+                      : "Price"}
                 </p>
               </div>
 
@@ -566,7 +596,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
       </div> */}
 
       <div>
-        <Modal
+        {/* <Modal
           open={isModalOpen}
           close={closeModal}
           filterOption={filterOption}
@@ -581,7 +611,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
           value={value}
         >
           text
-        </Modal>
+        </Modal> */}
       </div>
       <div className="mt-8">
         <Cards

@@ -264,7 +264,12 @@ class App extends Component {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Vacations />
                 </LocalizationProvider>
-                <Cards title={true} infoH={newArr} vacation={true} />
+                <Cards
+                  title={true}
+                  infoH={newArr}
+                  vacation={true}
+                  userId={userId}
+                />
                 <Footer />
               </>
             }

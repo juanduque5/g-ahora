@@ -515,6 +515,7 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                       <p className="font-mono text-lg font-semibold ">USD</p>
                     </div>
                   </div>
+                  <p>{"$ " + Number(info.precio).toLocaleString()}</p>
                 </div>
               </div>
             </div>

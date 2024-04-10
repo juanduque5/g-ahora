@@ -389,12 +389,3 @@ const PropiedadesYa = () => {
   );
 };
 export default PropiedadesYa;
-
-{
-  /* <span className="select-none text-yellow-new">Encuentra</span> o{" "}
-                <span className="select-none text-yellow-new">
-                  {" "}
-                  promociona{" "}
-                </span>
-                tu propiedad en PropiedadesAhora  */
-}

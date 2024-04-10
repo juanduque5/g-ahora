@@ -10,7 +10,7 @@ const socialMedia = ({
 }) => {
   return (
     <div className="flex h-1/5 w-full justify-center">
-      <div className="mt-2 flex w-auto gap-2 ">
+      <div className=" flex w-auto gap-2 ">
         <Icon socialLinks={socialLinks.whatsapp} imagen={wpp} />
         <Icon socialLinks={socialLinks.instagram} imagen={instagram} />
         <Icon socialLinks={socialLinks.facebook} imagen={facebook} />

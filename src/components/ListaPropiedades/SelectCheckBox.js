@@ -6,6 +6,7 @@ function SelectCheckbox({
   handleSelectedFilter,
   handleSearchData,
 }) {
+  console.log("searchData awlwct", handleSearchData.uso);
   return (
     <div className="m-auto w-full  rounded-lg shadow-md">
       {opciones.map((option) => (
@@ -17,6 +18,7 @@ function SelectCheckbox({
             onChange={() => {
               handleSelectedFilter(option);
               handleSelectedChange2(option);
+              // localStorage.setItem("searchData", handleSearchData.uso[option]);
             }}
           />
           <p className="flex w-full select-none items-center ">{option}</p>

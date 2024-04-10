@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useCallback } from "react";
-import down from "../../images/chevron-down.png";
-import SelectCheckBox from "./selectOption";
+// import down from "../../images/chevron-down.png";
+// import SelectCheckBox from "./selectOption";
 import Cards from "./cards";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Favoritos = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [isOptionOpen, setIsOptionOPen] = useState(false);
-  const ventaoRenta = ["Venta", "Renta"];
-  const [Selected, setSelected] = useState([]);
+  // const [isOptionOpen, setIsOptionOPen] = useState(false);
+  // const ventaoRenta = ["Venta", "Renta"];
+  // const [Selected, setSelected] = useState([]);
   const [properties, setProperties] = useState([]);
-  const openOption = () => {
-    setIsOptionOPen(!isOptionOpen);
-  };
+  // const openOption = () => {
+  //   setIsOptionOPen(!isOptionOpen);
+  // };
 
-  console.log('favoritos ID', id)
+  console.log("favoritos ID", id);
 
   const redirect = (info) => {
     console.log("id", info.id);
@@ -23,21 +23,21 @@ const Favoritos = () => {
     navigate(`/PropertyInfo/${info.id}`);
   };
 
-  const handleSelectedChange = (option) => {
-    if (Selected.includes(option)) {
-      const newSelected = Selected.filter((items) => items !== option);
+  // const handleSelectedChange = (option) => {
+  //   if (Selected.includes(option)) {
+  //     const newSelected = Selected.filter((items) => items !== option);
 
-      if (!newSelected) {
-        setSelected([]);
-      } else {
-        setSelected([...newSelected]);
-      }
-    } else {
-      setSelected([...Selected, option]);
-    }
+  //     if (!newSelected) {
+  //       setSelected([]);
+  //     } else {
+  //       setSelected([...newSelected]);
+  //     }
+  //   } else {
+  //     setSelected([...Selected, option]);
+  //   }
 
-    // console.log("option", option);
-  };
+  //   // console.log("option", option);
+  // };
 
   useEffect(() => {
     // Useeffect will be use to call favorite properties depending on the id
@@ -118,7 +118,7 @@ const Favoritos = () => {
         <p className="m-auto text-xl font-bold">Favoritos</p>
       </div>
       <div className="mb-7 mt-8 flex h-auto w-full items-center">
-        <div className="  h-12 w-44 cursor-pointer border">
+        {/* <div className="  h-12 w-44 cursor-pointer border">
           <div onClick={openOption} className="flex h-full  ">
             <p className="m-auto font-open-sans text-base font-bold lg:text-sm xl:text-base">
               Venta o alquiler
@@ -142,9 +142,9 @@ const Favoritos = () => {
               handleSelectedChange={handleSelectedChange}
             />
           </div>
-        </div>
+        </div> */}
 
-        <div className={`ml-auto ${!properties.length ? "hidden" : "block"}`}>
+        <div className={`text-md ${!properties.length ? "hidden" : "block"}`}>
           <p>Resultados: {properties.length}</p>
         </div>
       </div>

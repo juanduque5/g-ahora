@@ -145,7 +145,7 @@ const Vacations = () => {
                     <div className="flex h-full w-full items-center md:m-auto ">
                       <input
                         onChange={locationInfo}
-                        className="text-md m-auto h-11 w-full truncate rounded-sm border border-blue-300  focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-300 md:w-95 md:p-0"
+                        className="text-md m-auto h-11 w-full truncate rounded-sm border border-yellow-new  focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-300 md:w-95 md:p-0"
                         type="text"
                         placeholder="City or Localities"
                         value={location}
@@ -232,7 +232,7 @@ const Vacations = () => {
                   </div>
                   <div
                     onClick={searchProperties}
-                    className=" flex h-11 w-full cursor-pointer truncate rounded-xl bg-yellow-new md:m-auto md:h-90 md:w-2/5"
+                    className=" flex h-9 w-full cursor-pointer truncate rounded-xl bg-yellow-new md:m-auto md:h-4/5 md:w-2/5"
                   >
                     <p className="m-auto truncate text-center font-fira-sans text-sm  font-semibold text-white md:text-sm lg:text-base xl:text-xl">
                       SEARCH
