@@ -10,10 +10,14 @@ import car from "../../images/car.png";
 import house from "../../images/house.png";
 import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
+import language from "./language";
 
 import "./Cards.css";
 
-const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
+const Cards = ({ title, userId, vacation }) => {
+  const storedLanguage = localStorage.getItem("language") || "ES"; // Obtener el idioma almacenado en localStorage o establecer en español por defecto
+
+  const { explore } = language[storedLanguage];
   console.log("userId", userId);
   const [properties, setProperties] = useState([]);
   const token = localStorage.getItem("token") ? true : false;
@@ -171,7 +175,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
               </p>
             ) : (
               <p className="m-auto text-center  font-open-sans text-3xl font-semibold">
-                Explora propiedades cerca de ti
+                {explore}
               </p>
             )}
           </div>
@@ -282,7 +286,7 @@ const Cards = ({ title, infoH, userId, isAuth, vacation }) => {
             </div>
           ))}
         </div>
-        <div className="mt-5 flex justify-center mb-5">
+        <div className="mb-5 mt-5 flex justify-center">
           {getPageNumbers().map((number, index) => (
             <button
               key={index}

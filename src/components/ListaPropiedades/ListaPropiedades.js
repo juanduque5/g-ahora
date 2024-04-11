@@ -33,7 +33,15 @@ const ListaPropiedades = ({ isAuth, userId }) => {
   const [isOptionOpen5, setIsOptionOPen5] = useState(false);
   const [filteredWords, setFilteredInformation] = useState([]);
   const [place, setPlace] = useState("");
-  const [Selected, setSelected] = useState([]);
+  const [Selected, setSelected] = useState(() => {
+    const storedSelected = localStorage.getItem("Selected");
+    return storedSelected ? JSON.parse(storedSelected) : [];
+  });
+
+  // Guardar el estado actual de Selected en localStorage cada vez que cambie
+  useEffect(() => {
+    localStorage.setItem("Selected", JSON.stringify(Selected));
+  }, [Selected]);
 
   const [Selected2, setSelected2] = useState([]);
   // const [value, setValue] = useState([0, 10000]);
@@ -287,17 +295,29 @@ const ListaPropiedades = ({ isAuth, userId }) => {
   //handle change
   const handleSelectedChange = (option) => {
     if (Selected.includes(option)) {
-      const newSelected = Selected.filter((items) => items !== option);
-      console.log("newSelected", newSelected);
-      if (!newSelected) {
-        setSelected([]);
-      } else {
-        setSelected([...newSelected]);
-      }
+      setSelected(Selected.filter((item) => item !== option));
     } else {
       setSelected([...Selected, option]);
     }
   };
+
+  // Recuperar el estado almacenado en localStorage al inicializar el componente
+  // if (true) {
+  //   console.log("searchData", searchData);
+  //   console.log("searchData.tipo", searchData.tipo);
+  //   const tipoKeys = Object.keys(searchData.tipo);
+  //   console.log("tipoKeys", tipoKeys);
+  //   const data = tipoKeys
+  //     .filter(([key, value]) => value === true)
+  //     .map(([key, value]) => key);
+
+  //   console.log("aaadata", data);
+  //   if (data.length > 0) {
+  //     setSelected((prevState) => [...prevState, data]);
+  //   }
+  // }
+
+  console.log("selected", Selected);
 
   //handle changed 2
 

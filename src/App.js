@@ -129,15 +129,16 @@ class App extends Component {
     }, milliseconds);
   };
 
-  // fill = (info) => {
-  //   // console.log("app", info);
-  //   this.setState((prevState) => ({
-  //     new: info,
-  //   }));
-  // };
-
   render() {
     const { properties, isAuth, userId } = this.state;
+
+    const storedLanguage = localStorage.getItem("language");
+    if (!storedLanguage) {
+      localStorage.setItem("language", "ES"); // Establecer el idioma predeterminado en español si no hay ninguno almacenado
+      window.location.reload(); // Recargar la página para aplicar el nuevo idioma
+    }
+
+    console.log("language", storedLanguage);
 
     const first = localStorage.getItem("first");
     const last = localStorage.getItem("last");
@@ -166,23 +167,6 @@ class App extends Component {
 
     const newArr = properties.slice(0, 3);
 
-    // console.log(
-    //   "first:",
-    //   first,
-    //   "last:",
-    //   last,
-    //   "email:",
-    //   email,
-    //   "isAuth:",
-    //   isAuth,
-    //   "token:",
-    //   token,
-    //   "userId:",
-    //   userId,
-    //   "url",
-    //   url.length,
-    // );
-
     return (
       <div>
         <Routes>
@@ -196,12 +180,7 @@ class App extends Component {
                   logoutHandler={this.logoutHandler}
                 />
                 <PropiedadesYa />
-                <Cards
-                  title={true}
-                  infoH={newArr}
-                  isAuth={isAuth}
-                  userId={userId}
-                />
+                <Cards title={true} userId={userId} />
                 <PropiedadesYaS />
                 <Footer />
               </>

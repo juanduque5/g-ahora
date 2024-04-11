@@ -4,19 +4,32 @@ import React from "react";
 // import imageFilter from "../../images/image-filter.png";
 import agente from "../../images/agente.png";
 import "./PropiedadesYaS.css";
+import language from "./language";
 
 const PropiedadesYaS = () => {
+  const storedLanguage = localStorage.getItem("language") || "ES"; // Obtener el idioma almacenado en localStorage o establecer en español por defecto
+
+  const {
+    erestuun,
+    realstate,
+    orjust,
+    discoverhow,
+    propiedades,
+    puede,
+    herramientas,
+    uno,
+    dos,
+    tres,
+    cuatro,
+  } = language[storedLanguage];
   return (
     <div className="ajusta">
       <div className="m-auto mb-16 mt-16 flex  h-auto w-full flex-col  md:w-full">
         <div className="m-auto mb-4 flex h-auto flex-col justify-center  md:mb-8 lg:mb-8 xl:mb-8">
           <div className="m-auto flex h-auto w-full flex-col justify-center ">
             <p className="text-center  font-fira-sans   text-2xl font-extrabold md:text-3xl lg:text-4xl xl:text-6xl">
-              ¿ Eres un{" "}
-              <span className="text-blue-new  ">
-                agente inmobiliario o solo
-              </span>{" "}
-              quieres vender tu propiedad ?
+              {erestuun} <span className="text-blue-new  ">{realstate}</span>{" "}
+              {orjust}
             </p>
           </div>
           {/* <div className="m-auto flex  h-auto w-11/12 justify-center ">
@@ -28,16 +41,10 @@ const PropiedadesYaS = () => {
         <div className="mb-14 flex flex-col justify-center  md:mb-16 lg:mb-16 xl:mb-16">
           <div className="m-auto flex w-full">
             <p className="w-full   text-center  font-open-sans text-xl font-semibold md:text-2xl lg:text-3xl xl:text-4xl">
-              Descubre como <span className="text-blue-new">PropiedadesYa</span>{" "}
-              puede impulsar tus ventas
-              {/* <span className="md:hidden lg:hidden xl:hidden">tus ventas</span> */}
+              {discoverhow + " "}
+              <span className="text-blue-new">{propiedades}</span> {puede}
             </p>
           </div>
-          {/* <div className="m-auto flex w-full ">
-            <p className="font-open-sans m-auto hidden w-11/12  text-center  text-xl  font-semibold md:block md:text-2xl lg:block  lg:text-3xl xl:block xl:text-5xl">
-              tus ventas
-            </p>
-          </div> */}
         </div>
         <div className="h-auto">
           <div className="flex h-auto flex-col gap-8 md:h-350 md:flex-row md:gap-10   lg:h-450 lg:flex-row xl:h-500 xl:flex-row">
@@ -56,10 +63,7 @@ const PropiedadesYaS = () => {
             </div>
             <div className=" flex h-5/6 w-full flex-col  md:h-full md:w-full">
               <div className="mb-6 w-full  text-xl md:mb-0 md:text-xl lg:text-2xl xl:text-2xl">
-                <p>
-                  Las mejores y más modernas herramientas para promocionar tus
-                  propiedades.
-                </p>
+                <p>{herramientas}</p>
               </div>
               <div className="m-auto flex h-96 w-11/12 flex-col  ">
                 <div className="flex h-full w-full flex-row  ">
@@ -81,7 +85,7 @@ const PropiedadesYaS = () => {
                   </div>
                   <div className="flex w-full items-center justify-start ">
                     <p className="ml-2 font-open-sans text-lg font-bold md:text-lg lg:text-xl">
-                      Catálogo digital de tus propiedades
+                      {uno}
                     </p>
                   </div>
                 </div>
@@ -104,7 +108,7 @@ const PropiedadesYaS = () => {
                   </div>
                   <div className="flex w-full items-center justify-start ">
                     <p className="ml-2 font-open-sans text-lg font-bold md:text-lg lg:text-xl">
-                      Generador de historias para Facebook, Instagram o Whatsapp
+                      {dos}
                     </p>
                   </div>
                 </div>
@@ -127,7 +131,7 @@ const PropiedadesYaS = () => {
                   </div>
                   <div className="flex w-full items-center justify-start ">
                     <p className="ml-2 font-open-sans text-lg font-bold md:text-lg lg:text-xl">
-                      Generador de páginas web para tus propiedades
+                      {tres}
                     </p>
                   </div>
                 </div>
@@ -150,7 +154,7 @@ const PropiedadesYaS = () => {
                   </div>
                   <div className="flex w-full items-center justify-start ">
                     <p className="ml-2  font-open-sans text-lg font-bold md:text-lg lg:text-xl">
-                      Paquetes especiales para agencias inmobiliarias
+                      {cuatro}
                     </p>
                   </div>
                 </div>

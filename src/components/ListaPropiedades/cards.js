@@ -212,7 +212,8 @@ const Cards = React.memo(({ data }) => {
             }, 4000);
           }
         }
-      } else if (data === null && !token && !userId) {
+        //if data is null, and user is not auth
+      } else if (!token && !userId) {
         const response = await fetch(
           `http://localhost:2001/properties/info/${token}/${userId}`,
         );
@@ -220,19 +221,30 @@ const Cards = React.memo(({ data }) => {
           console.log("Error al obtener datos iniciales");
         }
 
+        localStorage.removeItem("searchData");
+        localStorage.removeItem("Selected");
+
+        console.log("se activo 1");
+
         const data = await response.json();
         setProperties(data.data);
         setTimeout(() => {
           setSkeleton(false);
           console.log("hagl se ha vuelto false después de 2 segundos");
         }, 4000);
-      } else if (data === null && token && userId) {
+
+        //if data is filled in, and user is auth
+      } else if (token && userId) {
         const response = await fetch(
           `http://localhost:2001/properties/info/${token}/${userId}`,
         );
         if (!response.ok) {
           console.log("Error al obtener datos iniciales");
         }
+
+        localStorage.removeItem("searchData");
+        localStorage.removeItem("Selected");
+        console.log("se activo 2");
 
         const data = await response.json();
         setProperties(data.data);

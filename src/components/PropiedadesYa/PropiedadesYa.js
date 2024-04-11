@@ -6,19 +6,21 @@ import down from "../../images/chevron-down.png";
 import "./PropiedadesYa.css";
 import SelectCheckBox from "./SelectCheckBox";
 import SearchBox from "./SearchBox";
+import language from "./language";
 
 const PropiedadesYa = () => {
-  // const opciones = ["Opción 1", "Opción 2", "Opción 3"];
-  // const [opcionSeleccionada, setOpcionSeleccionada] = useState("");
+  const storedLanguage = localStorage.getItem("language") || "ES";
+  const { find, or, promote, rest, rest2, rest3, rest4, search } =
+    language[storedLanguage];
 
-  // const handleSeleccionarOpcion = (e) => {
-  //   setOpcionSeleccionada(e.target.value);
-  // };
   const Navigate = useNavigate();
+
   const [isVentaOption, setIsVentaOption] = useState(false);
   const [isTypeOption, setTypeOption] = useState(false);
   const ventaoRenta = ["Venta", "Renta", "Venta y renta"];
-  const type = ["Casa", "Apartamento", "Lote", "Local"];
+  const sellorRent = ["Sell", "Rent", "Sell and Rent"];
+  const tipo = ["Casa", "Apartamento", "Lote", "Local"];
+  const type = ["House", "Apartment", "Land lot", "Premises"];
   const [filteredWords, setFilteredInformation] = useState([]);
   const [selectedUso, setSelectedUso] = useState(["Sell and rent"]);
   const [Selected, setSelected] = useState([]);
@@ -39,6 +41,20 @@ const PropiedadesYa = () => {
     },
     place: {
       location: "",
+    },
+  });
+
+  const [filterOptionEn, setFilterOptionEn] = useState({
+    tipo: {
+      House: false,
+      Apartment: false,
+      "Land lot": false,
+      Premises: false,
+    },
+    uso: {
+      Sell: false,
+      Rent: false,
+      "Sell and Rent": true,
     },
   });
 
@@ -65,29 +81,49 @@ const PropiedadesYa = () => {
   //Filtering type / used property
   const handleSelectedChange = (key) => {
     const option = key;
-    if (option === "Venta") {
+    if (option === "Venta" || option === "Sell") {
+      const venta = "Venta";
       setFilterOption({
         ...filterOption,
         uso: {
           ...filterOption.uso,
           Renta: false,
           "Venta y renta": false,
-          [option]: true,
+          [venta]: true,
+        },
+      });
+      setFilterOptionEn({
+        ...filterOptionEn,
+        uso: {
+          ...filterOptionEn.uso,
+          Rent: false,
+          "Sell and Rent": false,
+          Sell: true,
         },
       });
       setSelectedUso(option);
-    } else if (option === "Renta") {
+    } else if (option === "Renta" || option === "Rent") {
+      const renta = "Renta";
       setFilterOption({
         ...filterOption,
         uso: {
           ...filterOption.uso,
           Venta: false,
           "Venta y renta": false,
-          [option]: true,
+          [renta]: true,
+        },
+      });
+      setFilterOptionEn({
+        ...filterOptionEn,
+        uso: {
+          ...filterOptionEn.uso,
+          Rent: true,
+          "Sell and Rent": false,
+          Sell: false,
         },
       });
       setSelectedUso(option);
-    } else if (option === "Venta y renta") {
+    } else if (option === "Venta y renta" || option === "Sell and Rent") {
       setFilterOption({
         ...filterOption,
         uso: {
@@ -97,13 +133,56 @@ const PropiedadesYa = () => {
           "Venta y renta": true,
         },
       });
+      setFilterOptionEn({
+        ...filterOptionEn,
+        uso: {
+          ...filterOptionEn.uso,
+          Rent: true,
+          "Sell and Rent": true,
+          Sell: true,
+        },
+      });
       setSelectedUso(option);
     } else {
+      let mappedOption;
+      let mappedOption2;
+      switch (option) {
+        case "Casa":
+        case "House":
+          mappedOption = "Casa";
+          mappedOption2 = "House";
+          break;
+        case "Apartamento":
+        case "Apartment":
+          mappedOption = "Apartamento";
+          mappedOption2 = "Apartment";
+          break;
+        case "Local":
+        case "Premises":
+          mappedOption = "Local";
+          mappedOption2 = "Premises";
+          break;
+        case "Lote":
+        case "Land lot":
+          mappedOption = "Lote";
+          mappedOption2 = "Land lot";
+          break;
+        default:
+          mappedOption = "";
+      }
+
       setFilterOption({
         ...filterOption,
         tipo: {
           ...filterOption.tipo,
-          [option]: !filterOption.tipo[option],
+          [mappedOption]: !filterOption.tipo[mappedOption],
+        },
+      });
+      setFilterOptionEn({
+        ...filterOptionEn,
+        tipo: {
+          ...filterOptionEn.tipo,
+          [mappedOption2]: !filterOptionEn.tipo[mappedOption2],
         },
       });
     }
@@ -208,21 +287,18 @@ const PropiedadesYa = () => {
           <div className="flex h-2/5 w-full flex-col ">
             <div className="my-auto flex w-full  select-none">
               <p className="m-auto select-none font-fira-sans text-2xl font-extrabold not-italic text-white sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl 2xl:text-7xl">
-                <span className="select-none text-yellow-new">Find</span> or{" "}
-                <span className="select-none text-yellow-new">promote</span>{" "}
-                your property on PropiedadesAhora ✌️
+                <span className="select-none text-yellow-new">{find}</span> {or}{" "}
+                <span className="select-none text-yellow-new">{promote}</span>{" "}
+                {rest} ✌️
               </p>
             </div>
           </div>
           <div className="h-1/5 ">
             <p className="mb-3 font-open-sans  text-sm font-semibold not-italic text-white md:hidden">
-              Tu elección segura para el éxito en bienes raíces en Guatemala.
+              {rest2}
             </p>
             <p className="hidden font-open-sans text-sm font-semibold not-italic  text-white sm:text-base md:block md:text-base lg:text-3xl xl:text-3xl 2xl:text-3xl">
-              {/* Tu elección segura para el éxito en bienes raíces en Guatemala.
-              Únete a nosotros y toma el control de tu futuro inmobiliario.*/}
-              Your secure choice for success in real estate in Guatemala. Join
-              us and take control of your real estate future.
+              {rest2}
             </p>
           </div>
           <div className="aqui  flex  w-full   sm:w-full md:h-1/6 lg:h-1/4 xl:h-1/4">
@@ -253,8 +329,14 @@ const PropiedadesYa = () => {
                       <SelectCheckBox
                         type={false}
                         handleSelected2={handleSelected2}
-                        opciones={ventaoRenta}
-                        opcionesSeleccionadas={filterOption}
+                        opciones={
+                          storedLanguage === "ES" ? ventaoRenta : sellorRent
+                        }
+                        opcionesSeleccionadas={
+                          storedLanguage === "ES"
+                            ? filterOption
+                            : filterOptionEn
+                        }
                         handleSelectedChange={handleSelectedChange}
                       />
                     </div>
@@ -289,8 +371,12 @@ const PropiedadesYa = () => {
                     >
                       <SelectCheckBox
                         type={true}
-                        opciones={type}
-                        opcionesSeleccionadas={filterOption}
+                        opciones={storedLanguage === "ES" ? tipo : type}
+                        opcionesSeleccionadas={
+                          storedLanguage === "ES"
+                            ? filterOption
+                            : filterOptionEn
+                        }
                         handleSelectedChange={handleSelectedChange}
                         handleSelected={handleSelected}
                       />
@@ -308,7 +394,7 @@ const PropiedadesYa = () => {
                         onChange={locationInfo}
                         className="text-md m-auto h-9 w-full truncate rounded-sm border border-blue-300 pl-4 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-300 md:w-95 md:p-0"
                         type="text"
-                        placeholder="City or Localities"
+                        placeholder={rest4}
                         value={location}
                       ></input>
                     </div>
@@ -328,63 +414,21 @@ const PropiedadesYa = () => {
                     className="m-auto flex h-9 w-full cursor-pointer rounded-xl bg-blue-new md:mr-2 md:h-16 md:w-30 "
                   >
                     <p className="text-md m-auto text-center font-fira-sans font-bold text-white md:text-sm lg:text-base xl:text-base">
-                      SEARCH
+                      {search}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            {/* <div className=" flex h-56 w-full flex-col  md:hidden">
-              <div className="flex h-full justify-center  ">
-                <div className="m-auto flex h-5/6 w-full cursor-pointer border-2 bg-white hover:border-blue-new">
-                  <p className="m-auto text-center font-open-sans text-base font-bold">
-                    Venta o Alquiler
-                  </p>
-                </div>
-              </div>
-              <div className="flex h-full justify-center  ">
-                <div className="m-auto flex h-5/6 w-full cursor-pointer border-2 bg-white hover:border-blue-new">
-                  <p className="m-auto text-center font-open-sans text-base font-bold">
-                    Tipo de inmueble
-                  </p>
-                </div>
-              </div>
-              <div className="flex h-full justify-center  ">
-                <div className=" m-auto flex h-5/6 w-full cursor-pointer border-2  bg-white hover:border-blue-new">
-                  <p className="m-auto text-center font-open-sans text-base font-bold">
-                    Lugar
-                  </p>
-                </div>
-              </div>
-              <div className="flex h-full justify-center ">
-                <div className="m-auto flex h-5/6 w-full cursor-pointer rounded-xl bg-blue-new">
-                  <p className="m-auto text-center font-fira-sans text-base font-bold text-white ">
-                    Buscar Propiedad
-                  </p>
-                </div>
-              </div>
-            </div> */}
           </div>
 
           <div className="flex h-15 w-full justify-center">
             <p className="m-auto font-open-sans text-xl font-semibold text-white">
-              Find what you're looking for
+              {rest3}
             </p>
           </div>
         </div>
       </div>
-      {/* <div>
-        <label>Selecciona una opción:</label>
-        <select value={opcionSeleccionada} onChange={handleSeleccionarOpcion}>
-          <option value="">Selecciona una opción</option>
-          {opciones.map((opcion) => (
-            <option key={opcion} value={opcion}>
-              {opcion}
-            </option>
-          ))}
-        </select>
-        {opcionSeleccionada && <p>Opción seleccionada: {opcionSeleccionada}</p>}
-      </div> */}
     </div>
   );
 };

@@ -5,14 +5,36 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 import logo from "../../images/PROPIEADES_AHORAWEB-02.png";
 import down from "../../images/chevron-down.png";
+import language from "./language";
 
 const Header = ({ logged, isAuth, logoutHandler }) => {
   // console.log("isAuth", isAuth);
   // window.location.reload();
   const navigate = useNavigate();
+
   const [menu, setMenu] = useState(false);
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
   const [languageOptions, setLanguageOptions] = useState(false);
+  const storedLanguage = localStorage.getItem("language") || "ES"; // Obtener el idioma almacenado en localStorage o establecer en español por defecto
+
+  const handleLanguageSelect = (newLanguage) => {
+    localStorage.setItem("language", newLanguage); // Guardar el idioma seleccionado en localStorage
+    window.location.reload(); // Recargar la página para aplicar el nuevo idioma
+  };
+
+  const {
+    list,
+    pricing,
+    vacations,
+    publica,
+    login,
+    register,
+    account,
+    properties,
+    catalog,
+    saved,
+    logout,
+  } = language[storedLanguage];
   const location = useLocation();
 
   const handleClick = () => {
@@ -80,9 +102,11 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
       });
   };
 
-  console.log(menu);
+  // console.log(menu);
 
-  console.log("Logged in:", logged);
+  // console.log("Logged in:", logged);
+
+  console.log(list, pricing);
 
   return (
     // absolute top left
@@ -103,26 +127,24 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               className="m-auto hidden w-30  cursor-pointer lg:block"
               onClick={handleClick}
             >
-              <h1 className="text-center text-base font-semibold ">
-                List of Properties
-              </h1>
+              <h1 className="text-center text-base font-semibold ">{list}</h1>
             </div>
             <div className="m-auto hidden w-30  cursor-pointer lg:block">
               <h1 className="text-center text-base font-semibold">
-                <Link to="/Publica"> Pricing</Link>
+                <Link to="/Publica"> {pricing}</Link>
               </h1>
             </div>
           </div>
           <div className="m-auto flex h-3/4 w-1/2 ">
             <div className="m-auto hidden w-1/2 cursor-pointer  lg:block">
               <p className="ml-16 text-base font-semibold">
-                <Link to="/Vacations">🏖️️ Find a place for Vacations</Link>
+                <Link to="/Vacations">🏖️️ {vacations}</Link>
               </p>
             </div>
             <div className="m-auto hidden h-90 w-1/2  justify-end  lg:flex ">
               <div className="hidden w-1/2 cursor-pointer items-center  lg:flex">
                 <p className="m-auto  text-base font-bold text-blue-new underline">
-                  Publicar propiedad
+                  {publica}
                 </p>
               </div>
               <div className="relative my-auto w-auto  md:w-2/5">
@@ -213,11 +235,17 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                       }`}
                     >
                       <div className="flex flex-col rounded-lg shadow-xl">
-                        <div className="cursor-pointer  border-b text-blue-new hover:bg-blue-dark hover:text-white">
-                          <p>EN</p>
-                        </div>
-                        <div className=" cursor-pointer text-blue-new hover:bg-blue-dark hover:text-white">
+                        <div
+                          onClick={() => handleLanguageSelect("ES")}
+                          className={`cursor-pointer border-b text-blue-new   ${storedLanguage === "ES" ? " bg-blue-dark text-white" : ""}`}
+                        >
                           <p>ES</p>
+                        </div>
+                        <div
+                          onClick={() => handleLanguageSelect("EN")}
+                          className={`cursor-pointer border-b text-blue-new   ${storedLanguage === "EN" ? " bg-blue-dark text-white" : ""}`}
+                        >
+                          <p>EN</p>
                         </div>
                       </div>
                     </div>
@@ -239,43 +267,43 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                           onClick={() => handleAuth("account")}
                           className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
                         >
-                          <p className="m-auto">Account</p>
+                          <p className="m-auto">{account}</p>
                         </div>
                         <div
                           onClick={() => handleAuth("propiedades")}
                           className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
                         >
-                          <p className="m-auto">Propiedades</p>
+                          <p className="m-auto">{properties}</p>
                         </div>
                         <div
                           onClick={() => handleAuth("catalogo")}
                           className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
                         >
-                          <p className="m-auto">Catalogo</p>
+                          <p className="m-auto">{catalog}</p>
                         </div>
                         <div
                           onClick={() => handleAuth("favoritos")}
                           className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
                         >
-                          <p className="m-auto">Favoritos</p>
+                          <p className="m-auto">{saved}</p>
                         </div>
                         <div
                           onClick={logoutHandler}
                           className="flex cursor-pointer rounded-sm rounded-b-md border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white"
                         >
-                          <p className="m-auto">Log out</p>
+                          <p className="m-auto">{logout}</p>
                         </div>
                       </div>
                     ) : (
                       <div className=" rounded-md border bg-white shadow-2xl">
                         <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
                           <p className="m-auto">
-                            <Link to="/Login">Login</Link>
+                            <Link to="/Login">{login}</Link>
                           </p>
                         </div>
                         <div className="flex cursor-pointer border-b border-slate-200 text-blue-new hover:bg-blue-dark hover:text-white">
                           <p className="m-auto">
-                            <Link to="/Register">Register</Link>
+                            <Link to="/Register">{register}</Link>
                           </p>
                         </div>
                       </div>
@@ -330,7 +358,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               className="w-full cursor-pointer "
             >
               <p className="flex h-9 items-center justify-center border font-fira-sans font-bold   text-new3">
-                Account
+                {account}
               </p>
             </div>
             <div
@@ -338,7 +366,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               className="w-full cursor-pointer "
             >
               <p className="flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
-                Propiedades
+                {properties}
               </p>
             </div>
             <div
@@ -346,7 +374,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               className="w-full cursor-pointer "
             >
               <p className="m-auto flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
-                Catalogo
+                {catalog}
               </p>
             </div>
             <div
@@ -354,7 +382,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               className="w-full cursor-pointer "
             >
               <p className="m-auto flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
-                Favoritos
+                {saved}
               </p>
             </div>
             <div
@@ -362,7 +390,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               className="w-full cursor-pointer border bg-blue-new"
             >
               <p className="m-auto  flex h-9 w-full items-center justify-center font-fira-sans font-bold  text-white">
-                Publicar
+                {publica}
               </p>
             </div>
             <div
@@ -370,7 +398,7 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               className=" w-full  cursor-pointer border bg-blue-dark"
             >
               <p className="m-auto flex h-9 w-full items-center justify-center font-fira-sans font-bold text-white">
-                Log out
+                {logout}
               </p>
             </div>
           </div>
@@ -379,30 +407,28 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
             className={`m-auto flex w-11/12  select-none flex-col gap-1 rounded-md border bg-gray-50   pb-3 shadow-lg transition`}
           >
             <div className="w-full cursor-pointer ">
-              <p className="flex h-9 items-center justify-center border font-fira-sans font-bold   text-new3">
-                <Link to="/Propiedades"> Propiedades </Link>
+              <p className="flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
+                <Link to="/Publica"> {publica}</Link>
               </p>
             </div>
             <div className="w-full cursor-pointer ">
-              <p className="flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
-                <Link to="/Publica"> Publica tu propiedad</Link>
+              <p className="flex h-9 items-center justify-center border font-fira-sans font-bold   text-new3">
+                <Link to="/Propiedades"> {list} </Link>
               </p>
             </div>
             <div className="w-full cursor-pointer ">
               <p className="m-auto flex h-9 w-full items-center justify-center border font-fira-sans font-bold text-new3">
-                <Link to="/Vacations">
-                  🏖️️ Encuentra un lugar para vacacionar
-                </Link>
+                <Link to="/Vacations">🏖️️ {vacations}</Link>
               </p>
             </div>
             <div className="w-full cursor-pointer border bg-blue-new">
               <p className="m-auto  flex h-9 w-full items-center justify-center font-fira-sans font-bold  text-white">
-                <Link to="/Login">Login</Link>
+                <Link to="/Login">{login}</Link>
               </p>
             </div>
             <div className=" w-full  cursor-pointer border bg-blue-dark">
               <p className="m-auto flex h-9 w-full items-center justify-center font-fira-sans font-bold text-white">
-                Register
+                {register}
               </p>
             </div>
           </div>
