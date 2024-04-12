@@ -52,10 +52,22 @@ class App extends Component {
       first: null,
       last: null,
       email: null,
+      skeleton: false,
     };
   }
 
   componentDidMount() {
+    const languageChangeValue =
+      localStorage.getItem("languageChange") === "true";
+    if (languageChangeValue) {
+      console.log("siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+      this.setState({ skeleton: true }); // Actualizar el estado de skeleton
+      setTimeout(() => {
+        this.setState({ skeleton: false });
+        console.log("2");
+      }, 2000);
+      localStorage.removeItem("languageChange");
+    }
     console.log("App componentDidMount");
 
     // this.fetchData();
@@ -89,24 +101,6 @@ class App extends Component {
     this.setAutoLogout(remainingMilliseconds);
   }
 
-  // fetchData = async () => {
-  //   console.log("fetchio");
-  //   try {
-  //     const isAuth = this.state.isAuth;
-  //     const response = await fetch(
-  //       `http://localhost:2001/properties/info?isAuth=${isAuth}`,
-  //     );
-  //     if (!response.ok) {
-  //       console.log("Error al obtener datos iniciales");
-  //     }
-  //     const data = await response.json();
-  //     this.setState({ properties: data.data });
-  //     console.log("properties data:", data.data);
-  //   } catch (error) {
-  //     console.error("Error al obtener datos iniciales:", error);
-  //   }
-  // };
-
   logoutHandler = () => {
     this.setState({
       isAuth: false,
@@ -130,7 +124,7 @@ class App extends Component {
   };
 
   render() {
-    const { properties, isAuth, userId } = this.state;
+    const { properties, isAuth, userId, skeleton } = this.state;
 
     const storedLanguage = localStorage.getItem("language");
     if (!storedLanguage) {
@@ -167,6 +161,8 @@ class App extends Component {
 
     const newArr = properties.slice(0, 3);
 
+    console.log("skeleton", skeleton);
+
     return (
       <div>
         <Routes>
@@ -178,8 +174,9 @@ class App extends Component {
                   logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
+                  skeleton={skeleton}
                 />
-                <PropiedadesYa />
+                <PropiedadesYa skeleton={skeleton} />
                 <Cards title={true} userId={userId} />
                 <PropiedadesYaS />
                 <Footer />

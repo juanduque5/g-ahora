@@ -6,19 +6,26 @@ import "./Header.css";
 import logo from "../../images/PROPIEADES_AHORAWEB-02.png";
 import down from "../../images/chevron-down.png";
 import language from "./language";
+// import { useSelector, useDispatch } from "react-redux"; // Importa las funciones useSelector y useDispatch
+// import { setLanguage } from "./../../reducers/languageReducer";
 
-const Header = ({ logged, isAuth, logoutHandler }) => {
+const Header = ({ logged, isAuth, logoutHandler, skeleton }) => {
   // console.log("isAuth", isAuth);
   // window.location.reload();
   const navigate = useNavigate();
-
+  // const storedLanguage = useSelector((state) => state.language.language);
+  // const newLanguage = storedLanguage;
+  // const dispatch = useDispatch();
+  // const [skeleton, setSkeleton] = useState(false);
   const [menu, setMenu] = useState(false);
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
   const [languageOptions, setLanguageOptions] = useState(false);
+
   const storedLanguage = localStorage.getItem("language") || "ES"; // Obtener el idioma almacenado en localStorage o establecer en español por defecto
 
   const handleLanguageSelect = (newLanguage) => {
     localStorage.setItem("language", newLanguage); // Guardar el idioma seleccionado en localStorage
+    localStorage.setItem("languageChange", true); // Guardar el idioma seleccionado en localStorage
     window.location.reload(); // Recargar la página para aplicar el nuevo idioma
   };
 
@@ -102,12 +109,6 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
       });
   };
 
-  // console.log(menu);
-
-  // console.log("Logged in:", logged);
-
-  console.log(list, pricing);
-
   return (
     // absolute top left
     <div className="">
@@ -127,26 +128,53 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
               className="m-auto hidden w-30  cursor-pointer lg:block"
               onClick={handleClick}
             >
-              <h1 className="text-center text-base font-semibold ">{list}</h1>
+              {skeleton ? (
+                <h1 className="h-8 w-90 animate-pulse bg-gray-300 text-center text-base font-semibold">
+                  {}
+                </h1>
+              ) : (
+                <h1 className="text-center text-base font-semibold ">{list}</h1>
+              )}
             </div>
             <div className="m-auto hidden w-30  cursor-pointer lg:block">
-              <h1 className="text-center text-base font-semibold">
-                <Link to="/Publica"> {pricing}</Link>
-              </h1>
+              {skeleton ? (
+                <h1 className="h-8  w-90 animate-pulse bg-gray-300 text-center text-base font-semibold">
+                  {}
+                </h1>
+              ) : (
+                <h1 className="text-center text-base font-semibold">
+                  <Link to="/Publica"> {pricing}</Link>
+                </h1>
+              )}
             </div>
           </div>
           <div className="m-auto flex h-3/4 w-1/2 ">
             <div className="m-auto hidden w-1/2 cursor-pointer  lg:block">
-              <p className="ml-16 text-base font-semibold">
-                <Link to="/Vacations">🏖️️ {vacations}</Link>
-              </p>
-            </div>
-            <div className="m-auto hidden h-90 w-1/2  justify-end  lg:flex ">
-              <div className="hidden w-1/2 cursor-pointer items-center  lg:flex">
-                <p className="m-auto  text-base font-bold text-blue-new underline">
-                  {publica}
+              {skeleton ? (
+                <p className="ml-16 h-8 animate-pulse bg-gray-300 text-base font-semibold">
+                  {}
                 </p>
-              </div>
+              ) : (
+                <p className="ml-16 text-base font-semibold">
+                  <Link to="/Vacations">🏖️️ {vacations}</Link>
+                </p>
+              )}
+            </div>
+            <div className="m-auto hidden h-90 w-1/2  justify-end   lg:flex">
+              {skeleton ? (
+                <div className="m-auto hidden h-8 w-1/2  animate-pulse cursor-pointer   bg-gray-300 lg:flex lg:items-center">
+                  <p className="my-auto  text-base font-bold  text-blue-new underline">
+                    {}
+                  </p>
+                </div>
+              ) : (
+                <div className="hidden w-1/2 cursor-pointer   lg:flex lg:items-center">
+                  <p className="my-auto  text-base font-bold text-blue-new underline">
+                    {publica}
+                  </p>
+                </div>
+              )}
+
               <div className="relative my-auto w-auto  md:w-2/5">
                 <div className=" hidden flex-row   text-center   lg:flex ">
                   <div

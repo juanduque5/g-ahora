@@ -11,12 +11,12 @@ import house from "../../images/house.png";
 import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
 import language from "./language";
-
 import "./Cards.css";
+import { useSelector } from "react-redux"; // Importa las funciones useSelector y useDispatch
 
 const Cards = ({ title, userId, vacation }) => {
-  const storedLanguage = localStorage.getItem("language") || "ES"; // Obtener el idioma almacenado en localStorage o establecer en español por defecto
-
+  const storedLanguage = useSelector((state) => state.language.language);
+  const [skeleton, setSkeleton] = useState(null);
   const { explore } = language[storedLanguage];
   console.log("userId", userId);
   const [properties, setProperties] = useState([]);
@@ -162,129 +162,157 @@ const Cards = ({ title, userId, vacation }) => {
     }
   };
 
+  //skeleton
+  useEffect(() => {
+    setSkeleton(true);
+    setTimeout(() => {
+      setSkeleton(false);
+      console.log("hagl se ha vuelto false después de 2 segundos");
+    }, 2000);
+  }, [storedLanguage]);
+
   // console.log("hearts", heart);
 
   return (
     <div className="ajusta">
       <div className="m-auto mb-20 flex h-auto w-full flex-col md:w-full">
-        {title && (
-          <div className="mb-16 flex h-10 justify-center ">
-            {vacation ? (
-              <p className="m-auto text-center  font-open-sans text-3xl font-semibold">
-                Destinos populares
-              </p>
-            ) : (
-              <p className="m-auto text-center  font-open-sans text-3xl font-semibold">
-                {explore}
-              </p>
-            )}
+        {skeleton ? (
+          <div className="m-auto mb-16 flex h-16 w-1/2 animate-pulse justify-center border bg-gray-300">
+            <p className="m-auto w-1/2 text-center "></p>
+          </div>
+        ) : (
+          <div className="mb-16 flex h-10 justify-center">
+            <p className="m-auto text-center font-open-sans text-3xl font-semibold">
+              {explore}
+            </p>
           </div>
         )}
 
         <div className="try grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-          {currentProperties.map((info, index) => (
-            <div
-              onClick={() => redirect(info)}
-              className="h-500  w-full   cursor-pointer flex-col    rounded-lg border border-gray-700   shadow-md md:w-full  "
-              key={index}
-            >
-              <div className="relative h-3/5 ">
-                <div className="absolute left-0 top-0 bg-black p-2 text-white opacity-60">
-                  {info.uso}
+          {skeleton ? (
+            <>
+              {currentProperties.map((info, index) => (
+                <div
+                  onClick={() => redirect(info)}
+                  className="h-500  w-full   animate-pulse cursor-pointer  flex-col rounded-lg  bg-gray-300    shadow-md md:w-full  "
+                  key={index}
+                >
+                  <p key={index}>
+                    {/* Aquí debes agregar lo que quieras mostrar dentro del div */}
+                  </p>
                 </div>
-                <div className="absolute right-0 top-0 border  text-white opacity-60">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className={`h-9 w-7 ${
-                      info.favorito_id ? "fill-red-600" : "fill-black"
-                    }`}
-                    onClick={(event) => handleHeartClick(event, index, info.id)}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                    />
-                  </svg>
-                </div>
+              ))}
+            </>
+          ) : (
+            <>
+              {currentProperties.map((info, index) => (
+                <div
+                  onClick={() => redirect(info)}
+                  className="h-500  w-full   cursor-pointer flex-col    rounded-lg   shadow-md md:w-full  "
+                  key={index}
+                >
+                  <div className="relative h-3/5 ">
+                    <div className="absolute left-0 top-0 bg-black p-2 text-white opacity-60">
+                      {info.uso}
+                    </div>
+                    <div className="absolute right-0 top-0 border  text-white opacity-60">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className={`h-9 w-7 ${
+                          info.favorito_id ? "fill-red-600" : "fill-black"
+                        }`}
+                        onClick={(event) =>
+                          handleHeartClick(event, index, info.id)
+                        }
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                        />
+                      </svg>
+                    </div>
 
-                <img
-                  className="m-auto h-full w-full rounded-t-lg"
-                  src={info.imageURL}
-                  alt="Hi"
-                ></img>
-              </div>
-              <div className="flex h-2/5 justify-center ">
-                <div className="m-auto flex h-44  w-11/12 flex-col ">
-                  <div className=" flex h-full ">
-                    <p className="m-auto ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-xl xl:text-xl">
-                      {info.tipo.charAt(0).toUpperCase() + info.tipo.slice(1)}
-                    </p>
+                    <img
+                      className="m-auto h-full w-full rounded-t-lg"
+                      src={info.imageURL}
+                      alt="Hi"
+                    ></img>
                   </div>
-                  <div className=" flex h-full ">
-                    <p className="m-auto  ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-22 xl:text-22">
-                      $ {info.precio.toLocaleString() + " "}{" "}
-                      <span className="font-semibold text-gray-new">
-                        {" "}
-                        {info.currency}
-                      </span>
-                    </p>
-                  </div>
-                  <div className=" flex h-full ">
-                    <p className="m-auto ml-0 font-open-sans text-base font-normal text-gray-new md:text-lg lg:text-xl xl:text-xl">
-                      {info.municipio}
-                    </p>
-                  </div>
-                  <div className=" flex h-full flex-row ">
-                    <div className="flex w-1/5  ">
-                      <img
-                        className="m-auto ml-0 mr-2 h-5 w-5"
-                        src={bed}
-                        alt="Hi"
-                      ></img>
-                      <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                        {info.habitaciones}
-                      </p>
-                    </div>
-                    <div className="flex w-1/5 ">
-                      <img
-                        className="m-auto  ml-0 mr-2 h-5 w-5 "
-                        src={bath}
-                        alt="Hi"
-                      ></img>
-                      <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                        {info.banos}
-                      </p>
-                    </div>
-                    <div className="flex w-1/5 ">
-                      <img
-                        className="m-auto ml-0 mr-2 h-5 w-5"
-                        src={car}
-                        alt="Hi"
-                      ></img>
-                      <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                        {info.estacionamientos}
-                      </p>
-                    </div>
-                    <div className="flex w-2/5 ">
-                      <img
-                        className="m-auto ml-0 mr-2 h-5 w-5 "
-                        src={house}
-                        alt="Hi"
-                      ></img>
-                      <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                        {info.area}
-                      </p>
+                  <div className="flex h-2/5 justify-center ">
+                    <div className="m-auto flex h-44  w-11/12 flex-col ">
+                      <div className=" flex h-full ">
+                        <p className="m-auto ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-xl xl:text-xl">
+                          {info.tipo.charAt(0).toUpperCase() +
+                            info.tipo.slice(1)}
+                        </p>
+                      </div>
+                      <div className=" flex h-full ">
+                        <p className="m-auto  ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-22 xl:text-22">
+                          $ {info.precio.toLocaleString() + " "}{" "}
+                          <span className="font-semibold text-gray-new">
+                            {" "}
+                            {info.currency}
+                          </span>
+                        </p>
+                      </div>
+                      <div className=" flex h-full ">
+                        <p className="m-auto ml-0 font-open-sans text-base font-normal text-gray-new md:text-lg lg:text-xl xl:text-xl">
+                          {info.municipio}
+                        </p>
+                      </div>
+                      <div className=" flex h-full flex-row ">
+                        <div className="flex w-1/5  ">
+                          <img
+                            className="m-auto ml-0 mr-2 h-5 w-5"
+                            src={bed}
+                            alt="Hi"
+                          ></img>
+                          <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
+                            {info.habitaciones}
+                          </p>
+                        </div>
+                        <div className="flex w-1/5 ">
+                          <img
+                            className="m-auto  ml-0 mr-2 h-5 w-5 "
+                            src={bath}
+                            alt="Hi"
+                          ></img>
+                          <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
+                            {info.banos}
+                          </p>
+                        </div>
+                        <div className="flex w-1/5 ">
+                          <img
+                            className="m-auto ml-0 mr-2 h-5 w-5"
+                            src={car}
+                            alt="Hi"
+                          ></img>
+                          <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
+                            {info.estacionamientos}
+                          </p>
+                        </div>
+                        <div className="flex w-2/5 ">
+                          <img
+                            className="m-auto ml-0 mr-2 h-5 w-5 "
+                            src={house}
+                            alt="Hi"
+                          ></img>
+                          <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
+                            {info.area}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              ))}
+            </>
+          )}
         </div>
         <div className="mb-5 mt-5 flex justify-center">
           {getPageNumbers().map((number, index) => (

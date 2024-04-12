@@ -1,22 +1,23 @@
+// index.js
 import React from "react";
-import { createRoot } from "react-dom/client"; // Import createRoot from "react-dom/client"
-import "./index.css";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux"; // Importa Provider de react-redux
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
-import Modal from "react-modal";
+import store from "./store"; // Importa tu tienda Redux
 
-const root = createRoot(document.getElementById("root")); // Create a root instance
+import "./index.css";
 
-// Configurar el elemento de la aplicación
-Modal.setAppElement("#root"); // Asegúrate de ajustar el selector según el ID de tu elemento raíz
-
-root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>,
+ReactDOM.render(
+  <Provider store={store}>
+    <React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>
+  </Provider>,
+  document.getElementById("root"),
 );
 
 reportWebVitals();
