@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import React from "react";
 //import { Link } from "react-router-dom";
 //import { useMediaQuery } from "react-responsive";
@@ -10,8 +9,7 @@ import { useSelector } from "react-redux"; // Importa las funciones useSelector 
 
 const PropiedadesYaS = () => {
   const storedLanguage = useSelector((state) => state.language.language);
-  const [skeleton, setSkeleton] = useState(null);
-
+  const skeleton = useSelector((state) => state.language.skeleton);
   const {
     erestuun,
     realstate,
@@ -26,13 +24,7 @@ const PropiedadesYaS = () => {
     cuatro,
   } = language[storedLanguage];
   //
-  useEffect(() => {
-    setSkeleton(true);
-    setTimeout(() => {
-      setSkeleton(false);
-      console.log("hagl se ha vuelto false después de 2 segundos");
-    }, 2000);
-  }, [storedLanguage]);
+
   return (
     <div>
       {skeleton ? (

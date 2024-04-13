@@ -52,22 +52,21 @@ class App extends Component {
       first: null,
       last: null,
       email: null,
-      skeleton: false,
     };
   }
 
   componentDidMount() {
-    const languageChangeValue =
-      localStorage.getItem("languageChange") === "true";
-    if (languageChangeValue) {
-      console.log("siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-      this.setState({ skeleton: true }); // Actualizar el estado de skeleton
-      setTimeout(() => {
-        this.setState({ skeleton: false });
-        console.log("2");
-      }, 2000);
-      localStorage.removeItem("languageChange");
-    }
+    // const languageChangeValue =
+    //   localStorage.getItem("languageChange") === "true";
+    // if (languageChangeValue) {
+    //   console.log("siiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+    //   this.setState({ skeleton: true }); // Actualizar el estado de skeleton
+    //   setTimeout(() => {
+    //     this.setState({ skeleton: false });
+    //     console.log("2");
+    //   }, 2000);
+    //   localStorage.removeItem("languageChange");
+    // }
     console.log("App componentDidMount");
 
     // this.fetchData();
@@ -124,7 +123,7 @@ class App extends Component {
   };
 
   render() {
-    const { properties, isAuth, userId, skeleton } = this.state;
+    const { properties, isAuth, userId } = this.state;
 
     const storedLanguage = localStorage.getItem("language");
     if (!storedLanguage) {
@@ -161,8 +160,6 @@ class App extends Component {
 
     const newArr = properties.slice(0, 3);
 
-    console.log("skeleton", skeleton);
-
     return (
       <div>
         <Routes>
@@ -174,9 +171,8 @@ class App extends Component {
                   logged={first}
                   isAuth={this.state.isAuth}
                   logoutHandler={this.logoutHandler}
-                  skeleton={skeleton}
                 />
-                <PropiedadesYa skeleton={skeleton} />
+                <PropiedadesYa />
                 <Cards title={true} userId={userId} />
                 <PropiedadesYaS />
                 <Footer />
@@ -200,7 +196,7 @@ class App extends Component {
             }
           />
           <Route
-            path="/Publica"
+            path="/Pricing"
             element={
               <>
                 <Header

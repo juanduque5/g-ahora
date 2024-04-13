@@ -6,29 +6,54 @@ import "./Header.css";
 import logo from "../../images/PROPIEADES_AHORAWEB-02.png";
 import down from "../../images/chevron-down.png";
 import language from "./language";
-// import { useSelector, useDispatch } from "react-redux"; // Importa las funciones useSelector y useDispatch
-// import { setLanguage } from "./../../reducers/languageReducer";
+import { useSelector, useDispatch } from "react-redux"; // Importa las funciones useSelector y useDispatch
+import {
+  setLanguage,
+  setSkeleton,
+  resetSkeleton,
+} from "./../../reducers/languageReducer";
 
-const Header = ({ logged, isAuth, logoutHandler, skeleton }) => {
+const Header = ({ logged, isAuth, logoutHandler }) => {
   // console.log("isAuth", isAuth);
   // window.location.reload();
   const navigate = useNavigate();
-  // const storedLanguage = useSelector((state) => state.language.language);
+  const storedLanguage = useSelector((state) => state.language.language);
+  const skeleton = useSelector((state) => state.language.skeleton);
+
   // const newLanguage = storedLanguage;
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // const [skeleton, setSkeleton] = useState(false);
   const [menu, setMenu] = useState(false);
   const [mostrarOpciones, setMostrarOpciones] = useState(false);
   const [languageOptions, setLanguageOptions] = useState(false);
 
-  const storedLanguage = localStorage.getItem("language") || "ES"; // Obtener el idioma almacenado en localStorage o establecer en español por defecto
+  //Handle language change option1
+  // const storedLanguage = localStorage.getItem("language") || "ES"; // Obtener el idioma almacenado en localStorage o establecer en español por defecto
 
+  // const handleLanguageSelect = (newLanguage) => {
+  //   localStorage.setItem("languageChange", true); // Guardar el idioma seleccionado en localStorage
+  //   window.location.reload(); // Recargar la página para aplicar el nuevo idioma
+  //   // localStorage.setItem("language", newLanguage); // Guardar el idioma seleccionado en localStorage
+
+  //   dispatch(setLanguage(newLanguage));
+  //   // window.location.reload(); // Recargar la página para aplicar el nuevo idioma
+  // };
+  //Handle language change option2
   const handleLanguageSelect = (newLanguage) => {
-    localStorage.setItem("language", newLanguage); // Guardar el idioma seleccionado en localStorage
-    localStorage.setItem("languageChange", true); // Guardar el idioma seleccionado en localStorage
-    window.location.reload(); // Recargar la página para aplicar el nuevo idioma
-  };
+    // window.location.reload();
+    // localStorage.setItem("languageChange", true); // Guardar el idioma seleccionado en localStorage
+    setMostrarOpciones(false);
 
+    dispatch(setSkeleton(true)); // Activar el skeleton
+    dispatch(setLanguage(newLanguage)); // Cambiar el idioma después de un breve retraso
+
+    setTimeout(() => {
+      // window.location.reload();
+      dispatch(resetSkeleton());
+      // window.location.reload();
+      // Recargar la página para aplicar el nuevo idioma
+    }, 1000); // Ajusta el tiempo de retraso según sea necesario
+  };
   const {
     list,
     pricing,
@@ -143,7 +168,7 @@ const Header = ({ logged, isAuth, logoutHandler, skeleton }) => {
                 </h1>
               ) : (
                 <h1 className="text-center text-base font-semibold">
-                  <Link to="/Publica"> {pricing}</Link>
+                  <Link to="/Pricing"> {pricing}</Link>
                 </h1>
               )}
             </div>

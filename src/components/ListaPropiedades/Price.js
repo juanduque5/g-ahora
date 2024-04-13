@@ -1,6 +1,11 @@
 import React from "react";
+import language from "./language";
+import { useSelector } from "react-redux"; // Importa las funciones useSelector y useDispatch
 
 function Price({ opciones, handleSelectedFilter, handleSearchData }) {
+  const storedLanguage = useSelector((state) => state.language.language);
+
+  const { minprice0, maxprice0 } = language[storedLanguage];
   return (
     <div className="  rounded-lg shadow-md">
       <div className="flex justify-center border-b">
@@ -9,7 +14,7 @@ function Price({ opciones, handleSelectedFilter, handleSearchData }) {
       {handleSearchData.uso["Renta"] ? (
         <div className="flex w-auto flex-col ">
           <div className=" ">
-            <p>Precio min:</p>
+            <p>{minprice0}</p>
           </div>
           <div className="w-full">
             <input
@@ -22,7 +27,7 @@ function Price({ opciones, handleSelectedFilter, handleSearchData }) {
             ></input>
           </div>
           <div className=" ">
-            <p>Precio max:</p>
+            <p>{maxprice0}</p>
           </div>
           <div className="w-full ">
             <input

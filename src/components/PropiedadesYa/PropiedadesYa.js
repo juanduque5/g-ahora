@@ -7,11 +7,12 @@ import "./PropiedadesYa.css";
 import SelectCheckBox from "./SelectCheckBox";
 import SearchBox from "./SearchBox";
 import language from "./language";
-// import { useSelector } from "react-redux"; // Importa las funciones useSelector y useDispatch
+import { useSelector } from "react-redux"; // Importa las funciones useSelector y useDispatch
 
-const PropiedadesYa = ({ skeleton }) => {
-  // const storedLanguage = useSelector((state) => state.language.language);
-  const storedLanguage = localStorage.getItem("language");
+const PropiedadesYa = () => {
+  const storedLanguage = useSelector((state) => state.language.language);
+  const skeleton = useSelector((state) => state.language.skeleton);
+  // const storedLanguage = localStorage.getItem("language");
 
   const { find, or, promote, rest, rest2, rest3, rest4, search } =
     language[storedLanguage];
@@ -26,26 +27,16 @@ const PropiedadesYa = ({ skeleton }) => {
   const tipo = ["Casa", "Apartamento", "Lote", "Local"];
   const type = ["House", "Apartment", "Land lot", "Premises"];
   const [filteredWords, setFilteredInformation] = useState([]);
-  const [selectedUso, setSelectedUso] = useState([
-    storedLanguage === "ES" ? "Venta y renta" : "Sell and rent",
-  ]);
+  const [selectedUso, setSelectedUso] = useState([]);
+
+  useEffect(() => {
+    setSelectedUso(
+      storedLanguage === "ES" ? ["Venta y renta"] : ["Sell and rent"],
+    );
+  }, [storedLanguage]); // Se ejecutará este efecto cada vez que cambie el idioma
+
   const [Selected, setSelected] = useState([]);
   const [Selected2, setSelected2] = useState(["Venta y renta"]);
-
-  // useEffect(() => {
-  //   const languageChanged = localStorage.getItem("languageChange") === "true";
-  //   if (languageChanged) {
-  //     // Hacer algo cuando haya un cambio en el idioma
-  //     setSkeleton(true);
-  //     setTimeout(() => {
-  //       setSkeleton(false);
-  //       console.log("hagl se ha vuelto false después de 2 segundos");
-  //     }, 2000);
-
-  //     // Limpiar el indicador de cambio de idioma en localStorage
-  //     localStorage.removeItem("languageChange");
-  //   }
-  // }, []);
 
   //if you use null, then you'll encounter an issue
   const [location, setLocation] = useState("");

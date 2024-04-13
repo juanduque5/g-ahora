@@ -16,7 +16,7 @@ import { useSelector } from "react-redux"; // Importa las funciones useSelector 
 
 const Cards = ({ title, userId, vacation }) => {
   const storedLanguage = useSelector((state) => state.language.language);
-  const [skeleton, setSkeleton] = useState(null);
+  const skeleton = useSelector((state) => state.language.skeleton);
   const { explore } = language[storedLanguage];
   console.log("userId", userId);
   const [properties, setProperties] = useState([]);
@@ -161,15 +161,6 @@ const Cards = ({ title, userId, vacation }) => {
       );
     }
   };
-
-  //skeleton
-  useEffect(() => {
-    setSkeleton(true);
-    setTimeout(() => {
-      setSkeleton(false);
-      console.log("hagl se ha vuelto false después de 2 segundos");
-    }, 2000);
-  }, [storedLanguage]);
 
   // console.log("hearts", heart);
 
