@@ -1,0 +1,38 @@
+const language = {
+  EN: {
+    register: "Register",
+    name: "Name",
+    first2: "First",
+    last2: "Last",
+    email2: "Email",
+    password3: "Password",
+    reenter: "Re-enter password",
+    already: "Already have an account? ",
+    entrar: "Log in",
+    message2: "At least 8 characters",
+    crear: "Create account",
+    error1: "Please fill in every input field",
+    error2: "Email format is incorrect",
+    error3: "Passwords must be at least 8 characters",
+    error4: "Passwords do not match",
+  },
+  ES: {
+    register: "Registrar",
+    name: "Nombre",
+    first2: "Nombre",
+    last2: "Apellido",
+    email2: "Correo electrónico",
+    password3: "Contraseña",
+    reenter: "Volver a ingresar la contraseña",
+    already: "¿Ya tienes una cuenta?",
+    entrar: "Iniciar sesión",
+    message2: "Al menos 8 caracteres",
+    crear: "Crear cuenta",
+    error1: "Por favor llena cada espacio",
+    error2: "Formato de correo incorrecto",
+    error3: "Contraseña debe ser de almenos 8 caracteristicas",
+    error4: "Las contraseñas no coinciden",
+  },
+};
+
+export default language;

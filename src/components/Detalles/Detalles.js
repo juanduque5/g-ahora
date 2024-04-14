@@ -7,7 +7,8 @@ import { React, useState, useEffect } from "react";
 //   ZoomControl,
 // } from "react-leaflet";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-// import { Loader } from "@googlemaps/js-api-loader";
+import { useSelector } from "react-redux";
+import language from "./language";
 import {
   APIProvider,
   Map,
@@ -17,6 +18,31 @@ import {
 
 import Modal from "./modal";
 const Detalles = ({ logged, isAuth, logoutHandler }) => {
+  const storedLanguage = useSelector((state) => state.language.language);
+  const skeleton = useSelector((state) => state.language.skeleton);
+  const {
+    ubicacionMapa,
+    estado,
+    areaConstruccion,
+    estacionamientos,
+    banos,
+    habitaciones,
+    precio,
+    descripcion,
+    detalles,
+    municipio,
+    departamento,
+    datosPrincipales,
+    nuevaPropiedad,
+    total,
+    crear,
+    cancelar,
+    selecionar,
+    donot,
+    nuevo,
+    usado,
+  } = language[storedLanguage];
+
   const geoKey = process.env.REACT_APP_GEO_KEY;
   console.log("here", geoKey);
   const { state } = useLocation();
@@ -382,128 +408,138 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
   // console.log("info.address", info.direccion);
 
   return (
-    <div className="ajusta flex flex-col">
-      <div className="mb-12 mt-12">
-        <div className="flex h-auto w-full justify-between ">
-          <div className="flex">
-            <p className=" m-auto font-semibold">Nueva propiedad</p>
+    <>
+      {skeleton ? (
+        <div className="ajusta mt-11  ">
+          <div className="mb-12 mt-12 h-14  animate-pulse bg-gray-300 ">
+            <div className="flex h-auto w-full justify-between ">
+              <div className="flex"></div>
+              <div></div>
+            </div>
           </div>
-          <div>
-            <button
-              onClick={accessAccount}
-              className="rounded-md border border-blue-new p-3"
-            >
-              <p className="font-semibold text-blue-new">Cancelar</p>
-            </button>
-          </div>
+          <div className="mt-6 h-650 animate-pulse bg-gray-300"></div>
         </div>
-      </div>
-
-      <div className="mb-2">
-        <div className=" flex h-auto flex-col border">
-          <div className="flex justify-start">
-            <p className="font-medium">Datos principales</p>
-          </div>
-          <div className="flex h-auto w-full flex-col border md:h-72  md:flex-row">
-            <div className="order-2 flex w-full flex-col border md:order-1 md:w-67">
-              <div className="flex h-auto flex-col border md:h-1/2 md:flex-row">
-                <div className="flex w-full flex-col border md:w-1/2">
-                  <div className="flex h-1/2 items-center border">
-                    <p className="font-semibold">Departamento:</p>
-                  </div>
-                  <div className="flex h-1/2 items-center border">
-                    <select
-                      name="departamento"
-                      value={info.departamento}
-                      onChange={handleChange}
-                      className="h-11 max-h-8 w-95 overflow-y-auto rounded-md border border-gray-400 md:h-3/5 "
-                    >
-                      {departamentos.map((departamento, index) => (
-                        <option key={index}>{departamento}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="flex w-full flex-col border md:w-1/2">
-                  <div className="flex h-1/2 items-center border">
-                    <p className=" font-semibold">Municipio: </p>
-                  </div>
-                  <div className="flex h-1/2 items-center border">
-                    <select
-                      name="municipio"
-                      value={info.municipio}
-                      onChange={handleChange}
-                      className="h-11 max-h-8 w-95 overflow-y-auto rounded-md border border-gray-400 md:h-3/5 "
-                    >
-                      <option value="">Selecciona un municipio:</option>{" "}
-                      {municipios.map((municipio, index) => (
-                        <option key={index} value={municipio}>
-                          {municipio}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
+      ) : (
+        <div className="ajusta flex flex-col">
+          <div className="mb-12 mt-12">
+            <div className="flex h-auto w-full justify-between ">
+              <div className="flex">
+                <p className=" m-auto font-semibold">{nuevaPropiedad}</p>
               </div>
-              <div className="flex  h-full w-full flex-col border border-blue-500 md:h-3/5 md:flex-row">
-                <div className="flex w-full flex-col border md:w-1/2">
-                  <div className="border">
-                    <p className="font-semibold">Descripcion:</p>
-                  </div>
-                  <div
-                    className="h-full w-95 "
-                    // style={{
-                    //   height: "100%",
-                    //   border: "1px solid #ccc",
-                    //   padding: "8px",
-                    //   overflowY: "auto",
-                    // }}
-                  >
-                    <textarea
-                      name="description"
-                      className="h-full w-full resize-none rounded-md border border-gray-400"
-                      value={info.description}
-                      onChange={handleChange}
-                      // style={{
-                      //   width: "99%",
-                      //   height: "90%",
-                      //   maxHeight: "90%",
-                      //   borderRadius: "4px",
-                      //   border: "1px solid rgb(156 163 175)",
-                      //   padding: "8px",
-                      //   boxSizing: "border-box",
-                      //   resize: "none", // Evitar que se redimensione
-                      // }}
-                    />
-                  </div>
-                </div>
-                <div className="flex w-full flex-col border border-green-300 md:w-1/2">
-                  <div className="flex w-full border border-red-600">
-                    <div>
-                      <p className="font-semibold">Precio: </p>
-                    </div>
+              <div>
+                <button
+                  onClick={accessAccount}
+                  className="rounded-md border border-blue-new p-3"
+                >
+                  <p className="font-semibold text-blue-new">{cancelar}</p>
+                </button>
+              </div>
+            </div>
+          </div>
 
-                    {error3 && (
-                      <div>
-                        <p className="m-auto ml-1 text-red-500">
-                          No utilizar commas o puntos
-                        </p>
+          <div className="mb-2">
+            <div className=" flex h-auto flex-col border">
+              <div className="flex justify-start">
+                <p className="font-medium">{datosPrincipales}</p>
+              </div>
+              <div className="flex h-auto w-full flex-col border md:h-72  md:flex-row">
+                <div className="order-2 flex w-full flex-col border md:order-1 md:w-67">
+                  <div className="flex h-auto flex-col border md:h-1/2 md:flex-row">
+                    <div className="flex w-full flex-col border md:w-1/2">
+                      <div className="flex h-1/2 items-center border">
+                        <p className="font-semibold">{departamento}</p>
                       </div>
-                    )}
-                  </div>
-
-                  <div className="flex h-full w-full items-center gap-2 border">
-                    <div className="w-full">
-                      <input
-                        name="precio"
-                        value={info.precio}
-                        onChange={handleChange}
-                        className="h-9 w-full rounded-md border border-gray-400"
-                        placeholder="Ex. 100000"
-                      />
+                      <div className="flex h-1/2 items-center border">
+                        <select
+                          name="departamento"
+                          value={info.departamento}
+                          onChange={handleChange}
+                          className="h-11 max-h-8 w-95 overflow-y-auto rounded-md border border-gray-400 md:h-3/5 "
+                        >
+                          {departamentos.map((departamento, index) => (
+                            <option key={index}>{departamento}</option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
-                    <div className="flex w-30 ">
-                      {/* <select
+                    <div className="flex w-full flex-col border md:w-1/2">
+                      <div className="flex h-1/2 items-center border">
+                        <p className=" font-semibold">{municipio} </p>
+                      </div>
+                      <div className="flex h-1/2 items-center border">
+                        <select
+                          name="municipio"
+                          value={info.municipio}
+                          onChange={handleChange}
+                          className="h-11 max-h-8 w-95 overflow-y-auto rounded-md border border-gray-400 md:h-3/5 "
+                        >
+                          <option value="">{selecionar}</option>{" "}
+                          {municipios.map((municipio, index) => (
+                            <option key={index} value={municipio}>
+                              {municipio}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex  h-full w-full flex-col border border-blue-500 md:h-3/5 md:flex-row">
+                    <div className="flex w-full flex-col border md:w-1/2">
+                      <div className="border">
+                        <p className="font-semibold">{descripcion}</p>
+                      </div>
+                      <div
+                        className="h-full w-95 "
+                        // style={{
+                        //   height: "100%",
+                        //   border: "1px solid #ccc",
+                        //   padding: "8px",
+                        //   overflowY: "auto",
+                        // }}
+                      >
+                        <textarea
+                          name="description"
+                          className="h-full w-full resize-none rounded-md border border-gray-400"
+                          value={info.description}
+                          onChange={handleChange}
+                          // style={{
+                          //   width: "99%",
+                          //   height: "90%",
+                          //   maxHeight: "90%",
+                          //   borderRadius: "4px",
+                          //   border: "1px solid rgb(156 163 175)",
+                          //   padding: "8px",
+                          //   boxSizing: "border-box",
+                          //   resize: "none", // Evitar que se redimensione
+                          // }}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex w-full flex-col border border-green-300 md:w-1/2">
+                      <div className="flex w-full border border-red-600">
+                        <div>
+                          <p className="font-semibold">{precio}: </p>
+                        </div>
+
+                        {error3 && (
+                          <div>
+                            <p className="m-auto ml-1 text-red-500">{donot}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex h-full w-full items-center gap-2 border">
+                        <div className="w-full">
+                          <input
+                            name="precio"
+                            value={info.precio}
+                            onChange={handleChange}
+                            className="h-9 w-full rounded-md border border-gray-400"
+                            placeholder="Ex. 100000"
+                          />
+                        </div>
+                        <div className="flex w-30 ">
+                          {/* <select
                         name="currency"
                         value={info.currency}
                         onChange={handleChange}
@@ -512,252 +548,252 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
                         <option>GTQ</option>
                         <option>USD</option>
                       </select> */}
-                      <p className="font-mono text-lg font-semibold ">USD</p>
-                    </div>
-                  </div>
-                  <p>{"$ " + Number(info.precio).toLocaleString()}</p>
-                </div>
-              </div>
-            </div>
-            <div className="order-1 flex h-2/4 w-full border md:order-2 md:h-full md:w-33">
-              <div className="m-auto h-90 w-11/12 cursor-pointer flex-col border border-dashed border-gray-600 bg-slate-100 md:h-5/6">
-                <div className=" flex h-2/5 w-full flex-col  md:h-1/4">
-                  <input
-                    className="m-auto w-1/2 "
-                    type="file"
-                    onChange={handleFileChange}
-                    disabled={files.length >= 5 ? true : false}
-                    multiple
-                  />
-                </div>
-
-                <div className=" flex h-3/5 w-full flex-col  md:h-75">
-                  <div>
-                    <p className="flex w-full justify-center font-semibold  text-black">
-                      Total: {files.length}
-                    </p>
-                  </div>
-                  <div className="h-95 max-h-72  overflow-y-auto border">
-                    {files.map((files, index) => (
-                      <div className="flex gap-2 border" key={index}>
-                        <div className="h-40 w-70">
-                          <img
-                            className="h-full w-full"
-                            src={
-                              typeof files === "string"
-                                ? files
-                                : URL.createObjectURL(files)
-                            }
-                            alt=""
-                          ></img>
-                        </div>
-                        <div
-                          onClick={() => deleteImage(files.name)}
-                          className="flex w-30 items-center justify-center "
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="h-4 w-4 fill-red-200"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                            />
-                          </svg>
+                          <p className="font-mono text-lg font-semibold ">
+                            USD
+                          </p>
                         </div>
                       </div>
-                    ))}
+                      <p>{"$ " + Number(info.precio).toLocaleString()}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className=" flex h-auto w-full flex-col border border-yellow-400 md:h-72">
-            <div className="h-10 border">
-              <p className="font-semibold">Detalles</p>
-            </div>
-            <div className="flex h-1/2 flex-col border md:flex-row">
-              <div className="flex w-full flex-col border">
-                <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">Habitaciones:</p>
-                </div>
-                <div className="flex h-1/2 items-center border">
-                  <input
-                    name="habitaciones"
-                    value={info.habitaciones}
-                    onChange={handleChange}
-                    type="text"
-                    className="h-3/5 w-95  rounded-md border border-gray-400 p-1 "
-                    placeholder="#"
-                  ></input>
-                </div>
-              </div>
-              <div className="flex w-full flex-col border">
-                <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">Banos: </p>
-                </div>
-                <div className="flex h-1/2 items-center border">
-                  <input
-                    name="banos"
-                    value={info.banos}
-                    onChange={handleChange}
-                    type="text"
-                    className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
-                    placeholder="#"
-                  ></input>
-                </div>
-              </div>
-              <div className="flex w-full flex-col border">
-                <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">Estacionamientos:</p>
-                </div>
-                <div className="flex h-1/2 items-center border">
-                  <input
-                    name="estacionamientos"
-                    value={info.estacionamientos}
-                    onChange={handleChange}
-                    type="text"
-                    className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
-                    placeholder="#"
-                  ></input>
-                </div>
-              </div>
-            </div>
-            <div className="flex h-1/2 flex-col border md:flex-row">
-              <div className="flex w-full flex-col border md:w-4/12">
-                <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">
-                    Area construccion en metros cuadrados:
-                  </p>
-                </div>
-                <div className="flex h-1/2 items-center border">
-                  <input
-                    name="area"
-                    value={info.area}
-                    onChange={handleChange}
-                    type="text"
-                    className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
-                    placeholder="#"
-                  ></input>
-                </div>
-              </div>
-              <div className="flex w-full flex-col border md:w-4/12">
-                <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">Estado:</p>
-                </div>
-                <div className="flex h-1/2 items-center border">
-                  <select
-                    name="estado"
-                    value={info.estado}
-                    onChange={handleChange}
-                    className="h-8 w-95 rounded-md border border-gray-400 md:h-3/5"
-                  >
-                    <option value="usado">Usado</option>
-                    <option value="nuevo">Nuevo</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex w-full flex-col border md:w-4/12">
-                <div className="flex h-1/2 items-center border">
-                  <p className="font-semibold">
-                    Ubicación mapa (Ex. direccion):
-                  </p>
-                </div>
-                <div className="h-1/2 w-full ">
-                  <div className="flex h-full items-center border">
-                    <input
-                      name="direccion"
-                      placeholder=""
-                      type="text"
-                      value={info.direccion}
-                      onChange={(e) => {
-                        handleChange(e);
-                        handleSearch(e);
-                      }}
-                      className="h-8  w-95 rounded-md border border-gray-400 md:h-3/5 "
-                    ></input>
-                  </div>
-                  <div
-                    className={`relative  z-20  max-h-48 w-95 cursor-pointer overflow-y-auto  bg-white shadow-xl ${
-                      isListOpen ? "block" : "hidden"
-                    }`}
-                  >
-                    <div className="">
-                      {autoComplete.map((suggestion, index) => (
-                        <div key={index}>
-                          <div
-                            onClick={() =>
-                              handleSelectSuggestion(
-                                suggestion.place_id,
-                                suggestion.description,
-                              )
-                            }
-                            className="border hover:bg-slate-100 hover:text-blue-new"
-                          >
-                            <p> {suggestion.description}</p>
+                <div className="order-1 flex h-2/4 w-full border md:order-2 md:h-full md:w-33">
+                  <div className="m-auto h-90 w-11/12 cursor-pointer flex-col border border-dashed border-gray-600 bg-slate-100 md:h-5/6">
+                    <div className=" flex h-2/5 w-full flex-col  md:h-1/4">
+                      <input
+                        className="m-auto w-1/2 "
+                        type="file"
+                        onChange={handleFileChange}
+                        disabled={files.length >= 5 ? true : false}
+                        multiple
+                      />
+                    </div>
+
+                    <div className=" flex h-3/5 w-full flex-col  md:h-75">
+                      <div>
+                        <p className="flex w-full justify-center font-semibold  text-black">
+                          {total}: {files.length}
+                        </p>
+                      </div>
+                      <div className="h-95 max-h-72  overflow-y-auto border">
+                        {files.map((files, index) => (
+                          <div className="flex gap-2 border" key={index}>
+                            <div className="h-40 w-70">
+                              <img
+                                className="h-full w-full"
+                                src={
+                                  typeof files === "string"
+                                    ? files
+                                    : URL.createObjectURL(files)
+                                }
+                                alt=""
+                              ></img>
+                            </div>
+                            <div
+                              onClick={() => deleteImage(files.name)}
+                              className="flex w-30 items-center justify-center "
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="h-4 w-4 fill-red-200"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                />
+                              </svg>
+                            </div>
                           </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className=" flex h-auto w-full flex-col border border-yellow-400 md:h-72">
+                <div className="h-10 border">
+                  <p className="font-semibold">{detalles}</p>
+                </div>
+                <div className="flex h-1/2 flex-col border md:flex-row">
+                  <div className="flex w-full flex-col border">
+                    <div className="flex h-1/2 items-center border">
+                      <p className="font-semibold">{habitaciones}:</p>
+                    </div>
+                    <div className="flex h-1/2 items-center border">
+                      <input
+                        name="habitaciones"
+                        value={info.habitaciones}
+                        onChange={handleChange}
+                        type="text"
+                        className="h-3/5 w-95  rounded-md border border-gray-400 p-1 "
+                        placeholder="#"
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="flex w-full flex-col border">
+                    <div className="flex h-1/2 items-center border">
+                      <p className="font-semibold">{banos}: </p>
+                    </div>
+                    <div className="flex h-1/2 items-center border">
+                      <input
+                        name="banos"
+                        value={info.banos}
+                        onChange={handleChange}
+                        type="text"
+                        className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
+                        placeholder="#"
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="flex w-full flex-col border">
+                    <div className="flex h-1/2 items-center border">
+                      <p className="font-semibold">{estacionamientos}:</p>
+                    </div>
+                    <div className="flex h-1/2 items-center border">
+                      <input
+                        name="estacionamientos"
+                        value={info.estacionamientos}
+                        onChange={handleChange}
+                        type="text"
+                        className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
+                        placeholder="#"
+                      ></input>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex h-1/2 flex-col border md:flex-row">
+                  <div className="flex w-full flex-col border md:w-4/12">
+                    <div className="flex h-1/2 items-center border">
+                      <p className="font-semibold">{areaConstruccion}:</p>
+                    </div>
+                    <div className="flex h-1/2 items-center border">
+                      <input
+                        name="area"
+                        value={info.area}
+                        onChange={handleChange}
+                        type="text"
+                        className="h-3/5 w-95 rounded-md border border-gray-400 p-1"
+                        placeholder="#"
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="flex w-full flex-col border md:w-4/12">
+                    <div className="flex h-1/2 items-center border">
+                      <p className="font-semibold">{estado}:</p>
+                    </div>
+                    <div className="flex h-1/2 items-center border">
+                      <select
+                        name="estado"
+                        value={info.estado}
+                        onChange={handleChange}
+                        className="h-8 w-95 rounded-md border border-gray-400 md:h-3/5"
+                      >
+                        <option value="usado">{usado}</option>
+                        <option value="nuevo">{nuevo}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex w-full flex-col border md:w-4/12">
+                    <div className="flex h-1/2 items-center border">
+                      <p className="font-semibold">{ubicacionMapa}:</p>
+                    </div>
+                    <div className="h-1/2 w-full ">
+                      <div className="flex h-full items-center border">
+                        <input
+                          name="direccion"
+                          placeholder=""
+                          type="text"
+                          value={info.direccion}
+                          onChange={(e) => {
+                            handleChange(e);
+                            handleSearch(e);
+                          }}
+                          className="h-8  w-95 rounded-md border border-gray-400 md:h-3/5 "
+                        ></input>
+                      </div>
+                      <div
+                        className={`relative  z-20  max-h-48 w-95 cursor-pointer overflow-y-auto  bg-white shadow-xl ${
+                          isListOpen ? "block" : "hidden"
+                        }`}
+                      >
+                        <div className="">
+                          {autoComplete.map((suggestion, index) => (
+                            <div key={index}>
+                              <div
+                                onClick={() =>
+                                  handleSelectSuggestion(
+                                    suggestion.place_id,
+                                    suggestion.description,
+                                  )
+                                }
+                                className="border hover:bg-slate-100 hover:text-blue-new"
+                              >
+                                <p> {suggestion.description}</p>
+                              </div>
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="z-10 mb-2 w-full border">
-        <div>
-          <APIProvider apiKey={apiKey}>
-            <div style={{ height: "400px", width: "100%", margin: "auto" }}>
-              <Map
-                defaultZoom={13} // Aquí cambiamos zoom a defaultZoom
-                center={info.coordinates}
-                mapId={mapId}
-                de
-              >
-                <AdvancedMarker
-                  onClick={() => setIsOpen(true)}
-                  position={info.coordinates}
-                  defalt
-                ></AdvancedMarker>
-                {open && (
-                  <InfoWindow
-                    position={info.coordinates}
-                    onCloseClick={() => setIsOpen(false)}
+          <div className="z-10 mb-2 w-full border">
+            <div>
+              <APIProvider apiKey={apiKey}>
+                <div style={{ height: "400px", width: "100%", margin: "auto" }}>
+                  <Map
+                    defaultZoom={13} // Aquí cambiamos zoom a defaultZoom
+                    center={info.coordinates}
+                    mapId={mapId}
+                    de
                   >
-                    {info.direccion}
-                  </InfoWindow>
-                )}
-              </Map>
+                    <AdvancedMarker
+                      onClick={() => setIsOpen(true)}
+                      position={info.coordinates}
+                      defalt
+                    ></AdvancedMarker>
+                    {open && (
+                      <InfoWindow
+                        position={info.coordinates}
+                        onCloseClick={() => setIsOpen(false)}
+                      >
+                        {info.direccion}
+                      </InfoWindow>
+                    )}
+                  </Map>
+                </div>
+              </APIProvider>
             </div>
-          </APIProvider>
-        </div>
-      </div>
+          </div>
 
-      <div className="mb-6">
-        <div className="ajusta flex ">
-          <button
-            onClick={() => uploadInfo(info)}
-            className="m-auto w-28 rounded-lg border bg-blue-new p-4 "
-          >
-            <p className="text-lg font-semibold text-white">Crear</p>
-          </button>
+          <div className="mb-6">
+            <div className="ajusta flex ">
+              <button
+                onClick={() => uploadInfo(info)}
+                className="m-auto w-28 rounded-lg border bg-blue-new p-4 "
+              >
+                <p className="text-lg font-semibold text-white">{crear}</p>
+              </button>
+            </div>
+          </div>
+          <Modal
+            open={isModalOpen}
+            close={closeModal}
+            error={error}
+            error2={error2}
+          />
         </div>
-      </div>
-      <Modal
-        open={isModalOpen}
-        close={closeModal}
-        error={error}
-        error2={error2}
-      />
-    </div>
+      )}
+    </>
   );
 };
 export default Detalles;

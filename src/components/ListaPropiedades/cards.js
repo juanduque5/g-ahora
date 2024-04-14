@@ -11,8 +11,13 @@ import car from "../../images/car.png";
 import house from "../../images/house.png";
 import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
+import { useSelector } from "react-redux"; // Importa las funciones useSelector y useDispatch
+// import language from "./language";
 
 const Cards = React.memo(({ data }) => {
+  const storedLanguage = useSelector((state) => state.language.language);
+  const skeleton2 = useSelector((state) => state.language.skeleton);
+  // const { venta0, renta0, casa, apartamento } = language[storedLanguage];
   console.log("data", data);
   const token = localStorage.getItem("token") ? true : false;
   const userId = localStorage.getItem("userId");
@@ -323,8 +328,8 @@ const Cards = React.memo(({ data }) => {
   // console.log("hearts", heart);
 
   return (
-    <div className="">
-      {skeleton ? (
+    <div className="h-auto">
+      {skeleton || skeleton2 ? (
         <div>
           <div className="m-auto mb-20 flex h-auto w-full flex-col md:w-full">
             <div className="try grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
@@ -378,7 +383,15 @@ const Cards = React.memo(({ data }) => {
               >
                 <div className="relative h-3/5 ">
                   <div className="absolute left-0 top-0 bg-black p-2 text-white opacity-60">
-                    {info.uso}
+                    {info.uso === "Venta" && storedLanguage === "ES"
+                      ? "Venta"
+                      : info.uso === "Renta" && storedLanguage === "ES"
+                        ? "Renta"
+                        : info.uso === "Venta" && storedLanguage === "EN"
+                          ? "Sell"
+                          : info.uso === "Renta" && storedLanguage === "EN"
+                            ? "Rent"
+                            : ""}
                   </div>
                   <div className="absolute right-0 top-0   text-white opacity-60">
                     <svg
@@ -413,7 +426,28 @@ const Cards = React.memo(({ data }) => {
                   <div className="m-auto flex h-44  w-11/12 flex-col ">
                     <div className=" flex h-full ">
                       <p className="m-auto ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-xl xl:text-xl">
-                        {info.tipo.charAt(0).toUpperCase() + info.tipo.slice(1)}
+                        {info.tipo === "Casa" && storedLanguage === "ES"
+                          ? "Casa"
+                          : info.tipo === "Apartamento" &&
+                              storedLanguage === "ES"
+                            ? "Apartamento"
+                            : info.tipo === "Lote" && storedLanguage === "ES"
+                              ? "Lote"
+                              : info.tipo === "Local" && storedLanguage === "ES"
+                                ? "Local"
+                                : info.tipo === "Casa" &&
+                                    storedLanguage === "EN"
+                                  ? "House"
+                                  : info.tipo === "Apartamento" &&
+                                      storedLanguage === "EN"
+                                    ? "Apartment"
+                                    : info.tipo === "Lote" &&
+                                        storedLanguage === "EN"
+                                      ? "Land lot"
+                                      : info.tipo === "Local" &&
+                                          storedLanguage === "EN"
+                                        ? "Premises"
+                                        : ""}
                       </p>
                     </div>
                     <div className=" flex h-full ">

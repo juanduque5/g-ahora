@@ -1,9 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { useSelector } from "react-redux";
 
 import "./modal.css"; // Importa tus estilos CSS
 
 export default function Modal({ open, close, error, error2 }) {
+  const storedLanguage = useSelector((state) => state.language.language);
   if (!open) return null;
 
   return ReactDOM.createPortal(
@@ -19,10 +21,12 @@ export default function Modal({ open, close, error, error2 }) {
             <div>
               <div className="">
                 <p className="text-lg font-semibold text-blue-new">
-                  Completa la siguiente informacion:
+                  {storedLanguage === "ES"
+                    ? "Completar la siguiente información:"
+                    : "Complete this information:"}
                 </p>
               </div>
-              <div className="text-wrap  h-auto w-auto">
+              <div className="h-auto  w-auto text-wrap">
                 <p className="text-md  ">{error.join(", ")}</p>
               </div>
             </div>

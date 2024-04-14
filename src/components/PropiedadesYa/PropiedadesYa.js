@@ -71,6 +71,41 @@ const PropiedadesYa = () => {
     },
   });
 
+  //if languagechange set everything to false
+  useEffect(() => {
+    setFilterOption((prevFilterOption) => ({
+      ...prevFilterOption,
+      tipo: {
+        Casa: false,
+        Apartamento: false,
+        Local: false,
+        Lote: false,
+      },
+      uso: {
+        Venta: false,
+        Renta: false,
+        "Venta y renta": true,
+      },
+      place: {
+        location: "",
+      },
+    }));
+    setFilterOptionEn({
+      tipo: {
+        House: false,
+        Apartment: false,
+        "Land lot": false,
+        Premises: false,
+      },
+      uso: {
+        Sell: false,
+        Rent: false,
+        "Sell and Rent": true,
+      },
+    });
+    // Restablecer el estado de languageChange después de actualizar filterOptionEn
+  }, [storedLanguage]);
+
   //Update place.location using useffect
   useEffect(() => {
     setFilterOption((prevFilterOption) => ({
@@ -216,10 +251,18 @@ const PropiedadesYa = () => {
     }
   };
 
+  useEffect(() => {
+    setSelected([]);
+  }, [storedLanguage]);
+
   //handle select options from used
   const handleSelected2 = (option) => {
     setSelected2([option]);
   };
+  //
+  useEffect(() => {
+    setSelected2([]);
+  }, [storedLanguage]);
 
   console.log("selected", Selected);
   console.log("selected2", Selected2);

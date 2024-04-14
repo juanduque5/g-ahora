@@ -12,8 +12,25 @@ import business from "../../images/business-goal.png";
 import sell from "../../images/sell.png";
 import rent from "../../images/rent.png";
 import Modal from "./modal";
+import { useSelector } from "react-redux";
+import language from "./language";
 
-const Agregar = ({ logged, isAuth, logoutHandler }) => {
+const Agregar = ({ logged }) => {
+  const storedLanguage = useSelector((state) => state.language.language);
+  const skeleton = useSelector((state) => state.language.skeleton);
+  const {
+    casa,
+    apartamento,
+    local,
+    lote,
+    venta,
+    renta,
+    cancelar,
+    properties,
+    selecione,
+    which,
+    next,
+  } = language[storedLanguage];
   const [isModalOpen, setIsModalOPen] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -93,102 +110,116 @@ const Agregar = ({ logged, isAuth, logoutHandler }) => {
   console.log(filterOption);
 
   return (
-    <div className="ajusta flex flex-col">
-      <div className="  mb-12 mt-12 ">
-        <div className="flex h-auto w-full justify-between ">
-          <div className="flex">
-            <p className=" m-auto font-semibold">Nueva propiedad</p>
-          </div>
-          <div>
-            <button
-              onClick={accessAccount}
-              className="rounded-md border border-blue-new p-3"
-            >
-              <p className="font-semibold text-blue-new">Cancelar</p>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="  flex h-auto flex-col border">
-        <div className=" flex h-20 w-full border">
-          <p className="m-auto font-semibold">Seleciona tipo de inmueble</p>
-        </div>
-        <div className="m-auto flex h-auto w-full flex-wrap items-center justify-center gap-4 border md:h-52 md:flex-row">
-          <div
-            onClick={() => filterSearch("Casa")}
-            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-              filterOption.Casa ? "myBorder" : ""
-            } `}
-          >
-            <img src={househ} className="m-auto" alt="Hi"></img>
-            <p className="m-auto">Casa</p>
-          </div>
-          <div
-            onClick={() => filterSearch("Apartamento")}
-            className={`flex cursor-pointer flex-col border pb-5 pl-1 pr-1 pt-5 hover:border-blue-new ${
-              filterOption.Apartamento ? "myBorder" : ""
-            } `}
-          >
-            <img src={apartment} className="m-auto" alt="Hi"></img>
-            <p className="m-auto">Apartamento</p>
-          </div>
-          <div
-            onClick={() => filterSearch("Local")}
-            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-              filterOption.Local ? "myBorder" : ""
-            } `}
-          >
-            <img src={business} className="m-auto" alt="Hi"></img>
-            <p className="m-auto">Local</p>
-          </div>
-          <div
-            onClick={() => filterSearch("Lote")}
-            className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-              filterOption.Lote ? "myBorder" : ""
-            } `}
-          >
-            <img src={land} className="m-auto" alt="Hi"></img>
-            <p className="m-auto">Lote</p>
-          </div>
-        </div>
-        <div className="borde m-auto h-auto w-full flex-col">
-          <div className=" flex h-20 w-full border">
-            <p className="m-auto font-semibold">Venta o Renta</p>
-          </div>
-          <div className="m-auto flex h-52 w-full flex-row items-center justify-center gap-4 border">
-            <div
-              onClick={() => filterSearch2("Venta")}
-              className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-                Option.Venta ? "myBorder" : ""
-              } `}
-            >
-              <img src={sell} className="m-auto" alt="Hi"></img>
-              <p className="m-auto">Venta</p>
+    <>
+      {skeleton ? (
+        <div className="ajusta mt-11  ">
+          <div className="mb-12 mt-12 h-14  animate-pulse bg-gray-300 ">
+            <div className="flex h-auto w-full justify-between ">
+              <div className="flex"></div>
+              <div></div>
             </div>
-            <div
-              onClick={() => filterSearch2("Renta")}
-              className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
-                Option.Renta ? "myBorder" : ""
-              } `}
-            >
-              <img src={rent} className="m-auto" alt="Hi"></img>
-              <p className="m-auto">Renta</p>
+          </div>
+          <div className="mt-6 h-550 animate-pulse bg-gray-300"></div>
+        </div>
+      ) : (
+        <div className="ajusta flex flex-col">
+          <div className="  mb-12 mt-12 ">
+            <div className="flex h-auto w-full justify-between ">
+              <div className="flex">
+                <p className=" m-auto font-semibold">{properties}</p>
+              </div>
+              <div>
+                <button
+                  onClick={accessAccount}
+                  className="rounded-md border border-blue-new p-3"
+                >
+                  <p className="font-semibold text-blue-new">{cancelar}</p>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="flex">
-            <button
-              onClick={accessAgregar}
-              className="m-auto rounded-lg bg-blue-new p-4 text-white"
-            >
-              Siguiente
-            </button>
+          <div className="  flex h-auto flex-col border">
+            <div className=" flex h-20 w-full border">
+              <p className="m-auto font-semibold">{selecione}</p>
+            </div>
+            <div className="m-auto flex h-auto w-full flex-wrap items-center justify-center gap-4 border md:h-52 md:flex-row">
+              <div
+                onClick={() => filterSearch("Casa")}
+                className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+                  filterOption.Casa ? "myBorder" : ""
+                } `}
+              >
+                <img src={househ} className="m-auto" alt="Hi"></img>
+                <p className="m-auto">{casa}</p>
+              </div>
+              <div
+                onClick={() => filterSearch("Apartamento")}
+                className={`flex cursor-pointer flex-col border pb-5 pl-1 pr-1 pt-5 hover:border-blue-new ${
+                  filterOption.Apartamento ? "myBorder" : ""
+                } `}
+              >
+                <img src={apartment} className="m-auto" alt="Hi"></img>
+                <p className="m-auto">{apartamento}</p>
+              </div>
+              <div
+                onClick={() => filterSearch("Local")}
+                className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+                  filterOption.Local ? "myBorder" : ""
+                } `}
+              >
+                <img src={business} className="m-auto" alt="Hi"></img>
+                <p className="m-auto">{local}</p>
+              </div>
+              <div
+                onClick={() => filterSearch("Lote")}
+                className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+                  filterOption.Lote ? "myBorder" : ""
+                } `}
+              >
+                <img src={land} className="m-auto" alt="Hi"></img>
+                <p className="m-auto">{lote}</p>
+              </div>
+            </div>
+            <div className="borde m-auto h-auto w-full flex-col">
+              <div className=" flex h-20 w-full border">
+                <p className="m-auto font-semibold">{which}</p>
+              </div>
+              <div className="m-auto flex h-52 w-full flex-row items-center justify-center gap-4 border">
+                <div
+                  onClick={() => filterSearch2("Venta")}
+                  className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+                    Option.Venta ? "myBorder" : ""
+                  } `}
+                >
+                  <img src={sell} className="m-auto" alt="Hi"></img>
+                  <p className="m-auto">{venta}</p>
+                </div>
+                <div
+                  onClick={() => filterSearch2("Renta")}
+                  className={`flex cursor-pointer flex-col border p-5 hover:border-blue-new ${
+                    Option.Renta ? "myBorder" : ""
+                  } `}
+                >
+                  <img src={rent} className="m-auto" alt="Hi"></img>
+                  <p className="m-auto">{renta}</p>
+                </div>
+              </div>
+
+              <div className="flex">
+                <button
+                  onClick={accessAgregar}
+                  className="m-auto rounded-lg bg-blue-new p-4 text-white"
+                >
+                  {next}
+                </button>
+              </div>
+            </div>
           </div>
+          <Modal open={isModalOpen} close={closeModal} error={error} />
         </div>
-      </div>
-      <Modal open={isModalOpen} close={closeModal} error={error} />
-    </div>
+      )}
+    </>
   );
 };
 export default Agregar;

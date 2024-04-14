@@ -4,6 +4,8 @@ import "./Register.css";
 import { Link } from "react-router-dom";
 // import Modal from "react-modal";
 import Modal from "./modal";
+import language from "./language";
+import { useSelector } from "react-redux";
 
 const Login = () => {
   const [first, setFirst] = useState("");
@@ -17,6 +19,24 @@ const Login = () => {
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+  const storedLanguage = useSelector((state) => state.language.language);
+  const {
+    register,
+    name,
+    first2,
+    last2,
+    email2,
+    password3,
+    reenter,
+    already,
+    entrar,
+    message2,
+    crear,
+    error1,
+    error2,
+    error3,
+    error4,
+  } = language[storedLanguage];
 
   //Handle Sign up API
   const handleSignupClick = () => {
@@ -24,17 +44,17 @@ const Login = () => {
 
     // Check for empty input fields
     if (!first || !last || !email) {
-      errorMessage = "Please fill in every input field";
+      errorMessage = error1;
     } else if (isValidEmail) {
-      errorMessage = "Email format is incorrect";
+      errorMessage = error2;
     }
     // Check password length
     else if (password.length < 8 || password2.length < 8) {
-      errorMessage = "Passwords must be at least 8 characters";
+      errorMessage = error3;
     }
     // Check if passwords match
     else if (password !== password2) {
-      errorMessage = "Passwords do not match";
+      errorMessage = error4;
     }
 
     if (errorMessage) {
@@ -151,54 +171,52 @@ const Login = () => {
           <div className="h-13 ">
             <div className="flex h-full items-end justify-center ">
               <p className="font-open-sans text-2xl font-semibold">
-                Registrate
+                {register}
               </p>
             </div>
           </div>
 
-          <div className="h-4/6  ">
+          <div className="h-4/6">
             <div className="m-auto flex h-1/4 w-11/12 flex-col  ">
               <div className="flex h-2/5 items-center  ">
-                <p className="font-open-sans text-sm font-bold">Nombre</p>
+                <p className="font-open-sans text-sm font-bold">{name}</p>
               </div>
               <div className="flex h-3/5 items-center gap-2 ">
                 <input
                   className="h-5/6 w-full rounded-lg border"
                   type="text"
-                  placeholder="First"
+                  placeholder={first2}
                   onChange={handleFirst}
                 ></input>
                 <input
                   className="h-5/6 w-full rounded-lg border"
                   type="text"
-                  placeholder="Last"
+                  placeholder={last2}
                   onChange={handleLast}
                 ></input>
               </div>
             </div>
             <div className="m-auto flex h-1/4 w-11/12 flex-col  ">
               <div className="flex h-2/5 items-center  ">
-                <p className="font-open-sans text-sm font-bold">
-                  Correo electronico
-                </p>
+                <p className="font-open-sans text-sm font-bold">{email2}</p>
               </div>
               <div className="flex h-3/5 items-center ">
                 <input
                   className="h-5/6 w-full rounded-lg border"
                   type="text"
-                  placeholder="Email"
+                  placeholder="example@gmail.com"
                   onChange={handleEmail}
                 ></input>
               </div>
             </div>
             <div className="m-auto flex h-1/4 w-11/12 flex-col   ">
               <div className="flex h-2/5 items-center  ">
-                <p className="font-open-sans text-sm font-bold">Password</p>
+                <p className="font-open-sans text-sm font-bold">{password3}</p>
               </div>
               <div className="flex h-3/5 items-center ">
                 <input
                   className="h-full w-full rounded-lg border"
-                  placeholder="Password"
+                  placeholder={message2}
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={handlePasswordChange}
@@ -246,15 +264,13 @@ const Login = () => {
 
             <div className="m-auto flex h-1/4 w-11/12 flex-col   ">
               <div className="flex h-2/5 items-center  ">
-                <p className="font-open-sans text-sm font-bold">
-                  Re-enter password
-                </p>
+                <p className="font-open-sans text-sm font-bold">{reenter}</p>
               </div>
               <div className="flex h-3/5 items-center ">
                 <input
                   className="h-full w-full rounded-lg border"
                   type={showPassword2 ? "text" : "password"}
-                  placeholder="Re-enter Password "
+                  placeholder={message2}
                   value={password2}
                   onChange={handlePasswordChange2}
                 ></input>
@@ -302,9 +318,9 @@ const Login = () => {
           <div className="relative top-2 m-auto flex h-5 w-11/12 ">
             <div className="flex h-1/2  cursor-pointer rounded-xl">
               <p className="cursor-pointer  font-open-sans text-base text-black">
-                Already have an account ?{" "}
+                {already}{" "}
                 <span className="cursor-pointer text-blue-new">
-                  <Link to="/Login"> Inicia session </Link>
+                  <Link to="/Login"> {entrar}</Link>
                 </span>
               </p>
             </div>
@@ -317,7 +333,7 @@ const Login = () => {
               className="m-auto flex h-1/2 w-1/2 cursor-pointer rounded-xl bg-blue-new"
             >
               <p className="m-auto  cursor-pointer font-fira-sans text-lg text-white">
-                Register
+                {crear}
               </p>
             </button>
           </div>

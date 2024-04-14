@@ -8,8 +8,14 @@ import "./Account.css";
 // // import down from "../../images/chevron-down.png";
 // import plus from "../../images/plus.png";
 // import edit from "../../images/edit.png";
+import language from "./language";
 
-const Account = ({ logged, isAuth, logoutHandler }) => {
+import { useSelector } from "react-redux";
+
+const Account = ({ isAuth }) => {
+  const storedLanguage = useSelector((state) => state.language.language);
+  const skeleton = useSelector((state) => state.language.skeleton);
+  const { properties, add, edit2 } = language[storedLanguage];
   const [lista, setLista] = useState([]);
   const { id } = useParams();
   console.log("jaja", isAuth);
@@ -91,93 +97,115 @@ const Account = ({ logged, isAuth, logoutHandler }) => {
 
   return (
     <div className="ajusta">
-      <div className="mt-12">
-        <div className="flex h-auto w-full justify-between ">
-          <div className="flex">
-            <p className=" m-auto font-semibold">
-              Mis Propiedades: {lista.length > 0 ? lista.length : 0}
-            </p>
-          </div>
-          <div>
-            <button
-              onClick={accessAgregar}
-              className="flex flex-row rounded-md bg-blue-new p-3"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="mr-1 h-6 w-6 text-white"
+      {skeleton ? (
+        <div className="mt-12 h-850 animate-pulse bg-gray-300"></div>
+      ) : (
+        <div className="mt-12">
+          <div className="flex h-auto w-full justify-between ">
+            <div className="flex">
+              <p className=" m-auto font-semibold">
+                {properties}: {lista.length > 0 ? lista.length : 0}
+              </p>
+            </div>
+            <div>
+              <button
+                onClick={accessAgregar}
+                className="flex flex-row rounded-md bg-blue-new p-3"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
-
-              <p className=" font-semibold text-white">Agregar</p>
-            </button>
-          </div>
-        </div>
-        <div
-          className=" mt-12 flex h-auto max-h-dvh
-         flex-col gap-1 overflow-y-auto "
-        >
-          {lista.map((info, index) => (
-            <div
-              key={index}
-              className="flex h-auto flex-row  gap-6 border shadow-md"
-            >
-              <div className="w-30 ">
-                <img
-                  loading="lazy"
-                  className="m-auto h-28 w-full rounded-t-lg"
-                  src={info.imageURL}
-                  alt="Hi"
-                ></img>
-              </div>
-              <div className="flex w-10/12 flex-col justify-start ">
-                <div className="flex h-full font-semibold">
-                  {info.tipo.charAt(0).toUpperCase() + info.tipo.slice(1)}
-                </div>
-                <div className="flex h-full text-gray-400">
-                  {info.municipio}
-                </div>
-                <div className="flex h-full font-semibold">
-                  $ {info.precio.toLocaleString()}
-                </div>
-              </div>
-              <div className="mr-2 flex w-auto  flex-row ">
-                <button
-                  onClick={() => redirect(info)}
-                  className="m-auto flex gap-3 rounded-lg border p-3 shadow-md"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="mr-1 h-6 w-6 text-white"
                 >
-                  <div>
-                    <p className="font-mono text-lg font-semibold  text-slate-900">
-                      Editar
-                    </p>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+
+                <p className=" font-semibold text-white">{add}</p>
+              </button>
+            </div>
+          </div>
+          <div
+            className=" mt-12 flex h-auto max-h-dvh
+         flex-col gap-1 overflow-y-auto "
+          >
+            {lista.map((info, index) => (
+              <div
+                key={index}
+                className="flex h-auto flex-row  gap-6 border shadow-md"
+              >
+                <div className="w-30 ">
+                  <img
+                    loading="lazy"
+                    className="m-auto h-28 w-full rounded-t-lg"
+                    src={info.imageURL}
+                    alt="Hi"
+                  ></img>
+                </div>
+                <div className="flex w-10/12 flex-col justify-start ">
+                  <div className="flex h-full font-semibold">
+                    {info.tipo === "Casa" && storedLanguage === "ES"
+                      ? "Casa"
+                      : info.tipo === "Apartamento" && storedLanguage === "ES"
+                        ? "Apartamento"
+                        : info.tipo === "Lote" && storedLanguage === "ES"
+                          ? "Lote"
+                          : info.tipo === "Local" && storedLanguage === "ES"
+                            ? "Local"
+                            : info.tipo === "Casa" && storedLanguage === "EN"
+                              ? "House"
+                              : info.tipo === "Apartamento" &&
+                                  storedLanguage === "EN"
+                                ? "Apartment"
+                                : info.tipo === "Lote" &&
+                                    storedLanguage === "EN"
+                                  ? "Land lot"
+                                  : info.tipo === "Local" &&
+                                      storedLanguage === "EN"
+                                    ? "Premises"
+                                    : ""}
                   </div>
-                  <div>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="h-6 w-6 fill-gray-200"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                      />
-                    </svg>
+                  <div className="flex h-full text-gray-400">
+                    {info.municipio}
                   </div>
-                </button>
-                {/* <button
+                  <div className="flex h-full font-semibold">
+                    $ {info.precio.toLocaleString()}
+                  </div>
+                </div>
+                <div className="mr-2 flex w-auto  flex-row ">
+                  <button
+                    onClick={() => redirect(info)}
+                    className="m-auto flex gap-3 rounded-lg border p-3 shadow-md"
+                  >
+                    <div>
+                      <p className="font-mono text-lg font-semibold  text-slate-900">
+                        {edit2}
+                      </p>
+                    </div>
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="h-6 w-6 fill-gray-200"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                        />
+                      </svg>
+                    </div>
+                  </button>
+                  {/* <button
                   onClick={() => deleteProperty(info)}
                   className="m-auto rounded-lg  border p-2 shadow-md"
                 >
@@ -196,11 +224,12 @@ const Account = ({ logged, isAuth, logoutHandler }) => {
                     />
                   </svg>
                 </button> */}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* <div className=" mt-12 flex h-96 flex-col gap-1  ">
         <div className="flex h-1/4 flex-row  gap-6 border shadow-md">

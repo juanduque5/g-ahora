@@ -26,7 +26,7 @@ import language from "./language";
 const ListaPropiedades = ({ isAuth, userId }) => {
   const storedLanguage = useSelector((state) => state.language.language);
   const skeleton = useSelector((state) => state.language.skeleton);
-  const { bathrooms0, bedrooms0, venta0, renta0 } = language[storedLanguage];
+  const { bathrooms0, bedrooms0, city } = language[storedLanguage];
   //Setting Modal functionality
   const Navigate = useNavigate();
   // const [searchDataButton, setSearchDataButton] = useState(false);
@@ -493,60 +493,6 @@ const ListaPropiedades = ({ isAuth, userId }) => {
     // console.log("adentro", isOptionOpen);
   };
 
-  // console.log("afuera", isOptionOpen);
-
-  // const closeModal = () => {
-  //   setIsModalOPen(false);
-  //   //Resets filter object if modals closed
-  //   setFilterOption({
-  //     venta: false,
-  //     renta: false,
-  //     nuevo: false,
-  //     usado: false,
-  //     casa: false,
-  //     apartamento: false,
-  //     local: false,
-  //     lote: false,
-  //     cuartos: "Cualquiera",
-  //     banos: "Cualquiera",
-  //     precioMin: 0,
-  //     precioMax: 10000,
-  //   });
-  //   setValue([0, 10000]);
-  // };
-
-  // const closed = () => {
-  //   setFilterOption({
-  //     venta: false,
-  //     renta: false,
-  //     nuevo: false,
-  //     usado: false,
-  //     casa: false,
-  //     apartamento: false,
-  //     local: false,
-  //     lote: false,
-  //     cuartos: "Cualquiera",
-  //     banos: "Cualquiera",
-  //     precioMin: 0,
-  //     precioMax: 10000,
-  //   });
-  //   setValue([0, 10000]);
-  // };
-
-  // const colorMap = {
-  //   Cualquiera: true,
-  // };
-
-  // const nums = {
-  //   1: true,
-  //   2: true,
-  //   3: true,
-  //   4: true,
-  //   5: true,
-  //   6: true,
-  //   7: true,
-  // };
-
   //handle list of properties search
   const handleSearch = () => {
     Navigate("/Propiedades", { state: { searchData } });
@@ -554,11 +500,11 @@ const ListaPropiedades = ({ isAuth, userId }) => {
 
   return (
     <div className="ajusta">
-      <div className="mb-2 mt-8  h-auto md:bg-white lg:block">
+      <div className="mb-2 mt-8 h-auto md:bg-white lg:block">
         {skeleton ? (
           <div className="h-14 w-full animate-pulse bg-gray-300"></div>
         ) : (
-          <div className=" flex h-auto flex-col   gap-3  md:flex md:h-14 md:flex-row  md:gap-3">
+          <div className=" flex h-auto flex-col gap-3 md:flex md:h-14 md:flex-row  md:gap-3">
             <div className="relative order-1 inline-block w-full cursor-pointer flex-col rounded-md border md:order-1 md:w-1/6">
               <div
                 onClick={openOption}
@@ -596,6 +542,7 @@ const ListaPropiedades = ({ isAuth, userId }) => {
                   id="texto"
                   onChange={locationInfo}
                   value={place}
+                  placeholder={city}
                 />
               </div>
               <div
@@ -665,10 +612,10 @@ const ListaPropiedades = ({ isAuth, userId }) => {
               </div>
             </div>
 
-            <div className="md:w-once relative order-4 inline-block h-9 cursor-pointer rounded-md  border md:h-full">
+            <div className="relative order-4 inline-block h-9 cursor-pointer rounded-md border  md:h-full md:w-once">
               <div onClick={openOption3} className="m-auto flex h-full w-90">
                 <div className="m-auto w-90">
-                  <p className="m-auto truncate font-open-sans text-base font-bold lg:text-sm xl:text-base">
+                  <p className="m-auto truncate font-open-sans  text-base font-bold lg:text-sm xl:text-base">
                     {bedrooms0 + ":  " + searchData.bedrooms}
                   </p>
                 </div>
