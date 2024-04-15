@@ -14,8 +14,19 @@ const Login = ({ setAutoLogout }) => {
   const [isModalOpen, setIsModalOPen] = useState(false);
   const [isValidEmail, setIsValidEmail] = useState(false);
   const storedLanguage = useSelector((state) => state.language.language);
-  const { login, dont, create, email2, password2, olvido, reset, entrar } =
-    language[storedLanguage];
+  const {
+    login,
+    dont,
+    create,
+    email2,
+    password2,
+    olvido,
+    reset,
+    entrar,
+    error1,
+    error2,
+    error3,
+  } = language[storedLanguage];
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -55,15 +66,15 @@ const Login = ({ setAutoLogout }) => {
 
     // Check for empty input fields
     if (!email || !password) {
-      errorMessage = "Please fill in every input field";
+      errorMessage = error1;
     }
     // Check password length
     else if (isValidEmail) {
-      errorMessage = "Email format is incorrect";
+      errorMessage = error2;
     }
     // Check password length
     else if (password.length < 8) {
-      errorMessage = "Passwords must be at least 8 characters";
+      errorMessage = error3;
     }
 
     if (errorMessage) {

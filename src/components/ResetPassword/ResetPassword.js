@@ -5,17 +5,23 @@ import { Link, useNavigate } from "react-router-dom";
 import visible from "../../images/visible.png";
 import Modal from "react-modal";
 import { useParams } from "react-router-dom";
+import language from "./language";
+import { useSelector } from "react-redux";
 
 const ResetPassword = () => {
+  const storedLanguage = useSelector((state) => state.language.language);
+  const { dont, create, update, reset, password2, error3 } =
+    language[storedLanguage];
   const { token } = useParams();
   const [message, setMessage] = useState([]);
 
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [password, setPassword] = useState("");
   const [isModalOpen, setIsModalOPen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [id, setId] = useState(null);
-  const [passed, setPassed] = useState(false);
+  // const [passed, setPassed] = useState(false);
 
   useEffect(() => {
     // Realiza una solicitud al backend para verificar el token
@@ -29,7 +35,7 @@ const ResetPassword = () => {
         );
         if (!response.ok) {
           return response.json().then((errorData) => {
-            setMessage(errorData.message);
+            setError(errorData.message);
             openModal();
             // navigate("/Reset");
             // throw new Error(`Error: ${errorData.message}`);
@@ -43,7 +49,7 @@ const ResetPassword = () => {
         }
       } catch (error) {
         console.error("Error al verificar el token:", error);
-        setMessage(error.message);
+        setError(error.message);
         openModal();
         navigate("/Reset");
         // Manejar el error, por ejemplo, redirigir a una página de error
@@ -72,48 +78,59 @@ const ResetPassword = () => {
   };
 
   const handleNewPassword = () => {
-    const postData = {
-      password: password,
-    };
+    let errorMessage = "";
 
-    const requestOptions = {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(postData),
-    };
+    if (password.length < 8) {
+      errorMessage = error3;
+    }
 
-    fetch(`http://localhost:2001/auth/password-update/${id}`, requestOptions)
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((errorData) => {
-            console.log("Error data from server:", errorData.data[0].msg);
-            setMessage(errorData.data[0].msg);
-            openModal();
-            throw new Error(`Error: ${errorData.message}`);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("DATA:", data);
-        setPassed(true);
-        setMessage("You can logged in now ");
-        openModal();
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error.message);
+    if (errorMessage) {
+      setError(errorMessage);
+      setIsModalOPen(true);
+    } else {
+      const postData = {
+        password: password,
+      };
 
-        openModal();
-      });
+      const requestOptions = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(postData),
+      };
+
+      fetch(`http://localhost:2001/auth/password-update/${id}`, requestOptions)
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((errorData) => {
+              console.log("Error data from server:", errorData.data[0].msg);
+              setError(errorData.data[0].msg);
+              openModal();
+              throw new Error(`Error: ${errorData.message}`);
+            });
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("DATA:", data);
+          // setPassed(true);
+          setMessage("You can logged in now ");
+          openModal();
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error.message);
+
+          openModal();
+        });
+    }
   };
 
-  const statusMessage = passed ? "Password has been updated" : "Error occurred";
+  // const statusMessage = passed ? "Password has been updated" : "Error occurred";
 
-  const handleExit = () => {
-    navigate("/Reset");
-  };
+  // const handleExit = () => {
+  //   navigate("/Reset");
+  // };
 
   return (
     <div className="wx">
@@ -121,16 +138,14 @@ const ResetPassword = () => {
         <div className="relative m-auto h-90 w-10/12 rounded-2xl  bg-white shadow-2xl sm:h-5/6 sm:w-3/5 md:left-52 md:h-5/6 md:w-2/5 lg:h-5/6 xl:left-96 xl:h-5/6 xl:w-30">
           <div className="h-1/2 ">
             <div className="flex h-30 items-end justify-center ">
-              <p className="font-open-sans text-2xl font-semibold">
-                Reset Password
-              </p>
+              <p className="font-open-sans text-2xl font-semibold">{reset}</p>
             </div>
             <div className="h-70 ">
               <div className="m-auto flex h-1/4 w-11/12 items-end ">
                 <p className="font-open-sans">
-                  No tienes cuenta?{" "}
+                  {dont}{" "}
                   <span className="cursor-pointer text-blue-new">
-                    <Link to="/Register"> Crea una aqui</Link>
+                    <Link to="/Register"> {create}</Link>
                   </span>
                 </p>
               </div>
@@ -138,7 +153,7 @@ const ResetPassword = () => {
                 <div className="mt-10  h-3/5 w-full">
                   <div className="flex h-2/5 items-center  ">
                     <p className="font-open-sans text-sm font-bold">
-                      New password
+                      {password2}
                     </p>
                   </div>
                   <div className="flex h-3/5 items-center ">
@@ -165,37 +180,18 @@ const ResetPassword = () => {
                 onClick={handleNewPassword}
                 className="mt-8 flex h-2/5  w-3/5 cursor-pointer rounded-lg border bg-blue-new"
               >
-                <p className="m-auto font-fira-sans text-white">
-                  Update password
-                </p>
+                <p className="m-auto font-fira-sans text-white">{update}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Modal isOpen={isModalOpen} onAfterClose={closeModal}>
-        <div className="flex flex-col gap-1">
-          <div className="  border-b-slate-400">
-            <p className="font-semibold">{statusMessage}</p>
-          </div>
-          {message && (
-            <div className="mt-2 h-28">
-              <ul>
-                <li className="ml-1">- {message}</li>
-              </ul>
-            </div>
-          )}
-
-          <div
-            onClick={handleExit}
-            className="relative top-5 flex justify-end "
-          >
-            <button className="flex h-9 w-1/4 justify-center rounded-md bg-red-500">
-              <p className="m-auto font-open-sans text-white ">Exit</p>
-            </button>
-          </div>
-        </div>
-      </Modal>
+      <Modal
+        isOpen={isModalOpen}
+        onAfterClose={closeModal}
+        error={error}
+        message={message}
+      />
     </div>
   );
 };

@@ -17,6 +17,7 @@ const language = {
     ingresa: "Enter your email",
     edit2: "Edit",
     save: "Save",
+    subs: "Subscription",
   },
   ES: {
     settings: "Configuraciones",
@@ -36,6 +37,7 @@ const language = {
     ingresa: "escribe",
     edit2: "Editar",
     save: "Guardar",
+    subs: "Subscripción",
   },
 
   // Agrega más idiomas si es necesario

@@ -83,6 +83,7 @@ const Cards = React.memo(({ data }) => {
   const redirect = (info) => {
     // console.log("id", info);
     // fill(info);
+    window.scrollTo({ top: 0 });
     navigate(`/PropertyInfo/${info.id}`);
   };
 

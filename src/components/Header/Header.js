@@ -134,6 +134,16 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
       });
   };
 
+  const publish = () => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    if (token) {
+      navigate(`/Agregar/${userId}`);
+    } else {
+      navigate(`/Login`);
+    }
+  };
+
   return (
     // absolute top left
     <div className="">
@@ -193,7 +203,10 @@ const Header = ({ logged, isAuth, logoutHandler }) => {
                   </p>
                 </div>
               ) : (
-                <div className="hidden w-1/2 cursor-pointer   lg:flex lg:items-center">
+                <div
+                  onClick={publish}
+                  className="hidden w-1/2 cursor-pointer   lg:flex lg:items-center"
+                >
                   <p className="my-auto  text-base font-bold text-blue-new underline">
                     {publica}
                   </p>

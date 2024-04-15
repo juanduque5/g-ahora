@@ -30,7 +30,7 @@ const language = {
     crear: "Crear cuenta",
     error1: "Por favor llena cada espacio",
     error2: "Formato de correo incorrecto",
-    error3: "Contraseña debe ser de almenos 8 caracteristicas",
+    error3: "Contraseña debe ser de 8 caracteristicas",
     error4: "Las contraseñas no coinciden",
   },
 };
