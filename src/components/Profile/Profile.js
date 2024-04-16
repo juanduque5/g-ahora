@@ -49,6 +49,7 @@ const Profile = ({
   const [whatsappNumber, setWhatsappNumber] = useState(wnumber);
   const [change, setChange] = useState(false);
   const [router, setRouter] = useState(true);
+  const plan = localStorage.getItem("freeplan");
 
   ///
   const storedLanguage = useSelector((state) => state.language.language);
@@ -334,8 +335,8 @@ const Profile = ({
               <div className="sticky top-12 flex h-40 animate-pulse flex-col gap-2 border-r bg-gray-300  p-4 text-sm"></div>
             </aside>
           ) : (
-            <aside className="hidden py-4 md:block md:w-1/3 lg:w-1/4">
-              <div className="sticky top-12 flex flex-col gap-2 border-r border-indigo-100 p-4 text-sm">
+            <aside className="py-4 md:w-1/3 lg:w-1/4">
+              <div className="sticky top-12 flex flex-col gap-2 border-indigo-100 p-4 text-sm md:border-r">
                 <h2 className="mb-4 pl-3 text-2xl font-semibold">{settings}</h2>
                 <p
                   onClick={() => route("Public")}
@@ -710,8 +711,12 @@ const Profile = ({
                 ) : (
                   <div className=" flex h-auto w-full flex-col md:h-618 lg:h-786 xl:h-850">
                     <div className="flex h-full w-full flex-col items-center justify-center gap-6   md:flex-row">
-                      <div className="mt-5 flex h-auto flex-col rounded-2xl border  md:mt-0  md:h-95 md:w-1/2 lg:w-2/4 xl:w-2/5">
-                        <div className="flex h-11 rounded-t-3xl border bg-gray-k">
+                      <div
+                        className={`mt-5 flex h-auto flex-col rounded-2xl border  md:mt-0  md:h-95 md:w-1/2 lg:w-2/4 xl:w-2/5 ${plan ? "opacity-70" : ""}`}
+                      >
+                        <div
+                          className={`flex h-11 rounded-t-3xl border bg-gray-k`}
+                        >
                           <p className="m-auto text-2xl font-semibold sm:text-lg md:text-xl lg:text-2xl xl:text-3xl ">
                             GRATUITO{" "}
                           </p>
@@ -728,8 +733,10 @@ const Profile = ({
                             </p>
                           </div>
                           <div className="flex h-20 w-full border md:h-15">
-                            <button className="m-auto h-11 w-36 rounded-lg bg-blue-new font-fira-sans text-sm font-medium text-white">
-                              AGENDAR CITA
+                            <button
+                              className={`m-auto h-11 w-36 rounded-lg ${plan ? "cursor-not-allowed bg-gray-k" : "bg-blue-new"}  text-md font-fira-sans text-white`}
+                            >
+                              {plan ? "Offline" : "Active"}
                             </button>
                           </div>
                           <div className="flex h-3/5 w-full flex-col gap-3  md:gap-0  lg:gap-2 xl:gap-6">

@@ -18,6 +18,7 @@ const Account = ({ isAuth }) => {
   const { properties, add, edit2 } = language[storedLanguage];
   const [lista, setLista] = useState([]);
   const { id } = useParams();
+  const [button, setButton] = useState(null);
   console.log("jaja", isAuth);
   console.log("id daddy", id);
 
@@ -27,7 +28,7 @@ const Account = ({ isAuth }) => {
     navigate(`/Agregar/${id}`);
   };
 
-  //if logged if false, return to home page
+  //if logged if false, return to home page, change for token
   useEffect(() => {
     if (isAuth === false) {
       navigate("/");
@@ -51,7 +52,10 @@ const Account = ({ isAuth }) => {
         }
         const data = await response.json();
         console.log("data", data.propertiesById);
+        console.log(data);
         setLista(data.propertiesById);
+        setButton(data.button);
+        localStorage.setItem("freeplan", data.button);
 
         // Guardar la información en el estado local o hacer lo que sea necesario
       } catch (error) {
@@ -109,8 +113,9 @@ const Account = ({ isAuth }) => {
             </div>
             <div>
               <button
+                disabled={button}
                 onClick={accessAgregar}
-                className="flex flex-row rounded-md bg-blue-new p-3"
+                className={`flex flex-row rounded-md bg-blue-new p-3 ${button ? "cursor-not-allowed  opacity-30" : "cursor-pointer"}`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
