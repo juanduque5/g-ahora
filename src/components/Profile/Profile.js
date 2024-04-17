@@ -49,6 +49,7 @@ const Profile = ({
   const [whatsappNumber, setWhatsappNumber] = useState(wnumber);
   const [change, setChange] = useState(false);
   const [router, setRouter] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const plan = localStorage.getItem("freeplan");
 
   ///
@@ -304,6 +305,34 @@ const Profile = ({
     }
   };
 
+  //
+  const payment = () => {
+    setIsLoading(true);
+
+    fetch(`http://localhost:2001/payments/order/${id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al procesar el pago");
+        }
+        return response.json(); // Convertir la respuesta a JSON
+      })
+      .then((data) => {
+        console.log("Pago procesado exitosamente:", data);
+        //  setPaymentResult(data); // Guardar los datos de la respuesta en el estado
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
   return (
     <div className="ajusta">
       {skeleton && router ? (
@@ -818,7 +847,10 @@ const Profile = ({
                             </p>
                           </div>
                           <div className="flex h-20 w-full border md:h-15">
-                            <button className="m-auto h-11 w-36 rounded-lg bg-blue-new font-fira-sans text-sm font-medium text-white">
+                            <button
+                              onClick={payment}
+                              className="m-auto h-11 w-36 rounded-lg bg-blue-new font-fira-sans text-sm font-medium text-white"
+                            >
                               AGENDAR CITA
                             </button>
                           </div>
