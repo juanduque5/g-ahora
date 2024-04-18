@@ -50,7 +50,8 @@ const Profile = ({
   const [change, setChange] = useState(false);
   const [router, setRouter] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const plan = localStorage.getItem("freeplan");
+  const [link, setLink] = useState(null);
+  const [pay, setPay] = useState(false);
 
   ///
   const storedLanguage = useSelector((state) => state.language.language);
@@ -75,6 +76,8 @@ const Profile = ({
     edit2,
     subs,
   } = language[storedLanguage];
+
+  const [buttonText, setButtonText] = useState("Empezar");
 
   const navigate = useNavigate();
   const [IsValidEmail, setIsValidEmail] = useState(true);
@@ -308,6 +311,7 @@ const Profile = ({
   //
   const payment = () => {
     setIsLoading(true);
+    setButtonText("Cargando..");
 
     fetch(`http://localhost:2001/payments/order/${id}`, {
       method: "POST",
@@ -325,6 +329,10 @@ const Profile = ({
       .then((data) => {
         console.log("Pago procesado exitosamente:", data);
         //  setPaymentResult(data); // Guardar los datos de la respuesta en el estado
+        setLink(data.checkoutUrl);
+        setButtonText("Pagar");
+        console.log(data.checkoutUrl);
+        setPay(true);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -333,6 +341,11 @@ const Profile = ({
         setIsLoading(false);
       });
   };
+
+  console.log(link);
+
+  const plan = localStorage.getItem("freeplan");
+  console.log(plan);
   return (
     <div className="ajusta">
       {skeleton && router ? (
@@ -358,13 +371,13 @@ const Profile = ({
           </main>
         </div>
       ) : (
-        <div className="mt-12 flex w-full flex-col gap-5 bg-white px-3 text-[#161931] md:flex-row md:px-16 lg:px-28">
+        <div className="mt-12 flex w-full flex-col gap-5 bg-white px-3 text-[#161931] md:flex-row ">
           {skeleton && !router ? (
-            <aside className="hidden py-4 md:block md:w-1/3 lg:w-1/4">
+            <aside className="hidden w-full py-4 md:block">
               <div className="sticky top-12 flex h-40 animate-pulse flex-col gap-2 border-r bg-gray-300  p-4 text-sm"></div>
             </aside>
           ) : (
-            <aside className="py-4 md:w-1/3 lg:w-1/4">
+            <aside className="md:w-18  py-4">
               <div className="sticky top-12 flex flex-col gap-2 border-indigo-100 p-4 text-sm md:border-r">
                 <h2 className="mb-4 pl-3 text-2xl font-semibold">{settings}</h2>
                 <p
@@ -383,9 +396,9 @@ const Profile = ({
             </aside>
           )}
 
-          <main className="min-h-screen w-full py-1 md:w-2/3 lg:w-3/4">
+          <main className="flex min-h-screen w-full justify-center py-1 md:w-2/3 lg:w-full">
             {router ? (
-              <div className="p-2 md:p-4">
+              <div className=" w-70  p-2 md:p-4">
                 <div className="mt-8 w-full px-6 pb-8 sm:max-w-xl sm:rounded-lg">
                   <h2 className="pl-6 text-2xl font-bold sm:text-xl">
                     {publicProfile}
@@ -738,10 +751,10 @@ const Profile = ({
                     </div>
                   </div>
                 ) : (
-                  <div className=" flex h-auto w-full flex-col md:h-618 lg:h-786 xl:h-850">
-                    <div className="flex h-full w-full flex-col items-center justify-center gap-6   md:flex-row">
+                  <div className=" w-98 flex h-auto flex-col  md:h-618 lg:h-786 xl:h-850">
+                    <div className=" flex h-full w-full flex-col items-center gap-6 md:flex-row">
                       <div
-                        className={`mt-5 flex h-auto flex-col rounded-2xl border  md:mt-0  md:h-95 md:w-1/2 lg:w-2/4 xl:w-2/5 ${plan ? "opacity-70" : ""}`}
+                        className={`mt-5 flex h-auto flex-col rounded-2xl border  md:mt-0  md:h-95 md:w-1/2 lg:w-2/4 xl:w-2/5 ${plan === "true" ? "opacity-70" : ""}`}
                       >
                         <div
                           className={`flex h-11 rounded-t-3xl border bg-gray-k`}
@@ -763,9 +776,9 @@ const Profile = ({
                           </div>
                           <div className="flex h-20 w-full border md:h-15">
                             <button
-                              className={`m-auto h-11 w-36 rounded-lg ${plan ? "cursor-not-allowed bg-gray-k" : "bg-blue-new"}  text-md font-fira-sans text-white`}
+                              className={`m-auto h-11 w-36 rounded-lg ${plan === "true" ? "cursor-not-allowed bg-gray-k" : "bg-blue-new"}  text-md font-fira-sans text-white`}
                             >
-                              {plan ? "Offline" : "Active"}
+                              {plan === "true" ? "Offline" : "Active"}
                             </button>
                           </div>
                           <div className="flex h-3/5 w-full flex-col gap-3  md:gap-0  lg:gap-2 xl:gap-6">
@@ -847,13 +860,56 @@ const Profile = ({
                             </p>
                           </div>
                           <div className="flex h-20 w-full border md:h-15">
-                            <button
-                              onClick={payment}
-                              className="m-auto h-11 w-36 rounded-lg bg-blue-new font-fira-sans text-sm font-medium text-white"
-                            >
-                              AGENDAR CITA
-                            </button>
+                            {pay ? (
+                              <button className="m-auto h-11 w-36 rounded-lg bg-blue-new font-fira-sans text-lg font-medium text-white">
+                                <a href={link}>{buttonText}</a>
+                              </button>
+                            ) : (
+                              <button
+                                onClick={payment}
+                                type="button"
+                                className="m-auto flex h-11 w-36 items-center rounded-lg bg-blue-new px-4 py-2 text-white"
+                              >
+                                <svg
+                                  className={
+                                    isLoading
+                                      ? "mr-3 h-5 w-5 animate-spin text-white"
+                                      : "hidden"
+                                  }
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className={
+                                      isLoading ? " opacity-25" : "hidden"
+                                    }
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                  ></circle>
+                                  <path
+                                    className={
+                                      isLoading ? " opacity-75" : "hidden"
+                                    }
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  ></path>
+                                </svg>
+
+                                <p
+                                  className={`m-auto ${isLoading ? "w-16" : "w-auto"} font-medium`}
+                                >
+                                  <a className="" href={link}>
+                                    {buttonText}
+                                  </a>
+                                </p>
+                              </button>
+                            )}
                           </div>
+
                           <div className="flex h-3/5 w-full flex-col   md:gap-0 lg:gap-2 xl:gap-6">
                             <div className="  flex h-auto border md:h-16 ">
                               <div className="border">

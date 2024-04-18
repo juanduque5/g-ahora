@@ -38,7 +38,7 @@ const language = {
     total: "Total",
     crear: "Crear",
     cancelar: "Cancelar",
-    selecione: "Seleciona un municipio",
+    selecionar: "Seleciona un municipio",
     donot: "No utilizar commas o puntos",
     usado: "Usado",
     nuevo: "Nuevo",

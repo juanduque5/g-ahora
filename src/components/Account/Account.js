@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 const Account = ({ isAuth }) => {
   const storedLanguage = useSelector((state) => state.language.language);
   const skeleton = useSelector((state) => state.language.skeleton);
-  const { properties, add, edit2 } = language[storedLanguage];
+  const { properties, add, edit2, days } = language[storedLanguage];
   const [lista, setLista] = useState([]);
   const { id } = useParams();
   const [button, setButton] = useState(null);
@@ -56,6 +56,7 @@ const Account = ({ isAuth }) => {
         setLista(data.propertiesById);
         setButton(data.button);
         localStorage.setItem("freeplan", data.button);
+        console.log(data.button);
 
         // Guardar la información en el estado local o hacer lo que sea necesario
       } catch (error) {
@@ -98,6 +99,25 @@ const Account = ({ isAuth }) => {
 
   console.log("isAuth", isAuth);
   console.log("lista", lista);
+
+  // Función para calcular los días restantes desde 30 días
+  const calcularDiasRestantes = (joindate) => {
+    const fechaJoindate = new Date(joindate);
+    const fechaActual = new Date();
+    const diferenciaMs = fechaActual - fechaJoindate;
+    let diasRestantes = Math.floor(
+      (30 * 24 * 60 * 60 * 1000 - diferenciaMs) / (1000 * 60 * 60 * 24),
+    );
+
+    // Si quedan menos de 0 días, establecer en 0
+    if (diasRestantes < 0) {
+      diasRestantes = 0;
+    }
+    // Si quieres establecer un máximo de 30 días, descomenta la siguiente línea
+    // diasRestantes = Math.min(diasRestantes, 30);
+
+    return diasRestantes;
+  };
 
   return (
     <div className="ajusta">
@@ -183,7 +203,14 @@ const Account = ({ isAuth }) => {
                     $ {info.precio.toLocaleString()}
                   </div>
                 </div>
-                <div className="mr-2 flex w-auto  flex-row ">
+                <div className="mr-2 flex w-1/4  flex-row ">
+                  <div className="m-auto w-full font-medium text-gray-400 ">
+                    {days}{" "}
+                    <span className="text-black">
+                      {" "}
+                      {calcularDiasRestantes(info.joindate)}{" "}
+                    </span>
+                  </div>
                   <button
                     onClick={() => redirect(info)}
                     className="m-auto flex gap-3 rounded-lg border p-3 shadow-md"
