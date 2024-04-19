@@ -188,9 +188,9 @@ const Login = ({ setAutoLogout }) => {
           localStorage.setItem("expiryDate", expiryDate.toISOString());
 
           setAutoLogout(remainingMilliseconds);
-          // navigate("/"); // Reemplaza 'NombreDeLaPantalla' con el nombre de tu pantalla
-          // // console.log("DATAAA:", data);
-          // window.location.reload();
+          navigate("/"); // Reemplaza 'NombreDeLaPantalla' con el nombre de tu pantalla
+          // console.log("DATAAA:", data);
+          window.location.reload();
         })
         .catch((error) => {
           console.error("Error fetching data:", error.message);

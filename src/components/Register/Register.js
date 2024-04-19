@@ -1,7 +1,7 @@
 import { React, useState } from "react";
 import "./Register.css";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import Modal from "react-modal";
 import Modal from "./modal";
 import language from "./language";
@@ -14,6 +14,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   // const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOPen] = useState(false);
   const [message, setMessage] = useState(null);
   const [isValidEmail, setIsValidEmail] = useState(false);
@@ -93,7 +94,7 @@ const Login = () => {
         .then((data) => {
           console.log("data signing up:", data);
 
-          // navigate("/Login"); // Reemplaza '/dashboard' con la ruta deseada
+          navigate("/Login"); // Reemplaza '/dashboard' con la ruta deseada
         })
         .catch((error) => {
           console.error("Error :", error);

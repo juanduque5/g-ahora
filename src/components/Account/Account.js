@@ -158,14 +158,14 @@ const Account = ({ isAuth }) => {
           </div>
           <div
             className=" mt-12 flex h-auto max-h-dvh
-         flex-col gap-1 overflow-y-auto "
+         flex-col gap-5 overflow-y-auto md:gap-3 "
           >
             {lista.map((info, index) => (
               <div
                 key={index}
-                className="flex h-auto flex-row  gap-6 border shadow-md"
+                className="flex h-auto w-full flex-col gap-6  border shadow-md md:flex-row"
               >
-                <div className="w-30 ">
+                <div className="w-full  md:w-30">
                   <img
                     loading="lazy"
                     className="m-auto h-28 w-full rounded-t-lg"
@@ -173,7 +173,7 @@ const Account = ({ isAuth }) => {
                     alt="Hi"
                   ></img>
                 </div>
-                <div className="flex w-10/12 flex-col justify-start ">
+                <div className="m-auto flex w-10/12 flex-col md:m-0 md:justify-start">
                   <div className="flex h-full font-semibold">
                     {info.tipo === "Casa" && storedLanguage === "ES"
                       ? "Casa"
@@ -203,7 +203,7 @@ const Account = ({ isAuth }) => {
                     $ {info.precio.toLocaleString()}
                   </div>
                 </div>
-                <div className="mr-2 flex w-1/4  flex-row ">
+                <div className="m-auto flex w-70 flex-row justify-center gap-2  md:mr-2 md:w-1/4">
                   <div className="m-auto w-full font-medium text-gray-400 ">
                     {days}{" "}
                     <span className="text-black">
