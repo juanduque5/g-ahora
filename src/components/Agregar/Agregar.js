@@ -15,7 +15,7 @@ import Modal from "./modal";
 import { useSelector } from "react-redux";
 import language from "./language";
 
-const Agregar = ({ logged }) => {
+const Agregar = () => {
   const storedLanguage = useSelector((state) => state.language.language);
   const skeleton = useSelector((state) => state.language.skeleton);
   const {
@@ -51,12 +51,14 @@ const Agregar = ({ logged }) => {
   const { id } = useParams();
   console.log("id-id", id);
 
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
-    if (!logged) {
+    if (!token) {
       navigate("/");
     }
     return () => {};
-  }, [logged, navigate]); // Dependencias que activarán el efecto
+  }, [token, navigate]); // Dependencias que activarán el efecto
 
   const accessAgregar = () => {
     const selectedOption = Object.keys(filterOption).find(

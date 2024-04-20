@@ -12,14 +12,14 @@ import language from "./language";
 
 import { useSelector } from "react-redux";
 
-const Account = ({ isAuth }) => {
+const Account = () => {
   const storedLanguage = useSelector((state) => state.language.language);
   const skeleton = useSelector((state) => state.language.skeleton);
   const { properties, add, edit2, days } = language[storedLanguage];
   const [lista, setLista] = useState([]);
   const { id } = useParams();
   const [button, setButton] = useState(null);
-  console.log("jaja", isAuth);
+
   console.log("id daddy", id);
 
   const navigate = useNavigate();
@@ -29,12 +29,14 @@ const Account = ({ isAuth }) => {
   };
 
   //if logged if false, return to home page, change for token
+  const token = localStorage.getItem("token");
+
   useEffect(() => {
-    if (isAuth === false) {
+    if (!token) {
       navigate("/");
     }
     return () => {};
-  }, [isAuth, navigate]); // Dependencias que activarán el efecto
+  }, [token, navigate]); // Dependencias que activarán el efecto
 
   useEffect(() => {
     // Lógica para llamar al backend y obtener la información basada en el ID
@@ -97,7 +99,6 @@ const Account = ({ isAuth }) => {
   //   }
   // };
 
-  console.log("isAuth", isAuth);
   console.log("lista", lista);
 
   // Función para calcular los días restantes desde 30 días

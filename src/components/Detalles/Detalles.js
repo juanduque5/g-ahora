@@ -17,7 +17,7 @@ import {
 } from "@vis.gl/react-google-maps";
 
 import Modal from "./modal";
-const Detalles = ({ logged, isAuth, logoutHandler }) => {
+const Detalles = () => {
   const storedLanguage = useSelector((state) => state.language.language);
   const skeleton = useSelector((state) => state.language.skeleton);
   const {
@@ -84,16 +84,30 @@ const Detalles = ({ logged, isAuth, logoutHandler }) => {
 
   const navigate = useNavigate();
 
+  //  const [filterOptionEn, setFilterOptionEn] = useState({
+  //    tipo: {
+  //      House: false,
+  //      Apartment: false,
+  //      "Land lot": false,
+  //      Premises: false,
+  //    },
+  //    uso: {
+  //      Sell: false,
+  //      Rent: false,
+  //      "Sell and Rent": true,
+  //    },
+  //  });
+
   ////////////////////
 
-  // Solo se ejecuta una vez al montar el componente
+  const token = localStorage.getItem("token");
 
-  // useEffect(() => {
-  //   if (!logged) {
-  //     navigate("/");
-  //   }
-  //   return () => {};
-  // }, [logged, navigate]); // Dependencias que activarán el efecto
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    }
+    return () => {};
+  }, [token, navigate]);
 
   const accessAccount = () => {
     navigate("/");

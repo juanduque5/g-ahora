@@ -9,6 +9,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import language from "./language";
+import Cards from "./Cards";
 
 const Vacations = () => {
   const [location, setLocation] = useState("");
@@ -103,13 +104,22 @@ const Vacations = () => {
   };
 
   const searchProperties = () => {
-    if (checkInDate && checkOutDate) {
+    if (true) {
       // Construye la URL con los parámetros de consulta
       const url = new URL("http://localhost:2001/vacations/searchProperty");
-      url.searchParams.append("checkInDate", checkInDate);
-      url.searchParams.append("checkOutDate", checkOutDate);
-      url.searchParams.append("location", filterOption.place.location);
-      url.searchParams.append("guests", filterOption.guests);
+      url.searchParams.append("checkInDate", checkInDate ? checkInDate : false);
+      url.searchParams.append(
+        "checkOutDate",
+        checkOutDate ? checkOutDate : false,
+      );
+      url.searchParams.append(
+        "location",
+        filterOption.place.location ? filterOption.place.location : "",
+      );
+      url.searchParams.append(
+        "guests",
+        filterOption.guests ? filterOption.guests : false,
+      );
 
       // Realiza la solicitud GET
       fetch(url)
@@ -310,6 +320,9 @@ const Vacations = () => {
           </div>
         </div>
       )}
+      <div className="w-full">
+        <Cards />
+      </div>
     </div>
   );
 };

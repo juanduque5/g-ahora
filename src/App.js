@@ -158,7 +158,7 @@ class App extends Component {
 
     // const intenta = properties;
 
-    const newArr = properties.slice(0, 3);
+    // const newArr = properties.slice(0, 3);
 
     return (
       <div>
@@ -236,12 +236,7 @@ class App extends Component {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Vacations />
                 </LocalizationProvider>
-                <Cards
-                  title={true}
-                  infoH={newArr}
-                  vacation={true}
-                  userId={userId}
-                />
+
                 <Footer />
               </>
             }
