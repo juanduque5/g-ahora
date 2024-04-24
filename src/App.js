@@ -24,6 +24,8 @@ import Catalogo from "./components/Catalogo/Catalogo";
 import Landing from "./components/Landing/Landing";
 import Favoritos from "./components/Favoritos/Favoritos";
 import Edit from "./components/Edit/Edit";
+import InfoVacation from "./components/InfoVacation/Info";
+import Search from "./components/Search/Search";
 
 // import image5 from "./images/image5.png";
 // import image6 from "./images/image6.png";
@@ -123,7 +125,7 @@ class App extends Component {
   };
 
   render() {
-    const { properties, isAuth, userId } = this.state;
+    const { isAuth, userId } = this.state;
 
     const storedLanguage = localStorage.getItem("language");
     if (!storedLanguage) {
@@ -219,6 +221,30 @@ class App extends Component {
                   logoutHandler={this.logoutHandler}
                 />
                 <Info options={OPTIONS} userId={userId} isAuth={isAuth} />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/PropertyInfoVacations/:id"
+            element={
+              <>
+                <Header
+                  logged={first}
+                  isAuth={this.state.isAuth}
+                  logoutHandler={this.logoutHandler}
+                />
+
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Search />
+                </LocalizationProvider>
+
+                <InfoVacation
+                  options={OPTIONS}
+                  userId={userId}
+                  isAuth={isAuth}
+                />
+
                 <Footer />
               </>
             }

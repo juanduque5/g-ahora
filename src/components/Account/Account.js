@@ -18,7 +18,9 @@ const Account = () => {
   const { properties, add, edit2, days } = language[storedLanguage];
   const [lista, setLista] = useState([]);
   const { id } = useParams();
-  const [button, setButton] = useState(null);
+
+  // const [button, setButton] = useState(null);
+  const button = localStorage.getItem("freeplan");
 
   console.log("id daddy", id);
 
@@ -54,10 +56,11 @@ const Account = () => {
         }
         const data = await response.json();
         console.log("data", data.propertiesById);
-        console.log(data);
+        console.log("account", data);
         setLista(data.propertiesById);
-        setButton(data.button);
         localStorage.setItem("freeplan", data.button);
+        // setButton(data.button);
+
         console.log(data.button);
 
         // Guardar la información en el estado local o hacer lo que sea necesario
@@ -101,21 +104,19 @@ const Account = () => {
 
   console.log("lista", lista);
 
+  console.log("button", button);
+
   // Función para calcular los días restantes desde 30 días
-  const calcularDiasRestantes = (joindate) => {
-    const fechaJoindate = new Date(joindate);
+  const calcularDiasRestantes = (expireDate) => {
+    const fechaExpireDate = new Date(expireDate);
     const fechaActual = new Date();
-    const diferenciaMs = fechaActual - fechaJoindate;
-    let diasRestantes = Math.floor(
-      (30 * 24 * 60 * 60 * 1000 - diferenciaMs) / (1000 * 60 * 60 * 24),
-    );
+    const diferenciaMs = fechaExpireDate - fechaActual;
+    let diasRestantes = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24));
 
     // Si quedan menos de 0 días, establecer en 0
     if (diasRestantes < 0) {
       diasRestantes = 0;
     }
-    // Si quieres establecer un máximo de 30 días, descomenta la siguiente línea
-    // diasRestantes = Math.min(diasRestantes, 30);
 
     return diasRestantes;
   };
@@ -134,9 +135,9 @@ const Account = () => {
             </div>
             <div>
               <button
-                disabled={button}
+                disabled={button === "true" ? true : false}
                 onClick={accessAgregar}
-                className={`flex flex-row rounded-md bg-blue-new p-3 ${button ? "cursor-not-allowed  opacity-30" : "cursor-pointer"}`}
+                className={`flex flex-row rounded-md bg-blue-new p-3 ${button === "true" ? "cursor-not-allowed  opacity-30" : "cursor-pointer"}`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -209,7 +210,7 @@ const Account = () => {
                     {days}{" "}
                     <span className="text-black">
                       {" "}
-                      {calcularDiasRestantes(info.joindate)}{" "}
+                      {calcularDiasRestantes(info.expire_date)}{" "}
                     </span>
                   </div>
                   <button

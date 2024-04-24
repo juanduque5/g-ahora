@@ -115,7 +115,9 @@ const Login = ({ setAutoLogout }) => {
           localStorage.setItem("last", data.last);
           localStorage.setItem("email", data.email);
           localStorage.setItem("url", data.imageURL);
+          localStorage.setItem("freeplan", data.button);
 
+          console.log("button", data.button);
           const wnumber =
             data.profile && data.profile[0].wnumber !== null
               ? data.profile[0].wnumber

@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 // import { useMediaQuery } from "react-responsive";
 import "./Vacations.css";
+import { useNavigate } from "react-router-dom";
 import down from "../../images/chevron-down.png";
 import SearchBox from "./searchBox";
 import NumberGuests from "./numberGuests";
@@ -13,6 +14,7 @@ import Cards from "./Cards";
 
 const Vacations = () => {
   const [location, setLocation] = useState("");
+  const Navigate = useNavigate();
   const storedLanguage = useSelector((state) => state.language.language);
   const skeleton = useSelector((state) => state.language.skeleton);
   const {
@@ -34,15 +36,27 @@ const Vacations = () => {
     place: {
       location: "",
     },
-    guests: null,
+    checkInDate: "",
+    checkOutDate: "",
+    guests: "",
   });
 
   const handleCheckInDateChange = (date) => {
     setCheckInDate(date);
+    setFilterOption({
+      ...filterOption,
+      checkInDate: date.format("YYYY-MM-DD"),
+      checkIn: date,
+    });
   };
 
   const handleCheckOutDateChange = (date) => {
     setCheckOutDate(date);
+    setFilterOption({
+      ...filterOption,
+      checkOutDate: date.format("YYYY-MM-DD"),
+      checkOut: date,
+    });
   };
 
   const handleSelectedFilter = (option, key) => {
@@ -103,36 +117,36 @@ const Vacations = () => {
     // console.log("adentro", isOptionOpen);
   };
 
-  const searchProperties = () => {
-    if (true) {
-      // Construye la URL con los parámetros de consulta
-      const url = new URL("http://localhost:2001/vacations/searchProperty");
-      url.searchParams.append("checkInDate", checkInDate ? checkInDate : false);
-      url.searchParams.append(
-        "checkOutDate",
-        checkOutDate ? checkOutDate : false,
-      );
-      url.searchParams.append(
-        "location",
-        filterOption.place.location ? filterOption.place.location : "",
-      );
-      url.searchParams.append(
-        "guests",
-        filterOption.guests ? filterOption.guests : false,
-      );
+  // const searchProperties = () => {
+  //   // Construye la URL con los parámetros de consulta
+  //   const url = new URL("http://localhost:2001/vacations/searchProperty");
+  //   url.searchParams.append("checkInDate", checkInDate ? checkInDate : false);
+  //   url.searchParams.append(
+  //     "checkOutDate",
+  //     checkOutDate ? checkOutDate : false,
+  //   );
+  //   url.searchParams.append(
+  //     "location",
+  //     filterOption.place.location ? filterOption.place.location : "",
+  //   );
+  //   url.searchParams.append(
+  //     "guests",
+  //     filterOption.guests ? filterOption.guests : false,
+  //   );
 
-      // Realiza la solicitud GET
-      fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => {
-          console.error("Error al enviar los datos al backend:", error);
-        });
-    } else {
-      console.error("Ambas fechas deben ser seleccionadas");
-    }
+  //   // Realiza la solicitud GET
+  //   fetch(url)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error al enviar los datos al backend:", error);
+  //     });
+  // };
+
+  const searchProperties = () => {
+    Navigate("/Vacations", { state: { filterOption } });
   };
 
   const today = dayjs(); // Obtener la fecha actual
@@ -226,9 +240,13 @@ const Vacations = () => {
                       <DatePicker
                         label={message5}
                         disabled={checkInDate ? false : true}
-                        value={checkOutDate > checkInDate ? checkOutDate : null}
+                        value={
+                          checkOutDate > checkInDate
+                            ? filterOption.checkOutDate
+                            : null
+                        }
                         onChange={handleCheckOutDateChange}
-                        minDate={checkInDate ? checkInDate : today}
+                        minDate={checkInDate ? filterOption.checkInDate : today}
                         sx={{
                           "& .MuiInputLabel-root": { color: "gray" },
                           margin: "auto",

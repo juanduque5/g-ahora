@@ -377,7 +377,7 @@ const Profile = ({
               <div className="sticky top-12 flex h-40 animate-pulse flex-col gap-2 border-r bg-gray-300  p-4 text-sm"></div>
             </aside>
           ) : (
-            <aside className="md:w-18  py-4">
+            <aside className="py-4  md:w-18">
               <div className="sticky top-12 flex flex-col gap-2 border-indigo-100 p-4 text-sm md:border-r">
                 <h2 className="mb-4 pl-3 text-2xl font-semibold">{settings}</h2>
                 <p
@@ -751,10 +751,10 @@ const Profile = ({
                     </div>
                   </div>
                 ) : (
-                  <div className=" w-98 flex h-auto flex-col  md:h-618 lg:h-786 xl:h-850">
+                  <div className=" flex h-auto w-98 flex-col  md:h-618 lg:h-786 xl:h-850">
                     <div className=" flex h-full w-full flex-col items-center gap-6 md:flex-row">
                       <div
-                        className={`mt-5 flex h-auto flex-col rounded-2xl border  md:mt-0  md:h-95 md:w-1/2 lg:w-2/4 xl:w-2/5 ${plan === "true" ? "opacity-70" : ""}`}
+                        className={`mt-5 flex h-auto flex-col rounded-2xl border  md:mt-0  md:h-95 md:w-1/2 lg:w-2/4 xl:w-2/5 ${plan === "true" ? "" : "opacity-70"}`}
                       >
                         <div
                           className={`flex h-11 rounded-t-3xl border bg-gray-k`}

@@ -281,6 +281,12 @@ const Detalles = () => {
   const uploadInfo = async (info) => {
     const errorKeys = [];
     try {
+      // let objToCheck;
+      // if (idiomaActual === "espanol") {
+      //   objToCheck = infoEspanol;
+      // } else {
+      //   objToCheck = infoIngles;
+      // }
       //Check if any key in the obj is empty and/or files length is incorrect
       for (const key in info) {
         if (info.hasOwnProperty(key)) {
@@ -349,6 +355,9 @@ const Detalles = () => {
           );
           if (!response.ok) {
             console.log("error");
+          } else {
+            navigate(`/Propiedades/${id}`);
+            window.location.reload();
           }
         }
 

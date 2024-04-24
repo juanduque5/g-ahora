@@ -10,24 +10,38 @@ import car from "../../images/car.png";
 import house from "../../images/house.png";
 import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
-import language from "./language";
+// import language from "./language";
 // import "./Cards.css";
 import { useSelector } from "react-redux"; // Importa las funciones useSelector y useDispatch
 
 const Cards = ({ userId }) => {
   const storedLanguage = useSelector((state) => state.language.language);
-  const skeleton = useSelector((state) => state.language.skeleton);
-  const { explore } = language[storedLanguage];
+  const skeleton2 = useSelector((state) => state.language.skeleton);
+  // const { explore } = language[storedLanguage];
   console.log("userId", userId);
-  const [properties, setProperties] = useState([]);
-  const token = localStorage.getItem("token") ? true : false;
-  const navigate = useNavigate();
   const location = useLocation();
+  const [properties, setProperties] = useState([]);
+  const [skeleton, setSkeleton] = useState(true);
+  const token = localStorage.getItem("token") ? true : false;
+  const filterOption = location.state && location.state.filterOption;
+  const data =
+    filterOption === null || filterOption === undefined ? false : filterOption;
+
+  const navigate = useNavigate();
+
+  const dates = {
+    checkInDate: !data ? false : data.checkInDate,
+    checkOutDate: !data ? false : data.checkOutDate,
+  };
+
+  console.log(data, "dates", dates);
+
+  // const location = useLocation();
   // console.log("infoH:", infoH[0].imageURL);
   const redirect = (info) => {
     console.log("id", info.id);
     // fill(info);
-    navigate(`/PropertyInfo/${info.id}`);
+    navigate(`/PropertyInfoVacations/${info.id}`, { state: dates });
     window.scrollTo(0, 0);
   };
 
@@ -84,27 +98,79 @@ const Cards = ({ userId }) => {
   //Get properties, check if it's on home or properties
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetchio");
-      try {
-        const response = await fetch(
-          `http://localhost:2001/vacations/allVacationsProperties`,
+      if (data) {
+        setSkeleton(true);
+        const url = new URL("http://localhost:2001/vacations/searchProperty");
+        url.searchParams.append(
+          "checkInDate",
+          data.checkInDate !== "" ? data.checkInDate : false,
         );
-        if (!response.ok) {
-          console.log("Error al obtener datos iniciales");
-        }
-        if (location.pathname === "/") {
+        url.searchParams.append(
+          "checkOutDate",
+          data.checkOutDate !== "" ? data.checkOutDate : false,
+        );
+        url.searchParams.append(
+          "location",
+          data.place.location !== "" ? data.place.location : "",
+        );
+        url.searchParams.append(
+          "guests",
+          data.guests !== "" ? data.guests : false,
+        );
+
+        try {
+          // Realiza la solicitud GET
+          const response = await fetch(url);
           const data = await response.json();
-          setProperties(data.data.slice(0, 3));
-        } else {
+          console.log(data);
+          setProperties(data.data);
+          setTimeout(() => {
+            setSkeleton(false);
+            console.log("hagl se ha vuelto false después de 2 segundos");
+          }, 4000);
+        } catch (error) {
+          console.error("Error al enviar los datos al backend:", error);
+        }
+      } else {
+        try {
+          setSkeleton(true);
+          const response = await fetch(
+            `http://localhost:2001/vacations/allVacationsProperties`,
+          );
+          if (!response.ok) {
+            console.log("Error al obtener datos iniciales");
+          }
+
           const data = await response.json();
           setProperties(data.data);
+          setTimeout(() => {
+            setSkeleton(false);
+            console.log("hagl se ha vuelto false después de 2 segundos");
+          }, 4000);
+        } catch (error) {
+          console.error("Error al obtener datos iniciales:", error);
         }
-      } catch (error) {
-        console.error("Error al obtener datos iniciales:", error);
       }
     };
-    fetchData();
-  }, [token, location, userId]);
+
+    fetchData(); // Llamada a fetchData fuera del useEffect
+  }, [data]); // Agregar dependencias faltantes al array de dependencias
+
+  //  console.log("fetchio");
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:2001/vacations/allVacationsProperties`,
+  //     );
+  //     if (!response.ok) {
+  //       console.log("Error al obtener datos iniciales");
+  //     }
+
+  //     const data = await response.json();
+  //     setProperties(data.data);
+  //   } catch (error) {
+  //     console.error("Error al obtener datos iniciales:", error);
+  //   }
+  // };
 
   //handle heart favorite clicks
   const handleHeartClick = useCallback(
@@ -163,191 +229,197 @@ const Cards = ({ userId }) => {
   };
 
   // console.log("hearts", heart);
-
+  console.log("filteroption", filterOption);
+  console.log("data", data);
   return (
-    <div className="">
-      <div className="m-auto mb-20 flex h-auto w-full flex-col md:w-full">
-        {skeleton ? (
-          <div className="m-auto mb-16 flex h-16 w-1/2 animate-pulse justify-center border bg-gray-300">
-            <p className="m-auto w-1/2 text-center "></p>
-          </div>
-        ) : (
-          <div className="mb-16 flex h-10 justify-center">
-            <p className="m-auto text-center font-open-sans text-3xl font-semibold">
-              {explore}
-            </p>
-          </div>
-        )}
-
-        <div className="try grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
-          {skeleton ? (
-            <>
-              {currentProperties.map((info, index) => (
+    <div className="h-auto">
+      {skeleton ? (
+        <div className="m-auto mb-20 flex h-auto w-full flex-col md:w-full ">
+          <div className=" grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 ">
+            {[...Array(6)].map(
+              (
+                _,
+                index, // Crear 6 elementos de esqueleto
+              ) => (
                 <div
-                  onClick={() => redirect(info)}
-                  className="h-500  w-full   animate-pulse cursor-pointer  flex-col rounded-lg  bg-gray-300    shadow-md md:w-full  "
                   key={index}
+                  className="h-500 w-full animate-pulse cursor-pointer flex-col rounded-lg shadow-md md:w-full"
                 >
-                  <p key={index}>
-                    {/* Aquí debes agregar lo que quieras mostrar dentro del div */}
-                  </p>
-                </div>
-              ))}
-            </>
-          ) : (
-            <>
-              {currentProperties.map((info, index) => (
-                <div
-                  onClick={() => redirect(info)}
-                  className="h-500  w-full   cursor-pointer flex-col    rounded-lg   shadow-md md:w-full  "
-                  key={index}
-                >
-                  <div className="relative h-3/5 ">
-                    <div className="absolute left-0 top-0 bg-black p-2 text-white opacity-60">
-                      {info.uso === "Venta" && storedLanguage === "ES"
-                        ? "Venta"
-                        : info.uso === "Renta" && storedLanguage === "ES"
-                          ? "Renta"
-                          : info.uso === "Venta" && storedLanguage === "EN"
-                            ? "Sell"
-                            : info.uso === "Renta" && storedLanguage === "EN"
-                              ? "Rent"
-                              : ""}
+                  <div className="relative h-3/5 rounded-t-lg bg-gray-300"></div>{" "}
+                  {/* Esqueleto para la imagen */}
+                  <div className="flex h-2/5 justify-center">
+                    <div className="m-auto flex h-44 w-11/12 flex-col ">
+                      <div className="mb-2 flex h-full">
+                        <div className="m-auto ml-0 h-8 w-24 rounded bg-gray-300"></div>{" "}
+                        {/* Esqueleto para el tipo */}
+                      </div>
+                      <div className="mb-2 flex h-full">
+                        <div className="m-auto ml-0 h-8 w-32 rounded bg-gray-300"></div>{" "}
+                        {/* Esqueleto para el precio */}
+                      </div>
+                      <div className="mb-2 flex h-full">
+                        <div className="m-auto ml-0 h-8 w-32 rounded bg-gray-300"></div>{" "}
+                        {/* Esqueleto para el municipio */}
+                      </div>
+                      <div className="flex h-full w-full">
+                        <div className="mr-2 flex w-full">
+                          <div className="m-auto ml-0 h-8 w-90 rounded bg-gray-300"></div>{" "}
+                          {/* Esqueleto para habitaciones */}
+                        </div>
+                      </div>
                     </div>
-                    <div className="absolute right-0 top-0 border  text-white opacity-60">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth="1.5"
-                        stroke="currentColor"
-                        className={`h-9 w-7 ${
-                          info.favorito_id ? "fill-red-600" : "fill-black"
-                        }`}
-                        onClick={(event) =>
-                          handleHeartClick(event, index, info.id)
-                        }
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                        />
-                      </svg>
-                    </div>
-
-                    <img
-                      className="m-auto h-full w-full rounded-t-lg"
-                      src={info.imageURL}
-                      alt="Hi"
-                    ></img>
                   </div>
-                  <div className="flex h-2/5 justify-center ">
-                    <div className="m-auto flex h-44  w-11/12 flex-col ">
-                      <div className=" flex h-full ">
-                        <p className="m-auto ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-xl xl:text-xl">
-                          {info.tipo === "Casa" && storedLanguage === "ES"
-                            ? "Casa"
-                            : info.tipo === "Apartamento" &&
-                                storedLanguage === "ES"
-                              ? "Apartamento"
-                              : info.tipo === "Lote" && storedLanguage === "ES"
-                                ? "Lote"
-                                : info.tipo === "Local" &&
-                                    storedLanguage === "ES"
-                                  ? "Local"
-                                  : info.tipo === "Casa" &&
+                </div>
+              ),
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="m-auto mb-20 flex h-auto w-full flex-col md:w-full ">
+          <div className=" grid h-auto grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 ">
+            {currentProperties.map((info, index) => (
+              <div
+                onClick={() => redirect(info)}
+                className={`h-500  w-full    flex-col rounded-lg   ${info.booked ? "cursor-not-allowed opacity-70" : "cursor-pointer"}  shadow-md md:w-full `}
+                key={index}
+              >
+                <div className="relative h-3/5 ">
+                  <div className="absolute left-0 top-0 bg-black p-2 text-white opacity-60">
+                    {info.booked ? "Booked" : "Available"}
+                  </div>
+                  <div className="absolute right-0 top-0 border  text-white opacity-60">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className={`h-9 w-7 ${
+                        info.favorito_id ? "fill-red-600" : "fill-black"
+                      }`}
+                      onClick={(event) =>
+                        handleHeartClick(event, index, info.id)
+                      }
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                      />
+                    </svg>
+                  </div>
+
+                  <img
+                    className="m-auto h-full w-full rounded-t-lg"
+                    src={info.imageURL}
+                    alt="Hi"
+                  ></img>
+                </div>
+                <div className="flex h-2/5 justify-center ">
+                  <div className="m-auto flex h-44  w-11/12 flex-col ">
+                    <div className=" flex h-full ">
+                      <p className="m-auto ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-xl xl:text-xl">
+                        {info.tipo === "Casa" && storedLanguage === "ES"
+                          ? "Casa"
+                          : info.tipo === "Apartamento" &&
+                              storedLanguage === "ES"
+                            ? "Apartamento"
+                            : info.tipo === "Lote" && storedLanguage === "ES"
+                              ? "Lote"
+                              : info.tipo === "Local" && storedLanguage === "ES"
+                                ? "Local"
+                                : info.tipo === "Casa" &&
+                                    storedLanguage === "EN"
+                                  ? "House"
+                                  : info.tipo === "Apartamento" &&
                                       storedLanguage === "EN"
-                                    ? "House"
-                                    : info.tipo === "Apartamento" &&
+                                    ? "Apartment"
+                                    : info.tipo === "Lote" &&
                                         storedLanguage === "EN"
-                                      ? "Apartment"
-                                      : info.tipo === "Lote" &&
+                                      ? "Land lot"
+                                      : info.tipo === "Local" &&
                                           storedLanguage === "EN"
-                                        ? "Land lot"
-                                        : info.tipo === "Local" &&
-                                            storedLanguage === "EN"
-                                          ? "Premises"
-                                          : ""}
+                                        ? "Premises"
+                                        : ""}
+                      </p>
+                    </div>
+                    <div className=" flex h-full ">
+                      <p className="m-auto  ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-22 xl:text-22">
+                        $ {info.precio.toLocaleString() + " "}{" "}
+                        <span className="font-semibold text-gray-new">
+                          {" "}
+                          {info.currency}
+                        </span>
+                      </p>
+                    </div>
+                    <div className=" flex h-full ">
+                      <p className="m-auto ml-0 font-open-sans text-base font-normal text-gray-new md:text-lg lg:text-xl xl:text-xl">
+                        {info.municipio}
+                      </p>
+                    </div>
+                    <div className=" flex h-full flex-row ">
+                      <div className="flex w-1/5  ">
+                        <img
+                          className="m-auto ml-0 mr-2 h-5 w-5"
+                          src={bed}
+                          alt="Hi"
+                        ></img>
+                        <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
+                          {info.habitaciones}
                         </p>
                       </div>
-                      <div className=" flex h-full ">
-                        <p className="m-auto  ml-0 font-open-sans text-lg font-bold md:text-lg lg:text-22 xl:text-22">
-                          $ {info.precio.toLocaleString() + " "}{" "}
-                          <span className="font-semibold text-gray-new">
-                            {" "}
-                            {info.currency}
-                          </span>
+                      <div className="flex w-1/5 ">
+                        <img
+                          className="m-auto  ml-0 mr-2 h-5 w-5 "
+                          src={bath}
+                          alt="Hi"
+                        ></img>
+                        <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
+                          {info.banos}
                         </p>
                       </div>
-                      <div className=" flex h-full ">
-                        <p className="m-auto ml-0 font-open-sans text-base font-normal text-gray-new md:text-lg lg:text-xl xl:text-xl">
-                          {info.municipio}
+                      <div className="flex w-1/5 ">
+                        <img
+                          className="m-auto ml-0 mr-2 h-5 w-5"
+                          src={car}
+                          alt="Hi"
+                        ></img>
+                        <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
+                          {info.estacionamientos}
                         </p>
                       </div>
-                      <div className=" flex h-full flex-row ">
-                        <div className="flex w-1/5  ">
-                          <img
-                            className="m-auto ml-0 mr-2 h-5 w-5"
-                            src={bed}
-                            alt="Hi"
-                          ></img>
-                          <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                            {info.habitaciones}
-                          </p>
-                        </div>
-                        <div className="flex w-1/5 ">
-                          <img
-                            className="m-auto  ml-0 mr-2 h-5 w-5 "
-                            src={bath}
-                            alt="Hi"
-                          ></img>
-                          <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                            {info.banos}
-                          </p>
-                        </div>
-                        <div className="flex w-1/5 ">
-                          <img
-                            className="m-auto ml-0 mr-2 h-5 w-5"
-                            src={car}
-                            alt="Hi"
-                          ></img>
-                          <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                            {info.estacionamientos}
-                          </p>
-                        </div>
-                        <div className="flex w-2/5 ">
-                          <img
-                            className="m-auto ml-0 mr-2 h-5 w-5 "
-                            src={house}
-                            alt="Hi"
-                          ></img>
-                          <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
-                            {info.area}
-                          </p>
-                        </div>
+                      <div className="flex w-2/5 ">
+                        <img
+                          className="m-auto ml-0 mr-2 h-5 w-5 "
+                          src={house}
+                          alt="Hi"
+                        ></img>
+                        <p className="m-auto ml-0 text-base md:text-base lg:text-lg xl:text-xl">
+                          {info.area}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
-            </>
-          )}
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="mb-5 mt-5 flex justify-center">
-          {getPageNumbers().map((number, index) => (
-            <button
-              key={index}
-              className={`mx-1 rounded-lg bg-blue-500 px-3 py-1 text-white ${
-                number === currentPage ? "bg-blue-700" : ""
-              }`}
-              onClick={() => handlePageChange(number)}
-              disabled={number === "..."}
-            >
-              {number}
-            </button>
-          ))}
-        </div>
+      )}
+
+      <div className="mb-5 mt-5 flex justify-center">
+        {getPageNumbers().map((number, index) => (
+          <button
+            key={index}
+            className={`mx-1 rounded-lg bg-blue-500 px-3 py-1 text-white ${
+              number === currentPage ? "bg-blue-700" : ""
+            }`}
+            onClick={() => handlePageChange(number)}
+            disabled={number === "..."}
+          >
+            {number}
+          </button>
+        ))}
       </div>
     </div>
   );
