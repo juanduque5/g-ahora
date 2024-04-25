@@ -38,6 +38,8 @@ const Vacations = () => {
     },
     checkInDate: "",
     checkOutDate: "",
+    checkin: "",
+    checkout: "",
     guests: "",
   });
 
@@ -46,7 +48,7 @@ const Vacations = () => {
     setFilterOption({
       ...filterOption,
       checkInDate: date.format("YYYY-MM-DD"),
-      checkIn: date,
+      checkin: date,
     });
   };
 
@@ -55,7 +57,7 @@ const Vacations = () => {
     setFilterOption({
       ...filterOption,
       checkOutDate: date.format("YYYY-MM-DD"),
-      checkOut: date,
+      checkout: date,
     });
   };
 
@@ -152,7 +154,7 @@ const Vacations = () => {
   const today = dayjs(); // Obtener la fecha actual
   // const formattedToday = checkInDate.format("MM-DD-YYYY"); // Formatear la fecha como 'YYYY-MM-DD'
 
-  // console.log(formattedToday);
+  console.log(filterOption);
   return (
     <div className="ajusta ">
       {skeleton ? (
@@ -240,13 +242,9 @@ const Vacations = () => {
                       <DatePicker
                         label={message5}
                         disabled={checkInDate ? false : true}
-                        value={
-                          checkOutDate > checkInDate
-                            ? filterOption.checkOutDate
-                            : null
-                        }
+                        value={checkOutDate > checkInDate ? checkOutDate : null}
                         onChange={handleCheckOutDateChange}
-                        minDate={checkInDate ? filterOption.checkInDate : today}
+                        minDate={checkInDate ? checkInDate : today}
                         sx={{
                           "& .MuiInputLabel-root": { color: "gray" },
                           margin: "auto",

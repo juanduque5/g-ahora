@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "react-router-dom";
 import useEmblaCarousel from "embla-carousel-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Thumb } from "./thumb";
-import { useLocation } from "react-router-dom";
 import { PrevButton, NextButton } from "./arrows";
 import {
   APIProvider,
@@ -11,6 +11,8 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import "./embla.css";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 import share from "../../images/share.png";
 import mujer from "../../images/mujer.jpg";
@@ -25,22 +27,42 @@ import location2 from "../../images/location.png";
 import language from "./language";
 import { useSelector } from "react-redux"; // Importa las funciones useSelector y useDispatch
 
-const Info = ({ options, userId, isAuth }) => {
+const Info = ({ options, isAuth }) => {
+  const navigate = useNavigate();
   const storedLanguage = useSelector((state) => state.language.language);
   const skeleton = useSelector((state) => state.language.skeleton);
   const location = useLocation();
   const date = location.state;
-  const fechaInicio = new Date(date.checkInDate);
-  const fechaFin = new Date(date.checkOutDate);
-  const diferenciaMilisegundos = fechaFin - fechaInicio;
+  const today = dayjs();
+  const fechaInicio = dayjs(date.checkIn.$d);
+  // const fechaInicio = new Date(date.checkInDate);
+  const fechaFin = dayjs(date.checkOut.$d);
+  const userId = localStorage.getItem("userId");
+
+  const [checkInDate, setCheckInDate] = useState(fechaInicio);
+  const [checkOutDate, setCheckOutDate] = useState(fechaFin);
+  const [diferenciaDias, setDiferenciaDias] = useState(0);
 
   // Convierte la diferencia de milisegundos a días
-  const milisegundosPorDia = 1000 * 60 * 60 * 24; // 1 día en milisegundos
-  const diferenciaDias = Math.floor(
-    diferenciaMilisegundos / milisegundosPorDia,
-  );
 
-  const [stayDates, setStayDates] = useState(diferenciaDias);
+  const handleCheckInDateChange = (date) => {
+    setCheckInDate(date);
+  };
+
+  const handleCheckOutDateChange = (date) => {
+    setCheckOutDate(date);
+  };
+
+  useEffect(() => {
+    const milisegundosPorDia = 1000 * 60 * 60 * 24; // 1 día en milisegundos
+    const nuevaDiferenciaMilisegundos = checkOutDate - checkInDate;
+    const nuevaDiferenciaDias = Math.floor(
+      nuevaDiferenciaMilisegundos / milisegundosPorDia,
+    );
+    setDiferenciaDias(nuevaDiferenciaDias);
+  }, [checkInDate, checkOutDate]);
+
+  console.log("fechas", fechaInicio, fechaFin, diferenciaDias);
 
   const {
     connect,
@@ -54,19 +76,16 @@ const Info = ({ options, userId, isAuth }) => {
     Description,
     Enlace,
 
-    speak,
-    member,
-    name,
-    email,
-    phone,
-    contact,
     copy,
-    agente,
-    rest,
   } = language[storedLanguage];
 
   const { id } = useParams();
   // const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [link, setLink] = useState(null);
+  const [pay, setPay] = useState(false);
+  const [buttonText, setButtonText] = useState("Empezar");
+
   const apiKey = process.env.REACT_APP_API_KEY;
   const mapId = process.env.REACT_APP_MAP_ID;
   const [open, setIsOpen] = useState(false);
@@ -87,6 +106,8 @@ const Info = ({ options, userId, isAuth }) => {
   });
   const [propertyData, setPropertyData] = useState([]);
   const [data, setData] = useState([]);
+
+  const total = propertyData.precio * diferenciaDias;
   const [coordinates, setCoordinates] = useState({
     coordinates: { lat: 14.6349, lng: -90.5069 },
   });
@@ -243,7 +264,47 @@ const Info = ({ options, userId, isAuth }) => {
   console.log("PropertyData", propertyData.area);
   console.log("heart", heartClick);
   // console.log(coordinates.coordinates);
-  console.log("dates", date, stayDates);
+  // console.log("dates", fecha);
+
+  //
+  const payment = () => {
+    setIsLoading(true);
+    setButtonText("Cargando..");
+
+    if (!userId) {
+      // Si userId no está presente, navegar al componente /Login
+      navigate("/Login");
+      return; // Salir de la función para evitar que continúe ejecutando el código
+    }
+
+    fetch(`http://localhost:2001/payments/ordervacation/${id}/${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ total: total }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al procesar el pago");
+        }
+        return response.json(); // Convertir la respuesta a JSON
+      })
+      .then((data) => {
+        console.log("Pago procesado exitosamente:", data);
+        //  setPaymentResult(data); // Guardar los datos de la respuesta en el estado
+        setLink(data.checkoutUrl);
+        setButtonText("Pagar");
+        console.log(data.checkoutUrl);
+        setPay(true);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
   return (
     <div className="ajusta flex h-auto  ">
       {skeleton ? (
@@ -693,63 +754,145 @@ const Info = ({ options, userId, isAuth }) => {
 
               <div className="h-550 w-full flex-col items-start rounded-xl  shadow-md">
                 <div className=" h-full w-full flex-col rounded-xl  shadow-md">
-                  <div className="flex h-1/2 flex-col ">
-                    <div className="flex h-full ">
-                      <p className="m-auto text-center font-open-sans font-medium">
-                        {speak} <span className="text-blue-new">{agente} </span>{" "}
-                        {rest}
-                      </p>
-                    </div>
-                    <div className="flex h-full ">
-                      <div className="m-auto  h-auto w-auto rounded-full border ">
-                        <img
-                          className="h-28 w-28 rounded-full object-cover"
-                          src={mujer}
-                          alt=""
-                        />
+                  <div className="flex h-1/2 flex-col gap-2">
+                    <div className="flex h-1/2 gap-2 ">
+                      <div className="h-1/2 w-full  ">
+                        <div className=" m-auto flex h-full w-full  cursor-pointer truncate  bg-white ">
+                          <DatePicker
+                            label="Check-in"
+                            value={
+                              checkInDate < checkOutDate
+                                ? checkInDate
+                                : checkInDate
+                            }
+                            onChange={handleCheckInDateChange}
+                            minDate={today}
+                            sx={{
+                              "& .MuiInputLabel-root": { color: "gray" },
+                              margin: "auto",
+                              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                                {
+                                  border: "1px solid black",
+                                },
+                              background: "white", // Setting background color to white
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="h-1/2 w-full ">
+                        <div className=" flex h-full w-full cursor-pointer truncate border-r bg-white">
+                          <DatePicker
+                            label="Check-out"
+                            disabled={checkInDate ? false : true}
+                            value={
+                              checkOutDate > checkInDate ? checkOutDate : null
+                            }
+                            onChange={handleCheckOutDateChange}
+                            minDate={checkInDate ? checkInDate : today}
+                            sx={{
+                              "& .MuiInputLabel-root": { color: "gray" },
+                              margin: "auto",
+                              "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline":
+                                {
+                                  border: "1px solid black",
+                                },
+                              background: "white", // Setting background color to white
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div className="h-full">
-                      <div className="flex h-1/2 items-center justify-center  ">
-                        <img
-                          src={green}
-                          alt=""
-                          className="relative right-2 h-4 w-4 text-center"
-                        />
-                        <p className="font-open-sans text-xl font-bold text-blue-new">
-                          Yessenia Méndez
-                        </p>
+                    <div className="flex h-1/2 w-full flex-col">
+                      <div className="flex w-full ">
+                        <p className="m-auto text-lg font-semibold">Guests</p>
                       </div>
-                      <div className=" flex h-1/2">
-                        <p className="m-auto text-center font-open-sans text-sm font-normal text-new">
-                          {member}: 2023
-                        </p>
+                      <div className="w-border flex h-full">
+                        {/* <div className="flex w-1/4">
+                          <p className="m-auto flex h-11 w-11 items-center justify-center rounded-3xl border text-3xl">
+                            -
+                          </p>
+                        </div> */}
+                        <div className="m-auto  w-1/4 ">
+                          <p className="flex justify-center text-xl font-semibold">
+                            {propertyData.habitaciones}
+                          </p>
+                        </div>
+                        {/* <div className="flex w-1/4 ">
+                          <p className="m-auto flex h-11 w-11 items-center justify-center rounded-3xl border text-3xl">
+                            +
+                          </p>
+                        </div> */}
                       </div>
                     </div>
                   </div>
-                  <div className="flex h-1/2 flex-col items-center  gap-2 border">
-                    <div className="flex h-90 w-11/12 flex-col gap-3 border">
-                      <div className=" mt-2 h-full w-full rounded-xl border">
-                        <p>Price per night: 52</p>
+                  <div className="flex h-1/2 flex-col items-center  gap-2 ">
+                    <div className="flex h-90 w-11/12 flex-col gap-5 ">
+                      <div className=" mt-2 h-auto w-full rounded-xl border-b">
+                        <p>
+                          Price per night:{" "}
+                          {propertyData.precio !== undefined
+                            ? propertyData.precio.toLocaleString() + " "
+                            : ""}
+                        </p>
                       </div>
-                      <div className=" h-full w-full rounded-xl border">
+                      <div className=" h-auto w-full rounded-xl border-b">
                         <p>
                           {" "}
-                          Stay nights: 5{" "}
+                          Stay nights: {diferenciaDias}
                           <span className="relative left-5 m-auto font-semibold">
                             {" "}
-                            {fechaInicio.toLocaleDateString()} -{" "}
-                            {fechaFin.toLocaleDateString()}
+                            {/* {fechaInicio} - {fechaFin} */}
                           </span>
                         </p>
                       </div>
-                      <div className="h-full w-full rounded-xl border">
-                        <p>Total: 552</p>
+                      <div className="h-auto w-full rounded-xl border-b">
+                        <p>Total: {total.toLocaleString()} </p>
                       </div>
-                      <div className=" mb-1 flex h-full w-full cursor-pointer rounded-xl bg-blue-new">
-                        <p className="m-auto font-fira-sans text-white">
-                          Reserve
-                        </p>
+                      <div className=" mb-1 flex h-1/4 w-full cursor-pointer rounded-xl bg-blue-new">
+                        {pay ? (
+                          <button className="m-auto h-11 w-36 rounded-lg bg-blue-new font-fira-sans text-lg font-medium text-white">
+                            <a href={link}>{buttonText}</a>
+                          </button>
+                        ) : (
+                          <button
+                            onClick={payment}
+                            type="button"
+                            className="m-auto flex h-11 w-36 items-center rounded-lg bg-blue-new px-4 py-2 text-white"
+                          >
+                            <svg
+                              className={
+                                isLoading
+                                  ? "mr-3 h-5 w-5 animate-spin text-white"
+                                  : "hidden"
+                              }
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className={isLoading ? " opacity-25" : "hidden"}
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className={isLoading ? " opacity-75" : "hidden"}
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+
+                            <p
+                              className={`m-auto ${isLoading ? "w-16" : "w-auto"} font-medium`}
+                            >
+                              <a className="" href={link}>
+                                {buttonText}
+                              </a>
+                            </p>
+                          </button>
+                        )}
                       </div>
                     </div>
                     <div className="  flex w-full ">
@@ -772,7 +915,7 @@ const Info = ({ options, userId, isAuth }) => {
                       </div>
                       <div className=" flex w-1/2 cursor-pointer  ">
                         <div className="flex w-full">
-                          <a className="m-auto" href={wpp}>
+                          <a className="m-auto" href={true}>
                             <img
                               className="h-11 w-9 rounded-full object-cover"
                               src={whatsapp}

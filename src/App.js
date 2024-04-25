@@ -24,7 +24,7 @@ import Catalogo from "./components/Catalogo/Catalogo";
 import Landing from "./components/Landing/Landing";
 import Favoritos from "./components/Favoritos/Favoritos";
 import Edit from "./components/Edit/Edit";
-import InfoVacation from "./components/InfoVacation/Info";
+import InfoVacation from "./components/InfoVacation/info";
 import Search from "./components/Search/Search";
 
 // import image5 from "./images/image5.png";
@@ -239,11 +239,13 @@ class App extends Component {
                   <Search />
                 </LocalizationProvider>
 
-                <InfoVacation
-                  options={OPTIONS}
-                  userId={userId}
-                  isAuth={isAuth}
-                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <InfoVacation
+                    options={OPTIONS}
+                    userId={userId}
+                    isAuth={isAuth}
+                  />
+                </LocalizationProvider>
 
                 <Footer />
               </>

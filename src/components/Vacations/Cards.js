@@ -32,9 +32,11 @@ const Cards = ({ userId }) => {
   const dates = {
     checkInDate: !data ? false : data.checkInDate,
     checkOutDate: !data ? false : data.checkOutDate,
+    checkIn: !data ? false : data.checkin,
+    checkOut: !data ? false : data.checkout,
   };
 
-  console.log(data, "dates", dates);
+  console.log("dates", dates);
 
   // const location = useLocation();
   // console.log("infoH:", infoH[0].imageURL);

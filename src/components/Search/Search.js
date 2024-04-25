@@ -28,6 +28,8 @@ function Search() {
     },
     checkInDate: "",
     checkOutDate: "",
+    checkin: "",
+    checkout: "",
     guests: "",
   });
 
@@ -36,6 +38,7 @@ function Search() {
     setFilterOption({
       ...filterOption,
       checkInDate: date.format("YYYY-MM-DD"),
+      checkin: date,
     });
   };
 
@@ -44,6 +47,7 @@ function Search() {
     setFilterOption({
       ...filterOption,
       checkOutDate: date.format("YYYY-MM-DD"),
+      checkout: date,
     });
   };
 
