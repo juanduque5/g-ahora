@@ -20,7 +20,7 @@
 //   document.getElementById("root"),
 // );
 
-// reportWebVitals();
+
 
 import React from "react";
 import { createRoot } from "react-dom/client"; // Importa createRoot de react-dom/client
