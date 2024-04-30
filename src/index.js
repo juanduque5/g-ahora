@@ -23,7 +23,7 @@
 
 
 import React from "react";
-import { createRoot } from "react-dom/client"; // Importa createRoot de react-dom/client
+import { createRoot } from "react-dom/client"; // Importa createRoot  react-dom/client
 import { Provider } from "react-redux"; // Importa Provider de react-redux
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
