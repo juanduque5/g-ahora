@@ -80,7 +80,7 @@ const Info = ({ options, isAuth }) => {
   } = language[storedLanguage];
 
   const { id } = useParams();
-  // const navigate = useNavigate();
+ 
   const [isLoading, setIsLoading] = useState(false);
   const [link, setLink] = useState(null);
   const [pay, setPay] = useState(false);
