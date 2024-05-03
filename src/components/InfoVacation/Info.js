@@ -91,7 +91,7 @@ const Info = ({ options, isAuth }) => {
   const [open, setIsOpen] = useState(false);
   const [number, setNumber] = useState(false);
   const [wpp, setWpp] = useState(false);
-  const [copied, setCopied] = useState(false); // Estado para indicar si se ha copiado el enlace
+  const [copied, setCopied] = useState(false); // Estado para indicar si se ha copiado
   const linkRef = useRef(null); // Referencia al elemento de texto
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const [selectedIndex, setSelectedIndex] = useState(0);
