@@ -25,7 +25,7 @@ import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
 import location2 from "../../images/location.png";
 import language from "./language";
-import { useSelector } from "react-redux"; // Importa las funciones useSelector y useDispatch
+import { useSelector } from "react-redux"; //  las funciones useSelector y useDispatch
 
 const Info = ({ options, isAuth }) => {
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ const Info = ({ options, isAuth }) => {
   } = language[storedLanguage];
 
   const { id } = useParams();
- 
+
   const [isLoading, setIsLoading] = useState(false);
   const [link, setLink] = useState(null);
   const [pay, setPay] = useState(false);
