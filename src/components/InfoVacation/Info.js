@@ -25,7 +25,7 @@ import bath from "../../images/bath.png";
 import bed from "../../images/bed.png";
 import location2 from "../../images/location.png";
 import language from "./language";
-import { useSelector } from "react-redux"; //  las funciones useSelector y useDispatch
+import { useSelector } from "react-redux"; //  las funciones useSelector y useDispat
 
 const Info = ({ options, isAuth }) => {
   const navigate = useNavigate();
