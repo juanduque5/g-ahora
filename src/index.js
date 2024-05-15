@@ -36,7 +36,7 @@ import "./index.css";
 const container = document.getElementById("root");
 
 // Crea una raíz y usa el método render de esta
-const root = createRoot(container); // Asegúrate de que tu ID coincida con el del contenedor
+const root = createRoot(container); // Asegúrate de que tu ID coincida con el del 
 root.render(
   <Provider store={store}>
     <React.StrictMode>
