@@ -71,7 +71,6 @@ class App extends Component {
     // }
     console.log("App componentDidMount");
 
-    // this.fetchData();
 
     const token = localStorage.getItem("token");
     const expiryDate = localStorage.getItem("expiryDate");
